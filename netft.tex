@@ -10,6 +10,9 @@
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
 
+\newcommand{\beq}{\begin{eqnarray}}
+\newcommand{\eeq}{\end{eqnarray}}
+
 \title{DRAFT: Robust Communication in Structured Networks}
 \author{
     Edward L. Platt\\
@@ -54,8 +57,46 @@ away, which we assume have not been compromised by that node's adversaries.
 Our objective is now to construct a robust communication channel from Alice's
 trusted neighborhood to Bob's.
 
+\section{Multipath Fault Tolerance}
 
-\section{Fault Tolerance}
+We achieve robust communication between trusted neighborhoods through
+Concurrent Multipath Routing (CMR) \cite{}.
+If there are multiple {\em redundant paths} (i.e., paths sharing no nodes or
+links) between Alice and Bob's trusted neighborhoods, multiple copies of a
+message can be sent along different paths, enabling standard error detection and
+error correction techniques to be applied at the destination.
+If Alice randomly selects $k$ of $n$ total redundant paths, Eve's best strategy
+is to compromise at least one node on as many of the paths as possible.
+Because an error can be detected if even a single copy has been tampered with,
+Eve must compromise all $k$ paths in order to convince Bob to accept a compromised
+message.
+If Eve has the resources to compromise $l$ total nodes, the probability that
+Bob receives an undetectable error is:
+\beq
+\label{eq:pe}
+p_e &=& \frac{l!(n-k)!}{n!(l-k)!}.
+\eeq
+Letting $k=\alpha n$ and $l=\beta n$, then applying Stirling's
+approximation gives:
+\begin{eqnarray}
+\nonumber
+p_e &\approx&
+\frac{\sqrt{\beta(1-\alpha)}}{\sqrt{\beta-\alpha}} \\
+& &
+\times {}
+\label{eq:pe_approx}
+\left[
+    \left( \frac{\beta-\alpha}{1-\alpha} \right)^{\alpha}
+    \left( \frac{\beta}{\beta-\alpha} \right)^{\beta}
+    (1-\alpha)
+\right]^n
+\end{eqnarray}
+Note that Eq. (\ref{eq:pe_approx}) is exponential in the number of redundant
+paths $n$, which depends only on the network structure, and not on the
+resources available to individual nodes.
+If a network has a large number of redundant paths between trusted neighborhoods,
+a very low probability of undetected errors can be achieved, even if an adversary
+has the resources to compromise a very large fraction of the avialable paths.
 
 \section{Butterfly Network}
 
