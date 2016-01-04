@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{amsfonts}
 \usepackage{graphicx}
 \usepackage{breqn}
 
@@ -13,7 +14,9 @@
 \newcommand{\beq}{\begin{eqnarray}}
 \newcommand{\eeq}{\end{eqnarray}}
 
-\title{DRAFT: Robust Communication in Structured Networks}
+\DeclareMathOperator{\wbf}{W-BF}
+
+\title{DRAFT: Scalable, Robust Multipath Communication on the Butterfly Network}
 \author{
     Edward L. Platt\\
     elplatt@umich.edu
@@ -21,7 +24,7 @@
     Daniel M. Romero\\
     drom@umich.edu
 }
-\date{December 2015}
+\date{January 2016}
 
 \begin{document}
 
@@ -111,14 +114,109 @@ copies $k$ and compromised paths $l$.
 
 \section{Butterfly Network}
 
+We now describe a Concurrent Multipath Routing scheme on a specific family
+of networks: the butterfly network \cite{}.
+Several variations on the butterfly network exist.
+Specifically, we utilize the wrap-around butterfly.
+We define the $m$-dimensional directed wrap-around butterfly $\wbf(m)$:
+\beq
+\wbf(m) &=& (V, E_\downarrow \cup E_\rightarrow) \\
+V &=& \mathbb{Z}_m \times \mathbb{Z}_{2^m} \\
+E_\downarrow &=& \{((l,z),(l+1 (\text{mod } m),z) \nonumber \\
+&& \; | \, l \in \mathbb{Z}_d, z \in \mathbb{Z}_{2^m}\} \\
+E_\rightarrow &=& \{(l,z),(l+1 (\text{mod } m), z \oplus 2^l) \nonumber \\
+&& \; | \, l \in \mathbb{Z}_d, z \in \mathbb{Z}_{2^m}\},
+\eeq
+where $\oplus$ represents the bitwise XOR operator.
+Each node is associated with a level $l$ and an $m$-bit integer $z$.
+There are two types of edges, shown in Figure \ref{fig:butterfly}.
+Down edges ($E_\downarrow$) connect nodes sharing the same $z$ value
+in a cycle of increasing level $l$.
+Down-right edges ($E_\rightarrow$) also link to a node of level $l + 1$,
+but one having the bitstring equal to $z$ with the $l$th bit flipped.
+
+The wrap-around butterfly network has a number of properties making it useful for multipath routing:
+\begin{description}
+\item[Vertex transitivity]
+The problem
+of finding a route between arbitrary nodes $v$ and $w$
+can be reduced to finding a route from node $(0,0)$ to some $\tilde{w}$.
+\item[Logarithmic diameter]
+For any two nodes, the length of the shortest path between them is logorithmic
+in the size of the network.
+\item[Constant degree]
+In practical applications, each communication link requires additional resources,
+such as physical infrastructure or entries in a routing table.
+A constant degree limits the number of such resources needed as the network
+grows in size.
+\end{description}
+
 \begin{figure}
 \begin{center}
 \includegraphics{fig-butterfly.pdf}
 \end{center}
 \caption{
+Schematic illustration of the two types of edges in a directed butterfly network.
+The node $(l,z)$ is shown as the bit string $z$ with a square around the $l$th bit.
 \label{fig:butterfly}
 }
 \end{figure}
+
+\subsection{Multipath Routing on the Butterfly Network}
+
+We now describe a routing scheme that provides $2^h$ redundant paths between
+the $h$-hop trusted neighborhoods of any two nodes in an $m$-bit
+wrap-around butterfly network.
+Utilizing vertex transitivity, we label the source node as $(0, 0)$ and
+denote the destination node as $w = (l_w, z_w)$.
+
+Let $s$ be an integer such that $0 \leq s < 2^h$.
+Let $v_s^{(t)} = (l^{(t)}, z^{(t)})$ be the $t$th node in the path labeled by $s$.
+For convenience, we will omit the subscript $s$.
+We define two partitionings of the integers in $\mathbb{Z}_{2^m}$:
+one having the lowest $h$ bits matching the
+bits of $s$, and one having the $h$ bits preceeding the destination level $l_w$
+matching $s$:
+\beq
+S_s &=& \{z \in \mathbb{Z}_{2^m} | \forall i \in \mathbb{Z}_h z_i = s_i \} \\
+R_s &=& \{z \in \mathbb{Z}_{2^m} | \forall i \in \mathbb{Z}_h z_{(l_w - h + i)} = s_i \}.
+\eeq
+Note that if $r \neq s$, then $S_s \cap S_r = R_s \cap R_r = \emptyset$.
+
+We now construct a path such that between trusted neighborhoods $z^{(t)}$ is always
+in $S_s$, $R_s$, or both, guaranteeing that the path does not overlap with the
+other paths $v_r^{(t)}$.
+Routing proceeds in stages, with the level $l$ increasing by 1 at each hop.
+In Stage 1 ($0 \leq t < h$), down or down-right edges
+are chosen such that the the $t$th bit of $z^{(t+1)}$ is equal to the $t$th bit
+of $s$. Throughout Stage 1, all nodes are within the sender's trusted neighborhood.
+At the end of Stage 1, $z^{(h)} \in S_s$, and $z^{(t)}$ will remain so until the level loops
+back to $0$ at $t = m$.
+
+In Stage 2 ($h \leq t < l_w - h$), edges are chosen to make the $t$th bit of
+$z^{(t+1)}$ match the $t$th bit of $z_w$.
+
+In Stage 3 ($l_w - h \leq t < l_w$), the bits of $z^{(t)}$ are chosen to match $s$,
+such that after the stage is complete, $z^{(l_w)} \in R_s$.
+
+In Stage 4 ($l_w \leq t < m$), as in stage 2,
+paths are chosen such that the $t$th bit of $z^{(t+1)}$ matches $z_w$.
+After Stage 4, all bits of $z^{(m)}$ are equal to those of $z_w$
+except for the first $h$ and the $h$ preceeding index $l_w$.
+$z^{(m)}$ is also in both $S_s$ and $R_s$.
+
+At this point, we define $\tau = t - m$.
+In Stage 5 ($0 \leq \tau < h$), the first $h$ bits of $z^{(t)}$ are set to
+match $z_w$, potentially removing $z^{(t)}$ from $S_s$.
+
+In Stage 6 ($h \leq \tau < l_w - h$), all down edges are chosen, incrementing
+the level without any effect on $z^{(t)}$.
+At the end of Stage 6, $z^{(m + l_w - h)}$ is still in $R_s$ and
+$v^{(m + l_w - h)}$ is now within the trusted neighborhood of $w$.
+
+In the seventh, and final stage ($l_w - h \leq \tau < l_w$), the $h$ bits of $z^{(t)}$
+preceeding index $l_w$ are set to match $z_w$.
+After this stage, $v^{(m + l_w)} = w$ and routing is complete.
 
 \section{Discussion}
 
