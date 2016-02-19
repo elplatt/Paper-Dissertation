@@ -227,16 +227,40 @@ level of stabilizing asymmetry.
 
 \subsection{Structural Properties}
 
-Sparse
+To achieve scalability, networks must be {\em sparse} and have a
+{\em low diameter}.
+In practical settings, humans and devices have an upper limit on the number
+of connections they can maintain.
+In sparse networks, the number of links grows slowly as the network grows in
+size, allowing the network to scale without exceeding the nodes' capacity for
+links.
+Similarly, low-diameter guarantees that as a network grows, a short path will
+still exist between any pair of nodes.
+While low diameter guarantees a path exists,
+paths are only useful if an efficient {\em routing} algorithm exists
+to find them.
 
-Low-diameter
+Redundancy in a network can help reduce single points of failure as well as
+increase fault-tolerance.
+One measure of redundancy is given by the ratio of edges to nodes
+\cite{baran_distributed_1964}.
+A single points of failure occur when a node holds a uniquely
+central position,
+and can be eliminated by adding alternative
+paths around the node,
+which increases the network's redundancy.
+Similarly, redundancy in a network can enable fault-tolerance techniques
+that reduce the effectiveness of attacks and creating stabilizing asymmetry.
+When secrecy is desired, redundancy can help by allowing messages to be
+divided into parts and sent along different paths so even if one path is
+compromised, the whole message is not revealed.
 
-Vertex-transitivity
-
-Redundancy
-\cite{baran_distributed_1964}
-
-Routing
+Networks with {\em vertex transitivity} have the greatest protection agasint
+single points of failure.
+In vertex transitive networks, for any pair of nodes, an edge-preserving map
+always exists from one node to the other.
+In other words, all nodes occupy structurally indistinguishable positions
+in the network.
 
 \subsection{Trust}
 
