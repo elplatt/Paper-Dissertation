@@ -74,7 +74,7 @@ Author�s addresses: E.L. Platt and D.M. Romero, School of Information; email: 
 
 \maketitle
 
-TODO: Fix bibtex encoding. dfsdfsdfsd
+TODO: Fix bibtex encoding. 
 
 \section{Introduction}
 
@@ -103,14 +103,26 @@ attribute of complex communication networks themselves.
 General techniques for understanding and mitigating these vulnerabilities are
 needed.
 
-In this paper, we formally evaluate the effects of network structure on
-attack-resistance. We also propose an efficient, fault-tolerant network architecture.
-Our analysis focuses on {\em structured networks},
-in which links between nodes are constrained to a particular architecture.
-The proposed fault-tolerant architecture utilizes {\em multipath routing},
-in which many possible paths exist betweeen two nodes on a communication network.
-In our case, multiple paths allow multiple copies of a message to be sent,
-which can be used for error-detection and error-correction by the receiver.
+We consider a setting in which a source node in a network attempts to route information
+to a target node by forwarding it through the edges of the network. We 
+assume that some nodes in the network may be compromised by an attacker 
+and will forward the wrong information to their neighbors. We assume 
+a weak form of trust transitivity, where the source and the target are able to 
+detect any compromised nodes that are a few hops away from them in the network.
+
+Given this framework, we develop a \emph{multipath routing} technique to reduce 
+the likelihood that compromised nodes are undetected during the information 
+routing process by allowing multiple copies of a message to be sent through independent paths,
+which can be used for error-detection and error-correction by the receiver. 
+
+The multipath routing technique relies on the existence and detectability of
+multiple independent paths between the source and the destination. Thus, network 
+structure and routing algorithms play a key role in the success of the technique. We formally evaluate the 
+effects of network structure on attack-resistance and show that the probability of undetected 
+errors decreases exponentially with the number of independent paths between 
+source and destination. Focusing on {\em structured networks}, in which links between nodes are 
+constrained to a particular architecture, we propose an efficient multipath routing algorithm on an popular network
+architecture, which is currently used for several applications -- the butterfly network \cite{}. 
 
 Our main contributions are:
 \begin{itemize}
@@ -368,7 +380,7 @@ in $S_s$, $R_s$, or both, guaranteeing that the path does not overlap with the
 other paths $v_r^{(t)}$.
 Routing proceeds in stages, with the level $l$ increasing by 1 at each hop.
 In Stage 1 ($0 \leq t < h$), down or down-right edges
-are chosen such that the the $t$th bit of $z^{(t+1)}$ is equal to the $t$th bit
+are chosen such that the $t$th bit of $z^{(t+1)}$ is equal to the $t$th bit
 of $s$. Throughout Stage 1, all nodes are within the sender's trusted neighborhood.
 At the end of Stage 1, $z^{(h)} \in S_s$, and $z^{(t)}$ will remain so until the level loops
 back to $0$ at $t = m$.
