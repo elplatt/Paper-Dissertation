@@ -276,7 +276,21 @@ in the network.
 
 \subsection{Trust}
 
-Scale and indirect communication
+The sparsity requirement has an important consequence for network infrastructure:
+as a network grows, the number of nodes will exceed the number of links a given
+node can support and many pairs of nodes will only be indirectly connected,
+with all paths between them passing through at least one intermediary node.
+These intermediary nodes are targets for potential attacks.
+More specifically, the threat model is as follows: Alice sends a message to
+Bob via one or more intermediaries, but those intermediaries may either block
+or alter the message.
+The ability to tolerate these types of adversarial attacks often depends on
+Alice and Bob's ability to assume that some nodes have not been
+compromised---to {\em trust} them.
+
+Web of trust and transitivity.
+
+\section{Partial Trust}
 
 Source-to-network
 \begin{figure}
