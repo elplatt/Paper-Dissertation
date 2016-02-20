@@ -311,17 +311,72 @@ points of failure.
 
 \section{Partial Trust}
 
+We now propose a decentralized trust model based on weaker transitivity
+asumptions than existing web of trust models.
+In following sections, we will use this model to utilize network redundancy and
+minimize vulnerabilities due to single points of failure.
+Our model is based on the assumption of partially-transitive trust.
+While this assumption is still idealized, it is a more realistic improvement
+on fully-transitive models.
+
+Our model (Figure \ref{fig:trust-source})
+is represented as an undirected graph or network,
+with nodes representing individual
+agents and edges representing direct and mutual trust relationships.
+We define a {\em trust radius} $h$ and assume that trust is transitive
+up to $h$ hops away.
+In other words, the nodes $v$ trusts $w$ if the distance
+$d(u,v) < h$.
+We call the all such nodes the {\em trusted neighborhood} $T_h(v)$,
+and all noes at exactly distance $h$ the {\em trust boundary} $B_h(v)$:
+\beq
+T_h(v) &=& \left\{ w \mid d(v,w) < h \right\} \\
+B_h(v) &=& \left\{ w \mid d(v,w) = h \right\}.
+\eeq
+We assume that no nodes within the trusted neighborhood can be compromised
+by an adversary of $v$.
+However, by compromising all nodes in the trust boundary, an adversary can
+ensure that all communications leaving the trusted neighborhood are compromised.
+
 Source-to-network
 \begin{figure}
 \centerline{\includegraphics{fig-trust-source}}
-\caption{TODO}
+\caption{
+Illustration of the {\em partial trust} model.
+Edges represent direct, mutual trust relationships.
+Alice ($v$) trusts all nodes less than
+$h$ hops away---her {\em trusted neighborhood} $T_h(v)$.
+Beyond that, the nodes at distance $h$ form her {\em trust boundary} $B_h(v)$.
+We assume adversaries are unable to compromise nodes in the trusted neighborhood.
+By compromising all nodes in the trust boundary, an adversary can ensure that
+all communications leaving Alice's trusted neighborhood are compromised.
+}
 \label{fig:trust-source}
 \end{figure}
 
-Source-to-destination
+Now we consider a source $v$ (Alice) and a destination $w$ (Bob),
+shown in Figure \ref{fig-trust-source-desitnation}.
+We assume that a message beween Alice and Bob will not be compromised in
+either of their trusted neighborhoods.
+An adversary could compromise all possible paths between Alice and Bob
+by compromising either Alice or Bob's entire trust boundary,
+which requires compromising $\min(|T_h(v)|, |T_h(w)|)$ nodes.
+In a vertex transitive network, these two trust boundaries will be the same size.
+If disjoint paths exist connecting each node in Alice's trust boundary to
+a node in Bob's, then the cut size between the two can never be smaller than
+$|T_h(v)| = |T_h(v)|$,
+so an adversary compromises fewer nodes, they cannot compromise all possible
+paths between Alice and Bob.
+
 \begin{figure}
 \centerline{\includegraphics{fig-trust-source-destination}}
-\caption{TODO}
+\caption{
+Partial trust model with sender (Alice) and receiver (Bob).
+If disjoint paths exist connecting each node in Alice's trust boundary to
+a node in Bob's,
+than an adversary needs to compromise at least $|T_h(v)|$ nodes to
+compromise all possible paths between Alice and Bob.
+}
 \label{fig:trust-source-destionation}
 \end{figure}
 
