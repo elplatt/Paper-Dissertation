@@ -282,13 +282,32 @@ node can support and many pairs of nodes will only be indirectly connected,
 with all paths between them passing through at least one intermediary node.
 These intermediary nodes are targets for potential attacks.
 More specifically, the threat model is as follows: Alice sends a message to
-Bob via one or more intermediaries, but those intermediaries may either block
-or alter the message.
+Bob via one or more intermediaries, but some intermediaries may try to
+either block or alter the message.
 The ability to tolerate these types of adversarial attacks often depends on
 Alice and Bob's ability to assume that some nodes have not been
 compromised---to {\em trust} them.
 
-Web of trust and transitivity.
+Both centralized and decentralized approaches are commonly used to create
+trust infrastructures.
+Centralized approaches such as {\em public key infrastructure} (PKI)
+suffer from a number of vulnerabilities
+\cite{ellison_ten_2000},
+which stem largely from the single points of failure inherent to
+centralization.
+Alternatively, the decentralized {\em web of trust} model
+\cite{zimmermann_official_1995,ferguson_practical_2003}
+allows individuals
+to choose who they trust initially.
+Trust is then extended to new individuals if they are vouched for by a
+currently-trusted individual.
+However, the web of trust approach assumes that trust can be extended
+transitively,
+which is not generally true
+\cite{christianson_why_1997}.
+We note that while such approaches are decentralized,
+they do not incorporate redundancy and thus still suffer from single
+points of failure.
 
 \section{Partial Trust}
 
