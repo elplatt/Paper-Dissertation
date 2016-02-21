@@ -449,8 +449,15 @@ The node $(l,z)$ is shown as the bit string $z$ with a square around the $l$th b
 \subsection{Routing Algorithm: Overview}
 
 This section gives an informal overview of the multipath routing algorithm.
-
-
+In a wraparound butterfly network with trusted radius $h$,
+the algorithm constructs $2^h$ disjoint paths between the trusted neighborhoods
+of any two nodes, each parameterized by an $h$-bit string $s$
+(see Table \ref{tab:routing}).
+Each path cycles around the levels of the butterfly network (about) twice.
+During the first cycle, the place-within-level $z$ of all nodes is set such that
+no two paths overlap outside the trusted neighborhoods.
+During the second cycle, the place-within-level is set to its destination value
+and the algorithm terminates when the destination level is reached.
 
 \begin{table}%
 \tbl{Butterfly Multipath Routing Variables\label{tab:routing}}
@@ -459,6 +466,8 @@ This section gives an informal overview of the multipath routing algorithm.
 \hline
 NAME & VARIABLE \\\hline
 butterfly dimension & $m \in \mathbb{Z}_+$ \\\hline
+node level & $l \in \mathbb{Z} : 0 \leq l < m$ \\\hline
+node place within level & $z \in \mathbb \{0,1\}^m$ \\\hline
 trust radius & $h \in \mathbb{Z} : 1 \leq h \leq \lfloor m/2 \rfloor$ \\\hline
 path index & $s \in \{0,1\}^h$ \\\hline
 \end{tabular}
