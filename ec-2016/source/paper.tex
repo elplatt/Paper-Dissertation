@@ -396,6 +396,8 @@ Results
 
 \section{Multipath Routing on the Butterfly Topology}
 
+\subsection{Butterfly Network Topology}
+
 We now describe a Concurrent Multipath Routing scheme on a specific family
 of networks: the butterfly network \cite{}.
 Several variations on the butterfly network exist.
@@ -443,6 +445,27 @@ The node $(l,z)$ is shown as the bit string $z$ with a square around the $l$th b
 \label{fig:butterfly}
 }
 \end{figure}
+
+\subsection{Routing Algorithm: Overview}
+
+This section gives an informal overview of the multipath routing algorithm.
+
+
+
+\begin{table}%
+\tbl{Butterfly Multipath Routing Variables\label{tab:routing}}
+{
+\begin{tabular}{|l|l|}
+\hline
+NAME & VARIABLE \\\hline
+butterfly dimension & $m \in \mathbb{Z}_+$ \\\hline
+trust radius & $h \in \mathbb{Z} : 1 \leq h \leq \lfloor m/2 \rfloor$ \\\hline
+path index & $s \in \{0,1\}^h$ \\\hline
+\end{tabular}
+}
+\end{table}%
+
+\subsection{Routing Algorithm: Proof}
 
 We now describe a routing scheme that provides $2^h$ redundant paths between
 the $h$-hop trusted neighborhoods of any two nodes in an $m$-bit
