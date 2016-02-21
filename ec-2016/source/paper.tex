@@ -21,6 +21,8 @@
 
 \doi{XXXXXXX.XXXXXXX}% TeXSupport
 
+\usepackage{tikz}
+\usetikzlibrary{chains,decorations.pathreplacing}
 \newcommand{\beq}{\begin{eqnarray}}
 \newcommand{\eeq}{\end{eqnarray}}
 \DeclareMathOperator{\wbf}{wBF}
@@ -34,7 +36,7 @@
 % Title portion
 \title{
 Attack-Tolerance in Structured Networks via Multipath Routing
-\\ Draft: 2016-02-18
+\\ Draft: 2016-02-21
 }
 \author{EDWARD L. PLATT
 \affil{University of Michigan}
@@ -458,6 +460,145 @@ During the first cycle, the place-within-level $z$ of all nodes is set such that
 no two paths overlap outside the trusted neighborhoods.
 During the second cycle, the place-within-level is set to its destination value
 and the algorithm terminates when the destination level is reached.
+
+More specifically, the algorithm can be understood by dividing the bits of
+$z$ into four segments: $A, B, C, D$ (Figure \ref{fig:route-overview}).
+$A$ is the first $h$ bits, followed by $B$ until reaching $C$: the last $h$ bits before
+the destination level $l_w$, and then finally $D$.
+As the routing algorithm progresses through the levels $l$, the segments of $z$
+get updated in order.
+Because of vertex transitivity, we can make the simplifying assumption
+that $v = (0,0)$ without loss of generality.
+Initially (1) while still in the source trusted neighborhood,
+$A$ is set to match $s$, which ensures that no two
+paths will share nodes outside the trusted neighborhood.
+Then (2) the bits of $B$ are inverted and (3) a cyclic permutation of $s$ is
+placed into $C$.
+After this step (4--6), $D$, $A$, and $B$ are set to their destination values.
+After $A$ is set, the path remains distinct from other paths because other nodes
+either have uninverted values in $B$ or a different value of $\tilde{s}$ in $C$.
+While (7) $C$ is being set to the destination value, overlaps may occur, but
+nodes are now within the trusted neighborhood of the destination.
+
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+    B/.style = {decorate,
+                decoration={brace, amplitude=5pt,
+                pre=moveto,pre length=1pt,post=moveto,post length=1pt,
+                raise=1mm,
+                            #1}, % for mirroring of brace, if necessary
+                thick},
+    B/.default=mirror, % by default braces are mirrored
+                        ]
+\foreach \i in {0\ldots,{\ldots}0\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
+    \node[X] {\i};
+\draw[B] ( A-1.north west) -- node[above=1.5mm] {$h$} ( A-1.north east);
+\draw[B] ( A-2.north west) -- node[above=1.5mm] {$l_w - 2h$} ( A-2.north east);
+\draw[B] ( A-3.north west) -- node[above=1.5mm] {$h$} ( A-3.north east);
+\draw[B] ( A-4.north west) -- node[above=1.5mm] {$m - l_w$} ( A-4.north east);
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {start} ( A-1.west);
+\node (B1) [inner sep=1pt,above=of A-1.north,above=5ex] {\underline{A}};
+\node (B2) [inner sep=1pt,above=of A-2.north,above=5ex] {\underline{B}};
+\node (B3) [inner sep=1pt,above=of A-3.north,above=5ex] {\underline{C}};
+\node (B4) [inner sep=1pt,above=of A-4.north,above=5ex] {\underline{D}};
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+                        ]
+\foreach \i in {$s$,{\ldots}0\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {1.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+                        ]
+\foreach \i in {$s$,{\ldots}1\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {2.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+                        ]
+\foreach \i in {$s$,{\ldots}1\ldots,{\ldots}$\tilde{s}$\ldots,{\ldots}0}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {3.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+                        ]
+\foreach \i in {$s$,{\ldots}1\ldots,{\ldots}$\tilde{s}$\ldots,$z_{w,D}$}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {4.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+                        ]
+\foreach \i in {$z_{w,A}$,{\ldots}1\ldots,{\ldots}$\tilde{s}$\ldots,$z_{w,D}$}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {5.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+                        ]
+\foreach \i in {$z_{w,A}$,$z_{w,B}$,{\ldots}$\tilde{s}$\ldots,$z_{w,D}$}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {6.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+                        ]
+\foreach \i in {$z_{w,A}$,$z_{w,B}$,$z_{w,C}$,$z_{w,D}$}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {7.} ( A-1.west);
+\end{tikzpicture}
+\end{center}
+\caption{
+Progression of place-within-level $z$ as the multipath routing algorithm
+cycles through the levels of the butterfly network.
+}
+\label{fig:route-overview}
+\end{figure}
 
 \begin{table}%
 \tbl{Butterfly Multipath Routing Variables\label{tab:routing}}
