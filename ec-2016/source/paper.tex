@@ -80,7 +80,7 @@ TODO: Fix bibtex encoding.
 
 \section{Introduction}
 
-Communication networks, expemplified by the Internet,
+Communication networks, exemplified by the Internet,
 have become ubiquitous and critical infrastructural for
 communities, organizations, and markets.
 As with any critical infrastructure, the cost of a failure can be
@@ -205,7 +205,7 @@ the effect of network structure on adversarial fault-tolerance.
 
 \section{Attack-Tolerant Networks Infrastructure}
 
-In this section, we describe the functional proprties required of an
+In this section, we describe the functional properties required of an
 attack-tolerant network infrastructure and how those properties translate
 into constraints on network structure.
 We pay special attention to a property we call
@@ -213,18 +213,17 @@ We pay special attention to a property we call
 
 \subsection{Functional Properties}
 
-In most cases, infrastructure must remain functional as it grows;
-it must be {\em scalable}.
+\begin{description}
+\item[Scalability]
+For large scale networks it is important that the infrastructure allows for the network to grow while remaining functional. In practice, people, devises, and connections, have limited capabilities and these limitations need to be considered as part of the design of the infrastructure. 
+
+\item [Decentralization]
 Systems having single points of failure are less tolerant against faults at those
 points, which both raises the likelihood of a failure and creates targets
 where attackers might be able to focus their resources efficiently.
-Attack-tolerant infrastructure must minimize single points of failure;
-it must be {\em decentralized}.
-In some, but not all, cases it is also desirable that an infrastructure
-provides {\em secrecy},
-protecting the contents of a message or the identity of the sender.
+Attack-tolerant infrastructure must be decentralized in order to minimize single points of failure.
 
-We add one additional property, which we call {\em stabilizing asymmetry}.
+\item[Stabilizing asymmetry]
 In the context of international conflict,
 \cite{mack_why_1975}
 observed that power imbalance usually determines the outcome of a conflict
@@ -239,8 +238,15 @@ because it lowers the incentive to attack.
 With this in mind, an attack-resistant infrastructure will benefit from a high
 level of stabilizing asymmetry.
 
+\item[Secrecy]
+In some, but not all cases, it is desirable that the infrastructure provides secrecy and allow a source and a target to exchange private information while still relying on intermediary nodes. Our proposed multipath routing technique can be adapted to provide secrecy but we do not focus on this aspect in this paper. 
+
+\end{description}
 \subsection{Structural Properties}
 
+We now describe the structural properties of a network that allow it to achieve the functional properties described above. 
+\begin{description}
+\item [Sparsity and low diameter]
 To achieve scalability, networks must be {\em sparse} and have a
 {\em low diameter}.
 In practical settings, humans and devices have an upper limit on the number
@@ -254,27 +260,29 @@ While low diameter guarantees a path exists,
 paths are only useful if an efficient {\em routing} algorithm exists
 to find them.
 
-Redundancy in a network can help reduce single points of failure as well as
+\item [Vertex transitivity]
+In vertex transitive networks, for any pair of nodes, an edge-preserving map
+always exists from one node to the other.
+In other words, all nodes occupy structurally indistinguishable positions
+in the network. Networks with {\em vertex transitivity} are decentralized in the sense that they structure does no allow for  single points of failure.
+
+\item [Redundancy]
+Redundancy in a network refers to the extent to which nodes are connected to each other by multiple independent paths. Redundancy can help reduce single points of failure as well as
 increase fault-tolerance.
 One measure of redundancy is given by the ratio of edges to nodes
 \cite{baran_distributed_1964}.
-A single points of failure occur when a node holds a uniquely
+A single point of failure occurs when a node holds a uniquely
 central position,
 and can be eliminated by adding alternative
 paths around the node,
 which increases the network's redundancy.
-Similarly, redundancy in a network can enable fault-tolerance techniques
+Similarly, as we will later show, redundancy in a network can enable fault-tolerance techniques
 that reduce the effectiveness of attacks and creating stabilizing asymmetry.
 When secrecy is desired, redundancy can help by allowing messages to be
 divided into parts and sent along different paths so even if one path is
-compromised, the whole message is not revealed.
+compromised, the whole message is not revealed \cite{}. 
 
-Networks with {\em vertex transitivity} have the greatest protection agasint
-single points of failure.
-In vertex transitive networks, for any pair of nodes, an edge-preserving map
-always exists from one node to the other.
-In other words, all nodes occupy structurally indistinguishable positions
-in the network.
+\end{description}
 
 \subsection{Trust}
 
@@ -286,7 +294,7 @@ These intermediary nodes are targets for potential attacks.
 More specifically, the threat model is as follows: Alice sends a message to
 Bob via one or more intermediaries, but some intermediaries may try to
 either block or alter the message.
-The ability to tolerate these types of adversarial attacks often depends on
+The ability to tolerate these types of adversarial attacks depends on
 Alice and Bob's ability to assume that some nodes have not been
 compromised---to {\em trust} them.
 
@@ -307,42 +315,39 @@ However, the web of trust approach assumes that trust can be extended
 transitively,
 which is not generally true
 \cite{christianson_why_1997}.
-We note that while such approaches are decentralized,
-they do not incorporate redundancy and thus still suffer from single
+We note that while such approaches are decentralized in the sense that no central authority holds the keys,
+they do not necessarily incorporate redundancy and the network they form may not be vertex transitive. Thus they still may suffer from single
 points of failure.
 
 \section{Partial Trust}
 
 We now propose a decentralized trust model based on weaker transitivity
-asumptions than existing web of trust models.
-In following sections, we will use this model to utilize network redundancy and
-minimize vulnerabilities due to single points of failure.
+assumptions than existing web of trust models.
+In following sections, we will use this model along with network redundancy to minimize vulnerabilities due to single points of failure.
 Our model is based on the assumption of partially-transitive trust.
 While this assumption is still idealized, it is a more realistic improvement
 on fully-transitive models.
 
 Our model (Figure \ref{fig:trust-source})
-is represented as an undirected graph or network,
+is represented as an undirected graph,
 with nodes representing individual
-agents and edges representing direct and mutual trust relationships.
+agents and edges representing mutual trust relationships.
 We define a {\em trust radius} $h$ and assume that trust is transitive
 up to $h$ hops away.
-In other words, the nodes $v$ trusts $w$ if the distance
-$d(u,v) < h$.
-We call the all such nodes the {\em trusted neighborhood} $T_h(v)$,
-and all noes at exactly distance $h$ the {\em trust boundary} $B_h(v)$:
+In other words, the nodes $v$ and $w$ trust each other if the distance between $v$ and $w$, $d(u,v)$ is less than $h$.
+For a given node $v$, we call the set of nodes that $v$ trusts the {\em trusted neighborhood} $T_h(v)$,
+and all nodes at exactly distance $h$ from $v$ the {\em trust boundary} $B_h(v)$:
 \beq
 T_h(v) &=& \left\{ w \mid d(v,w) < h \right\} \\
 B_h(v) &=& \left\{ w \mid d(v,w) = h \right\}.
 \eeq
-We assume that no nodes within the trusted neighborhood can be compromised
-by an adversary of $v$.
-However, by compromising all nodes in the trust boundary, an adversary can
-ensure that all communications leaving the trusted neighborhood are compromised.
+We assume that $v$ is very familiar with nodes in its trusted neighbor and $v$ would know if any of these nodes were compromised by an attacher. Hence, an adversary of $v$ has no incentive to compromise a node in  $T_h(v)$. We thus assume that no nodes within the trusted neighborhood are compromised
+by an adversary of $v$. However, by compromising all nodes in the trust boundary, an adversary can
+ensure that all communications leaving the trusted neighborhood are compromised. 
 
 Source-to-network
 \begin{figure}
-\centerline{\includegraphics{fig-trust-source}}
+\centerline{\includegraphics[height =.4 \textwidth]{fig-alice_trusted_neigh2}}
 \caption{
 Illustration of the {\em partial trust} model.
 Edges represent direct, mutual trust relationships.
@@ -357,21 +362,12 @@ all communications leaving Alice's trusted neighborhood are compromised.
 \end{figure}
 
 Now we consider a source $v$ (Alice) and a destination $w$ (Bob),
-shown in Figure \ref{fig-trust-source-desitnation}.
-We assume that a message beween Alice and Bob will not be compromised in
-either of their trusted neighborhoods.
-An adversary could compromise all possible paths between Alice and Bob
-by compromising either Alice or Bob's entire trust boundary,
-which requires compromising $\min(|T_h(v)|, |T_h(w)|)$ nodes.
-In a vertex transitive network, these two trust boundaries will be the same size.
-If disjoint paths exist connecting each node in Alice's trust boundary to
+shown in Figure \ref{fig:trust-source-destionation}. We also consider an adversary who aims at disrupting all possible communication paths between Alice and Bob. Since the adversary cannot compromise any nodes in the trusted neighborhoods of Alicia or Bob, the only option is to compromise nodes outside of the trust neighborhoods. An adversary could, for example, compromise all possible paths between Alice and Bob by compromising either Alice or Bob's entire trust boundary. This would require compromising $\min(|T_h(v)|, |T_h(w)|)$ nodes. In a vertex transitive network, these two trust boundaries will be the same size. Alternatively, the adversary could try to compromise a small set of nodes such that all paths between Alice and Bob pass through one of these nodes. However, If disjoint paths exist connecting each node in Alice's trust boundary to
 a node in Bob's, then the cut size between the two can never be smaller than
-$|T_h(v)| = |T_h(v)|$,
-so an adversary compromises fewer nodes, they cannot compromise all possible
-paths between Alice and Bob.
+$|T_h(v)| = |T_h(v)|$, so an adversary who compromises fewer nodes cannot compromise all possible paths between Alice and Bob.
 
 \begin{figure}
-\centerline{\includegraphics{fig-trust-source-destination}}
+\centerline{\includegraphics[height =.4 \textwidth]{fig-bob_Alice_trusted_neigh2}}
 \caption{
 Partial trust model with sender (Alice) and receiver (Bob).
 If disjoint paths exist connecting each node in Alice's trust boundary to
@@ -428,13 +424,15 @@ The problem
 of finding a route between arbitrary nodes $v$ and $w$
 can be reduced to finding a route from node $(0,0)$ to some $\tilde{w}$.
 \item[Logarithmic diameter]
-For any two nodes, the length of the shortest path between them is logorithmic
+For any two nodes, the length of the shortest path between them is logarithmic
 in the size of the network.
 \item[Constant degree]
 In practical applications, each communication link requires additional resources,
 such as physical infrastructure or entries in a routing table.
 A constant degree limits the number of such resources needed as the network
 grows in size.
+\item [Redundancy] 
+As we show in the next section. The number of independent paths between two nodes increases exponentially with the size of the trusted neighborhood. 
 \end{description}
 
 \begin{figure}
@@ -453,32 +451,27 @@ The node $(l,z)$ is shown as the bit string $z$ with a square around the $l$th b
 This section gives an informal overview of the multipath routing algorithm.
 In a wraparound butterfly network with trusted radius $h$,
 the algorithm constructs $2^h$ disjoint paths between the trusted neighborhoods
-of any two nodes, each parameterized by an $h$-bit string $s$
-(see Table \ref{tab:routing}).
-Each path cycles around the levels of the butterfly network (about) twice.
+of any two nodes $v$ and $w$. Because of vertex transitivity, we can make the simplifying assumption that $v = (0,0)$ without loss of generality. Each path is parameterized by an $h$-bit string $s \in (0,2^h]$ (see Table \ref{tab:routing}). Each path cycles around the levels of the butterfly network at most twice.
+
+
 During the first cycle, the place-within-level $z$ of all nodes is set such that
 no two paths overlap outside the trusted neighborhoods.
 During the second cycle, the place-within-level is set to its destination value
 and the algorithm terminates when the destination level is reached.
 
-More specifically, the algorithm can be understood by dividing the bits of
-$z$ into four segments: $A, B, C, D$ (Figure \ref{fig:route-overview}).
-$A$ is the first $h$ bits, followed by $B$ until reaching $C$: the last $h$ bits before
-the destination level $l_w$, and then finally $D$.
-As the routing algorithm progresses through the levels $l$, the segments of $z$
-get updated in order.
-Because of vertex transitivity, we can make the simplifying assumption
-that $v = (0,0)$ without loss of generality.
-Initially (1) while still in the source trusted neighborhood,
-$A$ is set to match $s$, which ensures that no two
-paths will share nodes outside the trusted neighborhood.
-Then (2) the bits of $B$ are inverted and (3) a cyclic permutation of $s$ is
-placed into $C$.
-After this step (4--6), $D$, $A$, and $B$ are set to their destination values.
-After $A$ is set, the path remains distinct from other paths because other nodes
-either have uninverted values in $B$ or a different value of $\tilde{s}$ in $C$.
-While (7) $C$ is being set to the destination value, overlaps may occur, but
-nodes are now within the trusted neighborhood of the destination.
+More specifically, consider any node, $(l,z)$, in the path corresponding to $s$. The algorithm can be understood by dividing the $m$ bits of
+$z$ into four segments: $A, B, C, D$ (see figure \ref{fig:route-overview}).
+$A$ is the first $h$ bits, followed by $B$ until reaching $C$, which is the last $h$ bits before
+the destination level $l_w$, and then finally $D$. Hence, $A, B, C, $ and $D$ occupy $h$, $l_w - 2h$, $h$, and $m - l_w$ bits of $z$, respectively. 
+Note that due to the construction of the network, as we walk through any path $\{p_1, p_2, \dots\}$, the level $l_{t+1}$ of node $p_{t+1}$ is always one higher (mod $m$) than level $l_t$ the previous node $p_t$. Also, $z_{t+1}$ is always the same as the $z_t$, except for possibly the $(l+1)^{th}$ bit of $z_{t+1}$, which can be either 0 or 1. Hence, as the routing algorithm progresses through the levels $l$, the segments of $z$ get updated in order. 
+
+There are 7 stages of the algorithm to construct a path from $v$ to $w$. Stages (1) through (4) consist of the first cycle thought the levels of the network and stages (5) though (7) consists of the second (potentially partial) cycle. We start at the source node $v$ and begin constructing the path. During stage (1), $A$ is set to match $s$. During stage (2) the bits of $B$ are inverted. During stage (3) a cyclic permutation of $s$ is placed into $C$. After this, in stages (4--7), $D$, $A$, $B$, and $C$ are set to their destination values (see figure \ref{fig:route-overview}).
+
+We now argue that in the above routing algorithm, given $s, s' \in (0, 2^h]$ such that $s \neq s'$, the corresponding paths, $P_s$ and $P_{s'}$, are disjoint when they are both outside of the trusted neighborhoods of $v$ and $w$. We informally refer to different segments of nodes in $s$ and $s'$ as $A,B,C,D$ and $A',B',C',D'$, respectively. 
+
+First note that any over lap between the two paths must occur either while they are at the same stage of the routing, or while one is at stage (1) and the other one at (5), one is at stage (2) and the other one at (6), or one is at stage (3) and the other one at (7). This is because in any other case, the nodes in the paths will be at different levels, $l$, and thus they cannot overlap. Furthermore, when a path is in stage (1) or (7), it is in the trusted neighborhoods of $v$ or $w$, hence we are not concerned with overlaps in stages (1) or (7). 
+
+When both paths are in stages (2), (3), or (4), they do not overlap because segment $A$ is set to $s$ and segment $A'$ is set to $s'$. When both paths are in stages (5) or (6), they do not overlap because segment $C$ is set to a cyclic permutation of $s$ and segment $C'$ is set to a cyclic permutation of $s'$. When one path is in stage (1) and the other one is in stage (5), say $P_s$ is in (1) and $P_{s'}$ is in (5), they do not overlap because all bits in $B$ are set to the original bits in the source node and all bits in $B'$ is set to the inverted bits of the source node. When one path is in stage (2) and the other one is in stage (6), they do not overlap because at least one pair of bits in $B$ and $B'$ is still be mismatched while stage (6) is being processed. 
 
 \begin{figure}
 \begin{center}
