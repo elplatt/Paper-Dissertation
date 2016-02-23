@@ -544,13 +544,11 @@ We denote the $m$-dimensional, directed wrap-around butterfly as $\wbf(m)$:
 V &=& \mathbb{Z}_{m} \times \mathbb{Z}_2^m \\
 E_\downarrow
 &=&
-\{((l,z),(l+1 (\text{mod } m),z) \nonumber \\
-&& \; | \, l \in \mathbb{Z}_d, z \in \mathbb{Z}_{2^m}\} \\
+\{((l,z),(l+1 (\text{mod } m),z) \} \\
 E_\rightarrow
 &=&
 \{(l,z),(l+1 (\text{mod } m),
-(z_0, \ldots, z_{l-1},z_l \oplus 1, z_{l+1}, \ldots, z_{m-1}) \nonumber \\
-&& \; | \, l \in \mathbb{Z}_d, z \in \mathbb{Z}_{2^m}\},
+(z_0, \ldots, z_{l-1},z_l \oplus 1, z_{l+1}, \ldots, z_{m-1}) \},
 \eeq
 where $\mathbb{Z}_m$ is the set of integers modulo $m$,
 and $\oplus$ represents the addition modulo 2.
@@ -565,15 +563,15 @@ but one having the bitstring equal to $z$ with the $l$th bit inverted.
 The wrap-around butterfly network has a number of properties desired for
 a scalable, decentralized communication network.
 \begin{description}
-\item[Vertex-transitive.]
+\item[Vertex-transitive]
 Vertex transitivity means that the network is maximally decentralized.
 We will also use this property throught the proof, noting that
 the problem of finding a route between arbitrary nodes $\tilde{v}$ and $\tilde{w}$
 can be reduced to finding a route from node $(0,0)$ to some node $w$.
-\item[Small-diameter.]
+\item[Small-diameter]
 For any two nodes, the length of the shortest path between them is
-$O(log N)$, where N is the number of nodes in the network.
-\item[Sparse.]
+$O(\log N)$, where N is the number of nodes in the network.
+\item[Sparse]
 With a constant degree of 4, the wraparound butterfly is extremely sparse,
 and can scale indefnitely without node degree becoming a limitation.
 \item [Redundant] 
