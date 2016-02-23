@@ -399,12 +399,51 @@ compromise all possible paths between Alice and Bob.
 
 \section{Multipath Fault Tolerance}
 
+When the assumptions of the partial trust model hold, a network can achieve
+robust fault tolerance by utilizing the redundancy of multiple paths
+between the sender and receiver.
+Furthermore, this fault tolerance can remain robust even when faults are
+adversarially chosen by an attacker who has access to more resources
+than the sender and receiver.
+On a structured network, multipath fault tolerance reveals not just when
+an error has occured, but also which routes are faulty and potentially
+compromised.
 
-Fault tolerance with partial trust and redundancy.
+In the terminology of fault tolerance, a {\em fault} occurs when one component
+of a system behaves incorrectly (e.g., a routing node blocking or
+altering a message).
+The result of that fault (e.g., a recipient receiving conflicting messages)
+is an {\em error} state.
+If the error is undetected or incorrectly corrected, the system is
+said to have experienced a {\em failure} (e.g., an altered message is
+accepted as authentic).
+We are concerned in particular with {\em adversarial faults},
+which (as opposed to random faults)
+are chosen strategically (within the assumptions of the trust model)
+to maximize the liklihood of a failure.
+In this section, we focus on the simplest possible question:
+when using multipath fault tolerance,
+what is the probability that adversarial faults will cauase an undetectable
+error, and thus guarantee a failure?
 
-\subsection{Fault Tolerance}
-
-Results
+They key idea behind multipath fault tolerance is that several copies of
+a message are sent, along multiple routes,
+rather than using traditional unicast routing.
+If any of the message copies differ from one another or do not arrive,
+the receiver can conclude that an error has occurred,
+and possibly correct it, depending on the magnitude of the error
+and the desired fault tolerance properties.
+In the simplest such scheme, a sender broadcasts copies of a message
+along all possible routes to the receiver.
+Such an approach takes advantage of all possible redundancy in the network,
+and requires an adversary to compromise at least one node on each path
+in order to create an undetectable error.
+Realistically, the sender may only have the resources to send a limited number of
+copies, or the network may not be able to handle the congestion caused by
+sending all messages along all paths.
+However, we will now show that a network can provide a high level of
+fault tolerance with only a few copies of a message,
+provided the number of possible paths is large.
 
 \begin{figure}
 \centerline{\includegraphics{fig-perror}}
