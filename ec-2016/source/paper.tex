@@ -71,7 +71,7 @@ trust
 \begin{bottomstuff}
 This work is supported by TODO.
 
-Author�s addresses: E.L. Platt and D.M. Romero, School of Information; email: \{elplatt,drom\}@umich.edu.
+Author's addresses: E.L. Platt and D.M. Romero, School of Information; email: \{elplatt,drom\}@umich.edu.
 \end{bottomstuff}
 
 \maketitle
@@ -80,12 +80,13 @@ TODO: Fix bibtex encoding.
 
 \section{Introduction}
 
-Communication networks, exemplified by the Internet,
+Large-scale communication networks, exemplified by the Internet,
 have become ubiquitous and critical infrastructural for
 communities, organizations, and markets.
 As with any critical infrastructure, the cost of a failure can be
 immense, so methods for tolerating various kind of faults are an
-important and ongoing area of research.
+important and ongoing area of research
+\cite{zin_survey_2015,albert_error_2000,sterbenz_resilience_2010}.
 The key question is: what are the techniques and network structures that can
 be used to create robust, fault-tolerant systems?
 
@@ -106,36 +107,51 @@ General techniques for understanding and mitigating these vulnerabilities are
 needed.
 
 We consider a setting in which a source node in a network attempts to route information
-to a target node by forwarding it through the edges of the network. We 
+to a target node by forwarding it through the links of the network. We 
 assume that some nodes in the network may be compromised by an attacker 
-and will forward the wrong information to their neighbors. We assume 
-a weak form of trust transitivity, where the source and the target are able to 
-detect any compromised nodes that are a few hops away from them in the network.
+and will forward the wrong information to their neighbors or
+block the information altogether.
+In order to evaluate network-based techniques for mitigating such attacks,
+we develop a decentralized {\em partial trust} model,
+similar to a web of trust
+\cite{zimmermann_official_1995,ferguson_practical_2003},
+but making weaker assumptions of trust transitivity.
 
-Given this framework, we develop a \emph{multipath routing} technique to reduce 
+Given this framework, we develop and evaluate a \emph{multipath routing} technique to reduce 
 the likelihood that compromised nodes are undetected during the information 
 routing process by allowing multiple copies of a message to be sent through independent paths,
 which can be used for error-detection and error-correction by the receiver. 
 
-The multipath routing technique relies on the existence and detectability of
-multiple independent paths between the source and the destination. Thus, network 
-structure and routing algorithms play a key role in the success of the technique. We formally evaluate the 
-effects of network structure on attack-resistance and show that the probability of undetected 
+The multipath routing technique relies on the existence and discoverability of
+multiple redundant paths between the source and the destination. Thus, network 
+structure and routing algorithms play a key role in the success of the technique.
+We formally evaluate the 
+effects of network structure on attack-resistance and show that the probability
+of undetected 
 errors decreases exponentially with the number of independent paths between 
-source and destination. Focusing on {\em structured networks}, in which links between nodes are 
-constrained to a particular architecture, we propose an efficient multipath routing algorithm on an popular network
-architecture, which is currently used for several applications -- the butterfly network \cite{}. 
+source and destination.
+
+The mutlipath routing technique is well-suted for {\em structured networks},
+in which links between nodes are constrained to a particular architecture.
+Specifically, we employ the butterfly network topology,
+used elsewhere in parallel computing \cite{kshemkalyani_distributed_2008}
+and peer-to-peer \cite{lua_survey_2005, korzun_structured_2013}
+applications.
+For this network topology,
+we propose an efficient, attack-tolerant multipath routing algorithm.
 
 Our main contributions are:
 \begin{itemize}
-\item{We present a formal {\em partial trust model},
+\item{We develop a decentralized {\em partial trust model},
 which makes weaker transitivity assumptions than previous web-of-trust models,
 and use this model to quantify the effects of network structure on
 fault tolerance;}
-\item{We show that the probability of successfully detecting an
-adversarial fault increases exponentially with the number of disjoint untrusted
-paths between the neighborhoods of the sender and receiver, and that this
-value depends on network structure;}
+\item{We show that as the number of disjoint paths between the neighborhoods
+of the sender and reciever grows,
+the probability of successfully detecting adversarial faults
+approaches 1 exponentially.
+Furthermore, we show that the number of disjoint paths is a function of
+network structure;}
 \item{We present a scalable, efficient, and attack-tolerant multipath
 routing algorithm on the butterfly network topology.}
 \end{itemize}
@@ -151,7 +167,7 @@ Structured networks have been a popular tool in parallel and distributed
 computing architectures \cite{kshemkalyani_distributed_2008}.
 More recently, peer-to-peer systems based on distributed hash tables have used
 structured ``overlay'' networks to map table keys to local TCP/IP routes
-\cite{lua_survey_2005}.
+\cite{lua_survey_2005,korzun_structured_2013}.
 
 Many distributed consensus protocols (such as those used by crypto-currencies)
 are designed to provide tolerance against arbitrary or adversarial faults.
