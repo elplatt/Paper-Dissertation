@@ -483,56 +483,104 @@ errors are detectable.
 Otherwise, the probability of Eve producing an undetectable error is
 the probability that all of Alice's paths contain compromised nodes:
 \beq
-TODO
+\label{eq:pf}
+p_f &=& \frac{l!(B-k)!}{B!(l-k)!}.
 \eeq
+Letting $k=\alpha B$ and $l=\beta B$, then applying Stirling's
+approximation gives:
+\begin{eqnarray}
+\label{eq:pf_approx}
+p_f &\approx&
+\frac{\sqrt{\beta(1-\alpha)}}{\sqrt{\beta-\alpha}}
+\left[
+    \left( \frac{\beta-\alpha}{1-\alpha} \right)^{\alpha}
+    \left( \frac{\beta}{\beta-\alpha} \right)^{\beta}
+    (1-\alpha)
+\right]^B.
+\end{eqnarray}
+
+Figure \ref{fig:pfail} shows the value of $p_f$
+as a function of $k$ and $l$ for various values of $B$.
+Equation (\ref{eq:pf_approx}) shows that while $p_f$
+depends on the fractions of
+redundant paths actually utilized $\alpha$ and compromised $\beta$,
+it decreases exponentially in the total number of {\em possible}
+redundant paths.
+This result is significant because $B$ depends only on the network structure,
+not on the amount of resources available to the sender or the adversary.
+In other words, senders can tolerate attacks from significantly more powerful
+adversaries, as long as the network structure provides large $B$.
+Formally we have shown that under the partial trust assumption,
+multipath fault tolerance can provide {\em asymptotic security}
+against adversarial faults if $B$ can be made arbitrarily large.
+Similarly, because the cost of an attack is prohibitively large
+compared to the cost of protecting against an attack,
+this architecture creates what a stabilizing asymmetry.
+By putting attackers at a disadvantage, attacks are not only tolerated
+but also disincentivized.
 
 \begin{figure}
 \centerline{\includegraphics{fig-perror}}
-\caption{TODO}
-\label{fig:one}
+\caption{
+The probability of an undetectable error as a function of the number of
+message copies and the number of adversarial faults,
+for various numbers of redundant paths.
+}
+\label{fig:pfail}
 \end{figure}
 
 \section{Multipath Routing on the Butterfly Topology}
 
 \subsection{Butterfly Network Topology}
 
-We now describe a Concurrent Multipath Routing scheme on a specific family
-of networks: the butterfly network \cite{}.
+We now present a decentralized, fault-tolerant, multipath routing algorithm
+on a specific topology known as the butterfly network topology
+\cite{kshemkalyani_distributed_2008}.
 Several variations on the butterfly network exist.
 Specifically, we utilize the wrap-around butterfly.
-We denote the $m$-dimensional directed wrap-around butterfly as $\wbf(m)$:
+We denote the $m$-dimensional, directed wrap-around butterfly as $\wbf(m)$:
 \beq
 \wbf(m) &=& (V, E_\downarrow \cup E_\rightarrow) \\
-V &=& \mathbb{Z}_m \times \mathbb{Z}_{2^m} \\
-E_\downarrow &=& \{((l,z),(l+1 (\text{mod } m),z) \nonumber \\
+V &=& \mathbb{Z}_{m} \times \mathbb{Z}_2^m \\
+E_\downarrow
+&=&
+\{((l,z),(l+1 (\text{mod } m),z) \nonumber \\
 && \; | \, l \in \mathbb{Z}_d, z \in \mathbb{Z}_{2^m}\} \\
-E_\rightarrow &=& \{(l,z),(l+1 (\text{mod } m), z \oplus 2^l) \nonumber \\
+E_\rightarrow
+&=&
+\{(l,z),(l+1 (\text{mod } m),
+(z_0, \ldots, z_{l-1},z_l \oplus 1, z_{l+1}, \ldots, z_{m-1}) \nonumber \\
 && \; | \, l \in \mathbb{Z}_d, z \in \mathbb{Z}_{2^m}\},
 \eeq
-where $\oplus$ represents the bitwise XOR operator.
-Each node is associated with a level $l$ and an $m$-bit integer $z$.
+where $\mathbb{Z}_m$ is the set of integers modulo $m$,
+and $\oplus$ represents the addition modulo 2.
+Each node is associated with a level $l$ and an $m$-bit string $z$
+known as {\em the place-within-level}.
 There are two types of edges, shown in Figure \ref{fig:butterfly}.
 Down edges ($E_\downarrow$) connect nodes sharing the same $z$ value
 in a cycle of increasing level $l$.
 Down-right edges ($E_\rightarrow$) also link to a node of level $l + 1$,
-but one having the bitstring equal to $z$ with the $l$th bit flipped.
+but one having the bitstring equal to $z$ with the $l$th bit inverted.
 
-The wrap-around butterfly network has a number of properties making it useful for multipath routing:
+The wrap-around butterfly network has a number of properties desired for
+a scalable, decentralized communication network.
 \begin{description}
-\item[Vertex transitivity]
-The problem
-of finding a route between arbitrary nodes $v$ and $w$
-can be reduced to finding a route from node $(0,0)$ to some $\tilde{w}$.
-\item[Logarithmic diameter]
-For any two nodes, the length of the shortest path between them is logarithmic
-in the size of the network.
-\item[Constant degree]
-In practical applications, each communication link requires additional resources,
-such as physical infrastructure or entries in a routing table.
-A constant degree limits the number of such resources needed as the network
-grows in size.
-\item [Redundancy] 
-As we show in the next section. The number of independent paths between two nodes increases exponentially with the size of the trusted neighborhood. 
+\item[Vertex-transitive.]
+Vertex transitivity means that the network is maximally decentralized.
+We will also use this property throught the proof, noting that
+the problem of finding a route between arbitrary nodes $\tilde{v}$ and $\tilde{w}$
+can be reduced to finding a route from node $(0,0)$ to some node $w$.
+\item[Small-diameter.]
+For any two nodes, the length of the shortest path between them is
+$O(log N)$, where N is the number of nodes in the network.
+\item[Sparse.]
+With a constant degree of 4, the wraparound butterfly is extremely sparse,
+and can scale indefnitely without node degree becoming a limitation.
+\item [Redundant] 
+The number of independent paths between the $h$-trusted neighborhoods of two
+nodes in the wraparound butterfly increases exponentially in $h$.
+We prove this assertion below by giving an algorithm to explicitly construct
+these paths.
 \end{description}
 
 \begin{figure}
@@ -542,6 +590,8 @@ As we show in the next section. The number of independent paths between two node
 \caption{
 Schematic illustration of the two types of edges in a directed butterfly network.
 The node $(l,z)$ is shown as the bit string $z$ with a square around the $l$th bit.
+"Down" edges increment $l$, leaving $z$ unchanged, while "down-right" edges
+increment $l$ and invert the $l$th bit of $z$.
 \label{fig:butterfly}
 }
 \end{figure}
