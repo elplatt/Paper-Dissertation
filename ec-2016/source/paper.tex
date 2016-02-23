@@ -22,7 +22,7 @@
 \doi{XXXXXXX.XXXXXXX}% TeXSupport
 
 \usepackage{tikz}
-\usetikzlibrary{chains,decorations.pathreplacing}
+\usetikzlibrary{arrows,chains,decorations.pathreplacing}
 \newcommand{\beq}{\begin{eqnarray}}
 \newcommand{\eeq}{\end{eqnarray}}
 \DeclareMathOperator{\wbf}{wBF}
@@ -497,20 +497,13 @@ node distance=0pt,
     X/.style = {rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
                 outer sep=0pt, on chain},
-    B/.style = {decorate,
-                decoration={brace, amplitude=5pt,
-                pre=moveto,pre length=1pt,post=moveto,post length=1pt,
-                raise=1mm,
-                            #1}, % for mirroring of brace, if necessary
-                thick},
-    B/.default=mirror, % by default braces are mirrored
                         ]
 \foreach \i in {0\ldots,{\ldots}0\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
     \node[X] {\i};
-\draw[B] ( A-1.north west) -- node[above=1.5mm] {$h$} ( A-1.north east);
-\draw[B] ( A-2.north west) -- node[above=1.5mm] {$l_w - 2h$} ( A-2.north east);
-\draw[B] ( A-3.north west) -- node[above=1.5mm] {$h$} ( A-3.north east);
-\draw[B] ( A-4.north west) -- node[above=1.5mm] {$m - l_w$} ( A-4.north east);
+\draw[<->] ([yshift=1.5mm] A-1.north east) -- node[above=0.25mm] {$h$} ([yshift=1.5mm] A-1.north west);
+\draw[<->] ([yshift=1.5mm] A-2.north east) -- node[above=0.25mm] {$l_w - 2h$} ([yshift=1.5mm] A-2.north west);
+\draw[<->] ([yshift=1.5mm] A-3.north east) -- node[above=0.25mm] {$h$} ([yshift=1.5mm] A-3.north west);
+\draw[<->] ([yshift=1.5mm] A-4.north east) -- node[above=0.25mm] {$m - l_w$} ([yshift=1.5mm] A-4.north west);
 \draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {start} ( A-1.west);
 \node (B1) [inner sep=1pt,above=of A-1.north,above=5ex] {\underline{A}};
 \node (B2) [inner sep=1pt,above=of A-2.north,above=5ex] {\underline{B}};
@@ -524,8 +517,12 @@ node distance=0pt,
     X/.style = {rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
                 outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick},
                         ]
-\foreach \i in {$s$,{\ldots}0\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
+\node[Y] {$s$};
+\foreach \i in {{\ldots}0\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
     \node[X] {\i};
 \draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {1.} ( A-1.west);
 \end{tikzpicture}
@@ -536,8 +533,14 @@ node distance=0pt,
     X/.style = {rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
                 outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick},
                         ]
-\foreach \i in {$s$,{\ldots}1\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
+\foreach \i in {$s$}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {{\ldots}1\ldots};
+\foreach \i in {{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
     \node[X] {\i};
 \draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {2.} ( A-1.west);
 \end{tikzpicture}
@@ -548,8 +551,14 @@ node distance=0pt,
     X/.style = {rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
                 outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick},
                         ]
-\foreach \i in {$s$,{\ldots}1\ldots,{\ldots}$\tilde{s}$\ldots,{\ldots}0}% <-- content of nodes
+\foreach \i in {$s$,{\ldots}1\ldots}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {$\tilde{s}$};
+\foreach \i in {{\ldots}0}% <-- content of nodes
     \node[X] {\i};
 \draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {3.} ( A-1.west);
 \end{tikzpicture}
@@ -560,9 +569,13 @@ node distance=0pt,
     X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
                 outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick},
                         ]
-\foreach \i in {$s$,{\ldots}1\ldots,{\ldots}$\tilde{s}$\ldots,$z_{w,D}$}% <-- content of nodes
+\foreach \i in {$s$,{\ldots}1\ldots,$\tilde{s}$}% <-- content of nodes
     \node[X] {\i};
+\node[Y] {$z_{w,D}$};
 \draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {4.} ( A-1.west);
 \end{tikzpicture}
 \\
@@ -572,8 +585,12 @@ node distance=0pt,
     X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
                 outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick},
                         ]
-\foreach \i in {$z_{w,A}$,{\ldots}1\ldots,{\ldots}$\tilde{s}$\ldots,$z_{w,D}$}% <-- content of nodes
+\node[Y] {$z_{w,A}$};
+\foreach \i in {{\ldots}1\ldots,$\tilde{s}$,$z_{w,D}$}% <-- content of nodes
     \node[X] {\i};
 \draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {5.} ( A-1.west);
 \end{tikzpicture}
@@ -584,8 +601,14 @@ node distance=0pt,
     X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
                 outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick},
                         ]
-\foreach \i in {$z_{w,A}$,$z_{w,B}$,{\ldots}$\tilde{s}$\ldots,$z_{w,D}$}% <-- content of nodes
+\foreach \i in {$z_{w,A}$}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {$z_{w,B}$};
+\foreach \i in {$\tilde{s}$,$z_{w,D}$}% <-- content of nodes
     \node[X] {\i};
 \draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {6.} ( A-1.west);
 \end{tikzpicture}
@@ -596,8 +619,14 @@ node distance=0pt,
     X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
                 outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick},
                         ]
-\foreach \i in {$z_{w,A}$,$z_{w,B}$,$z_{w,C}$,$z_{w,D}$}% <-- content of nodes
+\foreach \i in {$z_{w,A}$,$z_{w,B}$}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {$z_{w,C}$};
+\foreach \i in {$z_{w,D}$}% <-- content of nodes
     \node[X] {\i};
 \draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {7.} ( A-1.west);
 \end{tikzpicture}
