@@ -433,17 +433,58 @@ If any of the message copies differ from one another or do not arrive,
 the receiver can conclude that an error has occurred,
 and possibly correct it, depending on the magnitude of the error
 and the desired fault tolerance properties.
-In the simplest such scheme, a sender broadcasts copies of a message
-along all possible routes to the receiver.
+
+In the simplest such scheme, a sender (Alice) broadcasts copies of a message
+along all possible routes to the receiver (Bob).
 Such an approach takes advantage of all possible redundancy in the network,
-and requires an adversary to compromise at least one node on each path
+and requires an adversary (Eve) to compromise at least one node on each path
 in order to create an undetectable error.
+But how many nodes is that?
+The answer depends on the smallest {\em vertex cut} of the untrusted
+portion of the network---the smallest set of nodes than can be removed
+to separate the network into two components.
+Any path between Alice and Bob must pass through all such sets,
+so to guarantee an undetectable error, Eve must compromise at least as many
+nodes as are in the smallest vertex cut.
+Alice and Bob's trust boundaries are both vertex cuts,
+so the smaller of the two is an upper bound.
+It is not difficult to construct networks in which the trust boundary is exactly
+the smallest vertex cut,
+and we will show this to be true for the networks we consider below.
+We denote the size of the smallest vertex cut---the
+maximum number of disjoint paths between Alice and Bob's trusted
+neighborhoods---as $B$.
+
 Realistically, the sender may only have the resources to send a limited number of
 copies, or the network may not be able to handle the congestion caused by
 sending all messages along all paths.
 However, we will now show that a network can provide a high level of
 fault tolerance with only a few copies of a message,
-provided the number of possible paths is large.
+provided the number of disjoint paths $B$ is large.
+
+In a more sophisticated multipath fault tolerance scheme,
+Alice randomly chooses $k$ paths and sends a copy of
+her message on each.
+We further assume that Alice posesses a routing algorithm
+(such as described in the next section)
+that enables her to construct paths that
+do not intersect between trusted neighborhoods.
+So the maximum number of paths Alice could choose is $B$,
+otherwise two paths would have to intersect in the minimum vertex cut.
+Let us assume that Eve is capable of compromising up to $l$ nodes.
+Eve's best adversarial strategy is now to compromise as many nodes in the smallest
+vertex cut as possible,
+succeeding when each of Alice's paths include one of the compromised nodes.
+Since Alice chooses paths randomly,
+all nodes in the vertex cut are equally likely to contain a path,
+so Eve can do no better than also choosing randomly.
+If $k > l$, at least one message will get through uncompromised and all
+errors are detectable.
+Otherwise, the probability of Eve producing an undetectable error is
+the probability that all of Alice's paths contain compromised nodes:
+\beq
+TODO
+\eeq
 
 \begin{figure}
 \centerline{\includegraphics{fig-perror}}
