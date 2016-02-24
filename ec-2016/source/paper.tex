@@ -81,6 +81,7 @@ Fix bibtex encoding\\
 Move secrecy section\\
 Add ref to unipath butterfly routing\\
 Update intro to make significance more clear\\
+Clarify identifying fault\\
 
 \section{Introduction}
 
@@ -558,13 +559,14 @@ There are two types of edges, shown in Figure \ref{fig:butterfly}.
 Down edges ($E_\downarrow$) connect nodes sharing the same $z$ value
 in a cycle of increasing level $l$.
 Down-right edges ($E_\rightarrow$) also link to a node of level $l + 1$,
-but one having the bitstring equal to $z$ with the $l$th bit inverted.
+but one having the place-within-level equal to $z$ with the $l$th bit inverted.
 
-The wrap-around butterfly network has a number of properties desired for
+The wrap-around butterfly network has a number of properties desirable for
 a scalable, decentralized communication network.
 \begin{description}
 \item[Vertex-transitive]
-Vertex transitivity means that the network is maximally decentralized.
+Because the wraparound butterfly is vertex transitive,
+it is maximally decentralized.
 We will also use this property throught the proof, noting that
 the problem of finding a route between arbitrary nodes $\tilde{v}$ and $\tilde{w}$
 can be reduced to finding a route from node $(0,0)$ to some node $w$.
@@ -599,8 +601,11 @@ increment $l$ and invert the $l$th bit of $z$.
 This section gives an informal overview of the multipath routing algorithm.
 In a wraparound butterfly network with trusted radius $h$,
 the algorithm constructs $2^h$ disjoint paths between the trusted neighborhoods
-of any two nodes $v$ and $w$. Because of vertex transitivity, we can make the simplifying assumption that $v = (0,0)$ without loss of generality. Each path is parameterized by an $h$-bit string $s \in (0,2^h]$ (see Table \ref{tab:routing}). Each path cycles around the levels of the butterfly network at most twice.
-
+of any two nodes $v$ and $w = (l_w, z_w)$.
+Because of vertex transitivity,
+we can make the simplifying assumption that $v = (0,0)$ without loss of generality.
+Each path is parameterized by an $h$-bit string $s \in \mathbb{Z}_2^h$ (see Table \ref{tab:routing}).
+Each path cycles around the levels of the butterfly network at most twice.
 
 During the first cycle, the place-within-level $z$ of all nodes is set such that
 no two paths overlap outside the trusted neighborhoods.
@@ -609,17 +614,64 @@ and the algorithm terminates when the destination level is reached.
 
 More specifically, consider any node, $(l,z)$, in the path corresponding to $s$. The algorithm can be understood by dividing the $m$ bits of
 $z$ into four segments: $A, B, C, D$ (see figure \ref{fig:route-overview}).
-$A$ is the first $h$ bits, followed by $B$ until reaching $C$, which is the last $h$ bits before
-the destination level $l_w$, and then finally $D$. Hence, $A, B, C, $ and $D$ occupy $h$, $l_w - 2h$, $h$, and $m - l_w$ bits of $z$, respectively. 
-Note that due to the construction of the network, as we walk through any path $\{p_1, p_2, \dots\}$, the level $l_{t+1}$ of node $p_{t+1}$ is always one higher (mod $m$) than level $l_t$ the previous node $p_t$. Also, $z_{t+1}$ is always the same as the $z_t$, except for possibly the $(l+1)^{th}$ bit of $z_{t+1}$, which can be either 0 or 1. Hence, as the routing algorithm progresses through the levels $l$, the segments of $z$ get updated in order. 
+$A$ is the first $h$ bits,
+and $C$ is the $h$ bits preceeding index $l_w$.
+$B$ is formed by the remaining bits between $A$ and $C$,
+while $D$ refers to the remaining bits after $C$.
+Hence, $A, B, C, $ and $D$ occupy $h$, $l_w - 2h$, $h$, and $m - l_w$ bits of $z$, respectively
+(we leave the caase of overlapping $A$ and $C$ for the formal proof).
+Note that due to the construction of the network,
+as we walk through any path $\{p_1, p_2, \dots\}$,
+the level $l_{t+1}$ of node $p_{t+1}$ is always one higher (mod $m$)
+than level $l_t$ the previous node $p_t$.
+Also, $z_{t+1}$ is always the same as the $z_t$,
+except for possibly the $(l+1)^{th}$ bit of $z_{t+1}$,
+which can be either 0 or 1.
+Hence, as the routing algorithm progresses through the levels $l$,
+the segments of $z$ get updated in order. 
 
-There are 7 stages of the algorithm to construct a path from $v$ to $w$. Stages (1) through (4) consist of the first cycle thought the levels of the network and stages (5) though (7) consists of the second (potentially partial) cycle. We start at the source node $v$ and begin constructing the path. During stage (1), $A$ is set to match $s$. During stage (2) the bits of $B$ are inverted. During stage (3) a cyclic permutation of $s$ is placed into $C$. After this, in stages (4--7), $D$, $A$, $B$, and $C$ are set to their destination values (see figure \ref{fig:route-overview}).
+There are 7 stages of the algorithm to construct a path from $v$ to $w$.
+Stages (1) through (4) consist of the first cycle thought the levels of
+the network and stages (5) though (7) consists of the second
+(potentially partial) cycle.
+We start at the source node $v = (0,0)$ and begin constructing the path.
+During stage (1), $A$ is set to match $s$.
+During stage (2) the bits of $B$ are inverted.
+During stage (3) a cyclic permutation of $s$ is placed into $C$
+(the details of the permutation are necessary for the overlapping case,
+but not relevant for this overview).
+After this, in stages (4--7), $D$, $A$, $B$, and $C$ are set to their
+destination values (see figure \ref{fig:route-overview}).
 
-We now argue that in the above routing algorithm, given $s, s' \in (0, 2^h]$ such that $s \neq s'$, the corresponding paths, $P_s$ and $P_{s'}$, are disjoint when they are both outside of the trusted neighborhoods of $v$ and $w$. We informally refer to different segments of nodes in $s$ and $s'$ as $A,B,C,D$ and $A',B',C',D'$, respectively. 
+We now argue that in the above routing algorithm,
+given $s, s' \in \mathbb{Z}_2^h$ such that $s \neq s'$,
+the corresponding paths, $P_s$ and $P_{s'}$,
+are disjoint when they are both outside of the trusted neighborhoods of
+$v$ and $w$.
+We informally refer to different segments of nodes in $s$ and $s'$ as
+$A,B,C,D$ and $A',B',C',D'$, respectively.
 
-First note that any over lap between the two paths must occur either while they are at the same stage of the routing, or while one is at stage (1) and the other one at (5), one is at stage (2) and the other one at (6), or one is at stage (3) and the other one at (7). This is because in any other case, the nodes in the paths will be at different levels, $l$, and thus they cannot overlap. Furthermore, when a path is in stage (1) or (7), it is in the trusted neighborhoods of $v$ or $w$, hence we are not concerned with overlaps in stages (1) or (7). 
+First note that any overlap between the two paths must occur either while they
+are at the same stage of the routing, or while one is at stage (1) and the other one at (5), one is at stage (2) and the other one at (6), or one is at stage (3) and the other one at (7).
+This is because in any other case,
+the nodes in the paths will be at different levels, $l$,
+and thus they cannot overlap.
+Furthermore, when a path is in stage (1) or (7),
+it is in the trusted neighborhoods of $v$ or $w$,
+hence we are not concerned with overlaps within stages (1) or (7). 
 
-When both paths are in stages (2), (3), or (4), they do not overlap because segment $A$ is set to $s$ and segment $A'$ is set to $s'$. When both paths are in stages (5) or (6), they do not overlap because segment $C$ is set to a cyclic permutation of $s$ and segment $C'$ is set to a cyclic permutation of $s'$. When one path is in stage (1) and the other one is in stage (5), say $P_s$ is in (1) and $P_{s'}$ is in (5), they do not overlap because all bits in $B$ are set to the original bits in the source node and all bits in $B'$ is set to the inverted bits of the source node. When one path is in stage (2) and the other one is in stage (6), they do not overlap because at least one pair of bits in $B$ and $B'$ is still be mismatched while stage (6) is being processed. 
+When both paths are in stages (2), (3), or (4), they do not overlap because
+segment $A$ is set to $s$ and segment $A'$ is set to $s'$.
+When both paths are in stages (5) or (6),
+they do not overlap because segment $C$ is set to a cyclic permutation of $s$
+and segment $C'$ is the same cyclic permutation of $s'$.
+When one path is in stage (1) and the other one is in stage (5),
+say $P_s$ is in (1) and $P_{s'}$ is in (5),
+they do not overlap because all bits in $B$ are set to the original bits in the
+source node and all bits in $B'$ are set to the inverted bits of the source node.
+When one path is in stage (2) and the other one is in stage (6), they do not
+overlap because at least one pair of bits in $B$ and $B'$ are still inverted
+while stage (6) is being processed. 
 
 \begin{figure}
 \begin{center}
@@ -778,68 +830,125 @@ cycles through the levels of the butterfly network.
 NAME & VARIABLE \\\hline
 butterfly dimension & $m \in \mathbb{Z}_+$ \\\hline
 node level & $l \in \mathbb{Z} : 0 \leq l < m$ \\\hline
-node place within level & $z \in \mathbb \{0,1\}^m$ \\\hline
+node place within level & $z \in \mathbb{Z}_2^m$ \\\hline
 trust radius & $h \in \mathbb{Z} : 1 \leq h \leq \lfloor m/2 \rfloor$ \\\hline
-path index & $s \in \{0,1\}^h$ \\\hline
+path index & $s \in \mathbb{Z}_2^h$ \\\hline
 \end{tabular}
 }
 \end{table}%
 
-\subsection{Routing Algorithm: Proof}
+\subsection{Routing Algorithm: Specification and Proof}
 
-We now describe a routing scheme that provides $2^h$ redundant paths between
+We now specify the multipath routing scheme and prove
+that provides $2^h$ disjoint paths between
 the $h$-hop trusted neighborhoods of any two nodes in an $m$-bit
 wrap-around butterfly network.
-Utilizing vertex transitivity, we label the source node as $(0, 0)$ and
-denote the destination node as $w = (l_w, z_w)$.
+Utilizing vertex transitivity, we label the source node as
+$(l^{(0)}, z^{(0)}) = (0, 0)$ and denote the destination node as $w = (l_w, z_w)$,
+without loss of generality.
 
-Let $s$ be an integer such that $0 \leq s < 2^h$.
-Let $v_s^{(t)} = (l^{(t)}, z^{(t)})$ be the $t$th node in the path labeled by $s$.
-For convenience, we will omit the subscript $s$.
-We define two partitionings of the integers in $\mathbb{Z}_{2^m}$:
-one having the lowest $h$ bits matching the
-bits of $s$, and one having the $h$ bits preceeding the destination level $l_w$
-matching $s$:
+Let $s$ be an $h$-bit binary string with $s_i$ denoting the bit at index $i$.
+There are $2^h$ such strings.
+Let $v_s^{(t)} = (l^{(t)}, z^{(t)})$ be the node at position $t$
+in the path parameterized by $s$.
+For convenience,
+we will omit the subscript $s$ when it is obvious from context.
+We define three distinct partitions of $m$-bit binary strings.
+Let $Q_{v^{(0)}}$ ($\overline{Q_{v^{(0)}}}$) be the set of $m$-bit
+strings in which the bits at
+all indeces $h \leq i < l_w - h$ match (do not all match) those of $z^{(0)}$.
+Note that $Q_{v^{(0)}}$ is trivially all $m$-bit strings if $l_w < 2h$.
+Let $R_s$ ($\overline{R_s}$) be the set of $m$-bit strings with the lowest $h$
+bits all matching (not all matching) the bits of $s$.
+Let $S_s$ ($\overline{S_s}$) be the set of $m$-bit strings with the $h$ bits
+preceeding index $l_w$ all matching (not all matching) the bits of $\tilde{s}$,
+where $\tilde{s}$ is a cyclic permutation of $s$ defined below.
 \beq
-S_s &=& \{z \in \mathbb{Z}_{2^m} | \forall i \in \mathbb{Z}_h z_i = s_i \} \\
-R_s &=& \{z \in \mathbb{Z}_{2^m} | \forall i \in \mathbb{Z}_h z_{(l_w - h + i)} = s_i \}.
+Q_{v^{(0)}} &=&
+\{z \in \mathbb{Z}_2^m \mid \;
+\neg \exists i \in \mathbb{Z} : h \leq (i < l_w - h) \land z_i \neq z_i^{(0)} \}
+\\
+\overline{Q_{v^{(0)}}} &=& \mathbb{Z}_2^m \setminus Q_{v^{(0)}}
+\\
+R_s &=&
+\{z \in \mathbb{Z}_{2}^m \mid \;
+\forall i \in \mathbb{Z}_2^h z_i = s_i \}
+\\
+\overline{R_s} &=& \mathbb{Z}_2^m \setminus R_s
+\\
+S_s &=&
+\{z \in \mathbb{Z}_{2}^m \mid \;
+\forall i \in \mathbb{Z}_2^h z_{(l_w - h + i)} = \tilde{s}_i \}
+\\
+\overline{S_s} &=& \mathbb{Z}_2^m \setminus S_s
+\\
+\tilde{s}_i &=& s_{(i + l_w) \text{ mod } h}.
 \eeq
-Note that if $r \neq s$, then $S_s \cap S_r = R_s \cap R_r = \emptyset$.
+We will make use of the fact that:
+\beq
+s \neq s^\prime &\implies&
+S_s \cap S_{s^\prime} = R_s \cap R_{s^\prime} = \emptyset.
+\eeq
 
-We now construct a path such that between trusted neighborhoods $z^{(t)}$ is always
-in $S_s$, $R_s$, or both, guaranteeing that the path does not overlap with the
-other paths $v_r^{(t)}$.
-Routing proceeds in stages, with the level $l$ increasing by 1 at each hop.
-In Stage 1 ($0 \leq t < h$), down or down-right edges
+Routes are contructed in 7 stages.
+The network topology dictates that $l^{(t+1)} = l^{(t)} + 1$ (mod $m$),
+so we let $l = t$ (mod $m$).
+and that $z^{(t+1)}$ is equal to $z^{(t)}$ with or without the bit in index
+$l^{(t)}$ inverted, depending on whether the down or down-right edge was
+taken at step $t$.
+\begin{description}
+\item[Stage 1: ($0 \leq t < h$)]{
+Down or down-right edges
 are chosen such that the $t$th bit of $z^{(t+1)}$ is equal to the $t$th bit
-of $s$. Throughout Stage 1, all nodes are within the sender's trusted neighborhood.
-At the end of Stage 1, $z^{(h)} \in S_s$, and $z^{(t)}$ will remain so until the level loops
-back to $0$ at $t = m$.
-
-In Stage 2 ($h \leq t < l_w - h$), edges are chosen to make the $t$th bit of
-$z^{(t+1)}$ match the $t$th bit of $z_w$.
-
-In Stage 3 ($l_w - h \leq t < l_w$), the bits of $z^{(t)}$ are chosen to match $s$,
-such that after the stage is complete, $z^{(l_w)} \in R_s$.
-
-In Stage 4 ($l_w \leq t < m$), as in stage 2,
-paths are chosen such that the $t$th bit of $z^{(t+1)}$ matches $z_w$.
-After Stage 4, all bits of $z^{(m)}$ are equal to those of $z_w$
-except for the first $h$ and the $h$ preceeding index $l_w$.
-$z^{(m)}$ is also in both $S_s$ and $R_s$.
-
-At this point, we define $\tau = t - m$.
-In Stage 5 ($0 \leq \tau < h$), the first $h$ bits of $z^{(t)}$ are set to
-match $z_w$, potentially removing $z^{(t)}$ from $S_s$.
-
-In Stage 6 ($h \leq \tau < l_w - h$), all down edges are chosen, incrementing
-the level without any effect on $z^{(t)}$.
-At the end of Stage 6, $z^{(m + l_w - h)}$ is still in $R_s$ and
-$v^{(m + l_w - h)}$ is now within the trusted neighborhood of $w$.
-
-In the seventh, and final stage ($l_w - h \leq \tau < l_w$), the $h$ bits of $z^{(t)}$
+of $s$.
+Throughout Stage 1, all nodes are within the sender's trusted neighborhood.
+Throughout Stage 1, $z^{(t)} \in Q_{v^{(0)}}$.
+At the end of Stage 1, $z^{(h)} \in S_s$, and $z^{(t)}$ will remain so until the level cycles to $0$ at $t = m$.
+}
+\item[Stage 2: ($h \leq t < l_w - h$)]{
+Edges are chosen to make the $t$th bit of
+$z^{(t+1)}$ the inverse of the $t$th bit of $z^{(0)}$.
+Note that this stage does not occur when $l_w < 2h$.
+If this stage occurs, then $z^{(t)} \in \overline{Q_{v^{(0)}}}$ until these
+levels are reached again in stage 6.
+}
+\item[Stage 3: ($l_w - h \leq t < l_w$)]{
+The bits of $z^{(t)}$ are chosen to match $\tilde{s}$,
+such that after the stage is complete, $z^{(t)} \in R_s$.
+}
+\item[Stage 4: ($l_w \leq t < m$)]{
+Paths are chosen such that the $t$th bit of $z^{(t+1)}$ matches that of the
+destination node $z_w$.
+This stage will not occur if $l_w > m - h$.
+}
+\item[Stage 5: ($m \leq t < m + h$)]{
+There are two cases.
+If $2h < l_w < m - h$,
+then there is no overlap between the indeces defining $R_s$ and $S_s$.
+In this case, the first $h$ bits of $z^{(t)}$ are set to
+match $z_w$.
+Otherwise there is some overlap between the indeces defining $R_s$ and
+$S_s$.
+In this case, the each of the first $h$ bits of $z^{(t)}$ is either kept the
+same if $l_w - h \leq l < l_w$, or set to the corresponding bit of $z_w$
+otherwise.
+In this stage and after, $z^{(t)}$ is no longer guaranteed to be in $R_s$.
+However, $z^{(t)}$ remains in $S_s$ during and after this stage.
+}
+\item[Stage 6: ($m + h \leq t < m + l_w - h$)]{
+In this stage, edges are chosen to set the bits of $z^{(t)}$ to their
+corresponding value in $z_w$.
+$z^{(t)} \in \overline{Q_{v^{(0)}}}$ throughout this stage,
+but not afterwards.
+}
+\item[Stage 7: ($m + l_w - h \leq t < m + l_w$)] {
+The $h$ bits of $z^{(t)}$
 preceeding index $l_w$ are set to match $z_w$.
+All nodes in this stage are within $h$ hops of $w$ and thus in its trusted
+neighborhood.
 After this stage, $v^{(m + l_w)} = w$ and routing is complete.
+}
+\end{description}
 
 \begin{figure}
 \begin{center}
