@@ -36,7 +36,6 @@
 % Title portion
 \title{
 Attack-Tolerance in Structured Networks via Multipath Routing
-\\ Draft: 2016-02-21
 }
 \author{EDWARD L. PLATT
 \affil{University of Michigan}
@@ -44,17 +43,52 @@ DANIEL M. ROMERO
 \affil{University of Michigan}}
 
 \begin{abstract}
-TODO
+Networks with single points of failure are particularly susceptible
+to adversarial faults,
+in which an attacker creates faults strategically at central points.
+Centralized network architectures necessarily exhibit this vulnerability,
+leading to a growing popularity in decentralized architectures.
+However, decentralized architectures do not guarantee the absence of single
+points of failure, and networks such as the Internet and World-Wide Web have
+been shown theoretically and historically to be highly susceptible to
+adversarial faults.
+We develop a partial trust model which makes weaker transitivity
+assumptions than common web of trust models.
+Using this model, we propose a general multipath fault tolerance technique for
+structured networks which
+provides asymptotic security against adversarial faults.
+We also provide a specific algorithm for implementing this technique on the
+butterfly network topology.
+When network topology can be dictated, these results can be used to create scalable, attack-tolerant infrastructures.
+More generally, our results provide a formalism for evaluating the effects
+of network structure on adversarial fault tolerance.
 \end{abstract}
 
 %ACM is moving forward with the 2012 Classification system: http://dl.acm.org/ccs_flat.cfm. Please generate the CCSXML tex code through the online interactive system and insert the code below. 
 
 \begin{CCSXML}
 <ccs2012>
-</ccs2012>  
+<concept>
+<concept_id>10002978.10002986</concept_id>
+<concept_desc>Security and privacy~Formal methods and theory of security</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10003033.10003034</concept_id>
+<concept_desc>Networks~Network architectures</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10010940.10010971.10010972.10010540</concept_id>
+<concept_desc>Software and its engineering~Peer-to-peer architectures</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
 \end{CCSXML}
 
-\ccsdesc[500]{TODO~TODO}
+\ccsdesc[500]{Security and privacy~Formal methods and theory of security}
+\ccsdesc[500]{Networks~Network architectures}
+\ccsdesc[500]{Software and its engineering~Peer-to-peer architectures}
 
 %\terms{Design, Algorithms, Performance}
 
@@ -994,7 +1028,7 @@ Thus, we have shown that assuming the partial trust model, with trust transitive
 for $h$ hops, we can construct $2^h$ paths on a wraparound butterfly topology
 which do not intersect outside the trusted neighborhoods of the source and
 destination.
-This is a lower bound on the value $B$ in Equation (\ref{eq:pf),
+This is a lower bound on the value $B$ in Equation (\ref{eq:pf}),
 showing that the decentralized, redundant, structured networks such as the
 butterfly can have a very low probability of failure when faced with
 adverarial faults, even from a very powerful attacker.
