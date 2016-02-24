@@ -109,11 +109,11 @@ Author's addresses: E.L. Platt and D.M. Romero, School of Information; email: \{
 
 \maketitle
 
-TODO:\\
-Fix bibtex encoding\\
-Move secrecy section\\
-Update intro to make significance more clear\\
-Clarify identifying fault\\
+%TODO:\\
+%Fix bibtex encoding\\
+%Move secrecy section\\
+%Update intro to make significance more clear\\
+%Clarify identifying fault\\
 
 \section{Introduction}
 
@@ -153,8 +153,17 @@ we develop a decentralized {\em partial trust} model,
 similar to a web of trust
 \cite{zimmermann_official_1995,ferguson_practical_2003},
 but making weaker assumptions of trust transitivity.
+While privacy and secrecy are often concerns in secure communication,
+it is not the focus of this paper.
+Existing techniques for privacy and secrecy are relatively mature compared
+to those for tolerating blocked or corrupted messages.
+In fact, an attacker might use message disruption as a fallback when
+surveillance isn't feasible.
+However, we would like to stress that the technqiues presented in this paper
+are entirely compatible with, and in some cases could enhance, existing
+privacy and secrecy techniques.
 
-Given this framework, we develop and evaluate a \emph{multipath routing} technique to reduce 
+Given the above framework, we develop and evaluate a \emph{multipath routing} technique to reduce 
 the likelihood that compromised nodes are undetected during the information 
 routing process by allowing multiple copies of a message to be sent through independent paths,
 which can be used for error-detection and error-correction by the receiver. 
@@ -301,9 +310,6 @@ because it lowers the incentive to attack.
 With this in mind, an attack-resistant infrastructure will benefit from a high
 level of stabilizing asymmetry.
 
-\item[Secrecy]
-In some, but not all cases, it is desirable that the infrastructure provides secrecy and allow a source and a target to exchange private information while still relying on intermediary nodes. Our proposed multipath routing technique can be adapted to provide secrecy but we do not focus on this aspect in this paper. 
-
 \end{description}
 \subsection{Structural Properties}
 
@@ -449,8 +455,9 @@ Furthermore, this fault tolerance can remain robust even when faults are
 adversarially chosen by an attacker who has access to more resources
 than the sender and receiver.
 On a structured network, multipath fault tolerance reveals not just when
-an error has occured, but also which routes are faulty and potentially
-compromised.
+an error has occured, but also provides information about which paths provide
+conflicting information,
+which could be used to help locate compromised nodes.
 
 In the terminology of fault tolerance, a {\em fault} occurs when one component
 of a system behaves incorrectly (e.g., a routing node blocking or
@@ -1043,21 +1050,75 @@ adverarial faults, even from a very powerful attacker.
 
 \section{Discussion}
 
-Secrecy
+While decentralized architectures have recieved much attention,
+methods for classifying, and evaluating decentralization
+are in their infancy.
+The trust model and multipath fault tolerance technique proposed in this
+paper provide a practical fault tolerance architecture for applications when
+network structure can be imposed,
+as well as a more general method for evaluating the role of network structure
+on fault tolerance.
 
-Creation of the network.
-Improves on web of trust.
-Gives framework for determining where to build trust.
+Fault-tolerant network infrastructures have many direct applications.
+Areas such as cryptocurrency, secure multiparty computation, and wireless
+sensor networks have immediate need for scalable, fault-tolerant
+infrastructures.
+Many Internet services---email, social networks, cloud storage---are still
+highly centralized and vulnearble to technical and non-technical attacks.
+Decentralized fault tolerance is one approach to securing these important
+services and making networked communication safer.
 
-Applications
-Distributed apps: storage, email, cryptocurrency, secure multiparty computation.
-Wireless Sensor Networks
+While the primary purpose of our proposed fault tolerance technique is the
+threat of message blocking or corruption, it can provide some improvements
+to secrecy and privacy.
+For example, if a message is broken into parts and each part is sent along
+a different random subset of routes, an attacker who succesfully compromises
+one part of the message will still be unable to compromise the rest.
+
+Our present contributions are limited in several ways.
+The partial trust model, while making fewer assumptions than web of trust
+approaches, still depends on some transitivity of trust,
+which may be a questionable assumption in many cases.
+Better trust models are still needed.
+
+The primary limitation of our structured network approach is that
+link structure is imposed rather than self-organized.
+This requirement may be appropriate for appliations such as
+wireless sensor networks,
+or slow-changing institutional infrastructure,
+in which the architect has considerable control over link structure.
+But in general, it remains an open question whether self-organized networks
+can be restructured, or buit from the ground up in such a way that
+structured multipath fault tolerance technqiues can be applied.
+Similarly, structured network topologies such as the butterfly are defined
+only for specific values.
+Although these values can be as large as desired,
+how to apply methods such as ours to networks with an intermediate number
+of nodes remains an open question.
 
 \section{Conclusion}
 
+We have developed a partial trust model which enables a formal analysis
+of the effect of decentralized network structure on fault tolerance properties.
+We have also proposed a general technique for achieving and evaluating adversarial
+fault tolerance in a structured network with partial trust.
+We found that the probability of an adversary causing an undetectable error
+decreases exponentially as the number of redundant paths between the
+neighborhoods of the sender and receiver grows.
+This property puts attackers at a disadvantage, creating a stabilizing
+asymmetry which disincentivizes attack.
+We also presented a specific implementation of the multipath fault tolerance
+technique on a wraparound butterfly network topology and proved that the
+number of redundant paths grows exponentially with number of network hops
+that can be trusted.
+Our results are directly applicable to architectures in which the link structure
+can be imposed by the architect,
+and provide a formalism that can be used more generally to evaluate the role
+of network structure and redundancy on the fault tolerance of decentralized
+networks.
+
 % Acknowledgments
 \begin{acks}
-The authors would like to thank TODO
 \end{acks}
 
 % Bibliography
