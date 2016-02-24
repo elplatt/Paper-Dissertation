@@ -642,6 +642,8 @@ During stage (3) a cyclic permutation of $s$ is placed into $C$
 but not relevant for this overview).
 After this, in stages (4--7), $D$, $A$, $B$, and $C$ are set to their
 destination values (see figure \ref{fig:route-overview}).
+Figure \ref{fig:routing} shows an explicit example of the routing algorithm
+for one value of $s$.
 
 We now argue that in the above routing algorithm,
 given $s, s' \in \mathbb{Z}_2^h$ such that $s \neq s'$,
@@ -837,6 +839,19 @@ path index & $s \in \mathbb{Z}_2^h$ \\\hline
 }
 \end{table}%
 
+\begin{figure}
+\begin{center}
+\includegraphics{fig-routing.pdf}
+\end{center}
+\caption{
+An example of one path as constructed by the proposed multipath
+routing algorithm.
+The path is shown for $s = 10_2$
+and $w = (6, 0110111_2)$.
+\label{fig:routing}
+}
+\end{figure}
+
 \subsection{Routing Algorithm: Specification and Proof}
 
 We now specify the multipath routing scheme and prove
@@ -950,14 +965,39 @@ After this stage, $v^{(m + l_w)} = w$ and routing is complete.
 }
 \end{description}
 
-\begin{figure}
-\begin{center}
-\includegraphics{fig-routing.pdf}
-\end{center}
-\caption{
-\label{fig:routing}
-}
-\end{figure}
+For all $2^h$ of these paths, the components excluding nodes within $h$ hops
+of $v$ or $w$ (in their trusted neighborhoods) are pairwise disjoint,
+which we now prove.
+Nodes from two paths can only coincide if their levels are the same.
+Nodes which share a level must either be in the same stage, or 4 stages
+apart.
+Let ($a$,$a^\prime$) denote a pair of sub-paths corresponding to stage $a$ of
+one path and stage $a^\prime$ of another.
+Excluding paths that intersect in their trusted neighborhoods, (1,1) and (7,7),
+we have reduced the list of possible intersections to the following cases:
+(2,2), (3,3), (4,4), (5,5), (6,6), (1,5), (2,6), and (3,7).
+Nodes in stages 2--4 belong to $R_s$ so cannot overlap with any stage 2--4
+nodes from another path, eliminating (2,2), (3,3), and (4,4).
+Similarly, nodes in stages 4--6 belong to a unique $S_s$,
+eliminating (5,5) and (6,6).
+Nodes in stage 1 belong to $Q_{v^{(0)}}$ while those in stage 5 belong in
+its complement, eliminating (1,5).
+Similarly, for all $l$ in stage 2, $z^{(l)}$ is equal to $z^{(0)}$,
+while in stage 6, $z^{(l)}$ is the inverse, eliminating (2,6)
+This leaves only (3,7), a collision which can occur only for only one path
+(with $s$ matching the first $h$ bits of $z_w$), and which enters the trusted
+neighborhood in stage 3.
+For this single path, we can proceed directly from stage 2 to stage 7,
+eliminating the last possible collision.
+
+Thus, we have shown that assuming the partial trust model, with trust transitive
+for $h$ hops, we can construct $2^h$ paths on a wraparound butterfly topology
+which do not intersect outside the trusted neighborhoods of the source and
+destination.
+This is a lower bound on the value $B$ in Equation (\ref{eq:pf),
+showing that the decentralized, redundant, structured networks such as the
+butterfly can have a very low probability of failure when faced with
+adverarial faults, even from a very powerful attacker.
 
 \section{Discussion}
 
