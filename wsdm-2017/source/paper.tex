@@ -111,20 +111,23 @@ Anonymized Authors
 \begin{abstract}
 Networks with single points of failure are particularly susceptible to
 adversarial faults, in which an attacker targets nodes strategically.
-Centralized network architectures necessarily exhibit this vulnerability,
+In communication networks, these types of attacks leave users vulnerable to
+censorship and targeted surveillance.
+Centralized networks have single points of failure by definition,
 leading to a growing popularity in decentralized architectures and protocols.
 However, centralized network structure can arise even when protocols are
 decentralized.
 While based on decentralized protocols, the Internet and World-Wide Web have
 been shown both theoretically and historically to be highly susceptible to
 adversarial faults, in part due to emergent, structural centralization.
-Existing network trust models, such as web of trust, fail to adequately address
+Existing network trust models, such as webs of trust, fail to adequately address
 network structure. We develop a partial trust model that incorporates network
 structure and which makes weaker, more realistic transitivity assumptions than
-web of trust. We show that the partial trust model, when combined with
+webs of trust. We show that the partial trust model, when combined with
 concurrent multipath routing, allows standard fault tolerance techniques to be
 applied to communication across complex networks. We also provide a specific
-algorithm for implementing this scheme on the butterfly network topology.
+routing algorithm for implementing this scheme on the butterfly network
+topology.
 When network topology can be dictated, these results can be used to create
 scalable, attack-tolerant infrastructures. More generally, our results provide
 a formalism for evaluating the effects of network structure on adversarial
@@ -178,14 +181,22 @@ fault tolerance.
 \section{Introduction}
 
 Large-scale communication networks, exemplified by the Internet,
-have become ubiquitous and critical infrastructural for
-communities, organizations, and markets.
+have become ubiquitous, and are now crucial infrastructure for
+individuals, communities, and organizations around the world.
 As with any critical infrastructure, the cost of a failure can be
 immense, so methods for tolerating various kind of faults are an
 important and ongoing area of research
 \cite{zin_survey_2015,albert_error_2000,sterbenz_resilience_2010}.
-The key question is: what are the techniques and network structures that can
-be used to create robust, fault-tolerant systems?
+In fact, the decentralized design of the Internet was intended to protect
+against targeted attacks, such as nuclear strikes
+\cite{baran_distributed_1964}.
+Such targeted attacks are formally described as {\em adversarial faults}
+and are some of the most difficult to protect against.
+Both theoretical results and recent events have demonstrated that
+the Internet is surprisingly vulnerable to adversarial faults.
+Decentralization remains a promising approach to building resilient networks,
+but further work is needed to understand the relationship between
+decentralized network structure and adversairal fault tolerance.
 
 Many complex networks, including the Internet and World-Wide Web, exhibit
 scale-free structure
