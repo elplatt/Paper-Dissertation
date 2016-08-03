@@ -192,18 +192,33 @@ against targeted attacks, such as nuclear strikes
 \cite{baran_distributed_1964}.
 Such targeted attacks are formally described as {\em adversarial faults}
 and are some of the most difficult to protect against.
-Both theoretical results and recent events have demonstrated that
+Both theoretical results and recent events (described below)
+have demonstrated that
 the Internet is surprisingly vulnerable to adversarial faults.
 Decentralization remains a promising approach to building resilient networks,
 but further work is needed to understand the relationship between
 decentralized network structure and adversairal fault tolerance.
 
-Many complex networks, including the Internet and World-Wide Web, exhibit
-scale-free structure
+Analysis of the Internet's router network has shown that while it is remarkably
+resilient against random faults,
+it is highly susceptible to adversarial faults \cite{albert_error_2000}.
+These results have been attributed to the scale-free structure of the Internet's
+router network
 \cite{barabasi_emergence_1999,barabasi_scale-free_2009}.
-While scale-free networks tolerate random faults well,
-they are highly susceptible to adversarial faults, i.e. attacks
-\cite{albert_error_2000}.
+In scale-free networks and other networks with heavy-tail degree distributions,
+random failures are highly likely to pick low-degree nodes, thus having
+little effect,
+while adversarial faults target the small number of high-degree nodes,
+thus removing a large number of edges with each fault.
+It may seem to be a contradiction that the Internet both be decentralized
+and exhibit a heavy-tailed degree distribution.
+This contradiction is resolved by observing that the Internet is decentralized
+in its {\em protocols}, but somewhat centralized in its {\em network structure}.
+In other words, the protocols of the Internet do not {\em require}
+centralization, but centralization may still emerge from the socio-technical
+processes that create its network structure.
+
+
 For example, in 2008, YouTube suffered a worldwide outage for several hours
 when a service provider in Pakistan advertised false routing information
 \cite{hunter_pakistan_2008}.
