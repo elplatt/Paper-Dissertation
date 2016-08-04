@@ -238,8 +238,8 @@ We consider a setting in which a source node (Alice)
 in a network attempts to route a message
 to a target node (Bob) by forwarding it through the links of the network.
 We assume that some nodes in the network may be compromised by an attacker
-(Eve).
-We assume that Eve has full knowledge of the network structure, but has
+(Mal).
+We assume that Mal has full knowledge of the network structure, but has
 limited resources and thus can only compromise a fixed number of nodes.
 Compromised nodes may behave incorrectly by blocking the message,
 changing the message content, or routing the message incorrectly.
@@ -608,14 +608,14 @@ and the desired fault tolerance properties.
 In the simplest such scheme, a sender (Alice) broadcasts copies of a message
 along all possible routes to the receiver (Bob).
 Such an approach takes advantage of all possible redundancy in the network,
-and requires an adversary (Eve) to compromise at least one node on each path
+and requires an adversary (Mal) to compromise at least one node on each path
 in order to create an undetectable error.
 But how many nodes is that?
 The answer depends on the smallest {\em vertex cut} of the untrusted
 portion of the network---the smallest set of nodes than can be removed
 to separate the network into two components.
 Any path between Alice and Bob must pass through all such sets,
-so to guarantee an undetectable error, Eve must compromise at least as many
+so to guarantee an undetectable error, Mal must compromise at least as many
 nodes as are in the smallest vertex cut.
 Alice and Bob's trust boundaries are both vertex cuts,
 so the smaller of the two is an upper bound.
@@ -642,16 +642,16 @@ that enables her to construct paths that
 do not intersect between trusted neighborhoods.
 So the maximum number of paths Alice could choose is $B$,
 otherwise two paths would have to intersect in the minimum vertex cut.
-Let us assume that Eve is capable of compromising up to $l$ nodes.
-Eve's best adversarial strategy is now to compromise as many nodes in the smallest
+Let us assume that Mal is capable of compromising up to $l$ nodes.
+Mal's best adversarial strategy is now to compromise as many nodes in the smallest
 vertex cut as possible,
 succeeding when each of Alice's paths include one of the compromised nodes.
 Since Alice chooses paths randomly,
 all nodes in the vertex cut are equally likely to contain a path,
-so Eve can do no better than also choosing randomly.
+so Mal can do no better than also choosing randomly.
 If $k > l$, at least one message will get through uncompromised and all
 errors are detectable.
-Otherwise, the probability of Eve producing an undetectable error is
+Otherwise, the probability of Mal producing an undetectable error is
 the probability that all of Alice's paths contain compromised nodes:
 \beq
 \label{eq:pf}
