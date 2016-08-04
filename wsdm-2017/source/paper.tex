@@ -458,11 +458,12 @@ level of stabilizing asymmetry.
 
 We now describe the structural properties of a network that allow it to achieve the functional properties described above. 
 \begin{description}
-\item [Sparsity and low diameter]
+\item [Sparsity and low diameter:]
 To achieve scalability, networks must be {\em sparse} and have a
 {\em low diameter}.
 In practical settings, humans and devices have an upper limit on the number
-of connections they can maintain.
+of connections they can maintain (e.g., Dunbar's number
+\cite{dunbar_neocortex_1992}).
 In sparse networks, the number of links grows slowly as the network grows in
 size, allowing the network to scale without exceeding the nodes' capacity for
 links.
@@ -472,43 +473,54 @@ While low diameter guarantees a path exists,
 paths are only useful if an efficient {\em routing} algorithm exists
 to find them.
 
-\item [Vertex transitivity]
-In vertex transitive networks, for any pair of nodes, an edge-preserving map
-always exists from one node to the other.
+\item [Uniform centrality:]
+There are many ways to measure node centrality in networks
+\cite{freeman_centrality_1978}.
+The more uniform these measures are across nodes, the more decentralized
+a network is.
+Centrality is minimized in {\em vertex transitive} networks,
+for which an edge-preserving map
+always exists from any node to any other node.
 In other words, all nodes occupy structurally indistinguishable positions
-in the network. Networks with {\em vertex transitivity} are decentralized in the sense that they structure does no allow for  single points of failure.
+in the network.
 
-\item [Redundancy]
-Redundancy in a network refers to the extent to which nodes are connected to each other by multiple independent paths. Redundancy can help reduce single points of failure as well as
+\item [Redundancy:]
+In a network, redundancy refers to the existence of multiple non-overlapping
+paths between nodes or components.
+Redundancy can help reduce single points of failure as well as
 increase fault-tolerance.
 One measure of redundancy is given by the ratio of edges to nodes
 \cite{baran_distributed_1964}.
 A single point of failure occurs when a node holds a uniquely
-central position,
-and can be eliminated by adding alternative
-paths around the node,
-which increases the network's redundancy.
-Similarly, as we will later show, redundancy in a network can enable fault-tolerance techniques
+central position.
+When alterative paths are added to bypass central nodes,
+the network becomes more redundant.
+Similarly, as we will later show,
+redundancy in a network can enable fault-tolerance techniques
 that reduce the effectiveness of attacks and creating stabilizing asymmetry.
 When secrecy is desired, redundancy can help by allowing messages to be
 divided into parts and sent along different paths so even if one path is
-compromised, the whole message is not revealed \cite{}. 
+compromised, the whole message is not revealed
+\cite{shamir_how_1979, blakley_safeguarding_1979}. 
 
 \end{description}
 
 \section{Trust}
 
-The sparsity requirement has an important consequence for network infrastructure:
-as a network grows, the number of nodes will exceed the number of links a given
-node can support and many pairs of nodes will only be indirectly connected,
-with all paths between them passing through at least one intermediary node.
+The requirement that networks remain sparse has important implications for
+resilience.
+As such networks grow, the number of nodes will exceed the number of links
+any single node can support.
+As a result, some pairs of nodes are only connected indirectly,
+through at least one intermediary node.
 These intermediary nodes are targets for potential attacks.
-More specifically, the threat model is as follows: Alice sends a message to
-Bob via one or more intermediaries, but some intermediaries may try to
-either block or alter the message.
+In communication networks, 
+the threat model is as follows: Alice sends a message to
+Bob via one or more intermediaries,
+but some intermediaries may block, change, or re-route the message.
 The ability to tolerate these types of adversarial attacks depends on
-Alice and Bob's ability to assume that some nodes have not been
-compromised---to {\em trust} them.
+Alice and Bob's ability to either find a path they {\em trust},
+or to communicate successfully across untrusted paths.
 
 Both centralized and decentralized approaches are commonly used to create
 trust infrastructures.
@@ -517,19 +529,29 @@ suffer from a number of vulnerabilities
 \cite{ellison_ten_2000},
 which stem largely from the single points of failure inherent to
 centralization.
-Alternatively, the decentralized {\em web of trust} model
+
+The well-known and widely-used {\em web of trust} model
 \cite{zimmermann_official_1995,ferguson_practical_2003}
-allows individuals
-to choose who they trust initially.
+is a decentralized alternative.
+In a web of trust,
+individuals choose who they trust initially.
 Trust is then extended to new individuals if they are vouched for by a
-currently-trusted individual.
+currently-trusted individual,
+making it possible to extend their web of trust to a large
+number of nodes.
 However, the web of trust approach assumes that trust can be extended
 transitively,
 which is not generally true
 \cite{christianson_why_1997}.
-We note that while such approaches are decentralized in the sense that no central authority holds the keys,
-they do not necessarily incorporate redundancy and the network they form may not be vertex transitive. Thus they still may suffer from single
-points of failure.
+The web of trust model also fails to account for the structure
+of the trust network:
+trusted nodes are all trusted equally,
+regardless of how many nodes trust them.
+Similarly, while the process of building a web of trust is decentralized,
+the emergent structure of the trust network itself can be centralized.
+In order to analyze the influence of network structure on adversarial
+fault tolerance,
+a different trust model is needed.
 
 \subsection{Partial Trust Model}
 
