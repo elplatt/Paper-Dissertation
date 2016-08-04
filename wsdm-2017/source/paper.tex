@@ -10,6 +10,7 @@
 %\SetAlCapNameFnt{\small}
 %\SetAlCapHSkip{0pt}
 
+\usepackage[utf8]{inputenc}
 \usepackage{tikz}
 \usetikzlibrary{arrows,chains,decorations.pathreplacing}
 %\usepackage{draftwatermark}
@@ -218,36 +219,62 @@ In other words, the protocols of the Internet do not {\em require}
 centralization, but centralization may still emerge from the socio-technical
 processes that create its network structure.
 
-
+The Internet's vulnerability to censorship and other targeted attacks
+has been confirmed by the success of several such attacks.
 For example, in 2008, YouTube suffered a worldwide outage for several hours
 when a service provider in Pakistan advertised false routing information
 \cite{hunter_pakistan_2008}.
 The action (known as a {\em black hole attack}) was intended to censor YouTube
 within Pakistan only, but resulted in a worldwide cascading failure.
-Such vulnerabilities are not limited to any one system or protocol, but an
-attribute of complex communication networks themselves.
-General techniques for understanding and mitigating these vulnerabilities are
-needed.
+Such vulnerabilities are not limited to any one system or protocol,
+but result from the network structure itself.
+With strong theoretical and historical evidence that network structure
+can create vulnerabilities,
+methods for analyzing structural vulnerabilities and for designing
+fault tolerant networks are needed.
+This paper presents several contributions towards advancing those goals.
 
-We consider a setting in which a source node in a network attempts to route information
-to a target node by forwarding it through the links of the network. We 
-assume that some nodes in the network may be compromised by an attacker 
-and will forward the wrong information to their neighbors or
-block the information altogether.
+We consider a setting in which a source node (Alice)
+in a network attempts to route a message
+to a target node (Bob) by forwarding it through the links of the network.
+We assume that some nodes in the network may be compromised by an attacker
+(Eve).
+We assume that Eve has full knowledge of the network structure, but has
+limited resources and thus can only compromise a fixed number of nodes.
+Compromised nodes may behave incorrectly by blocking the message,
+changing the message content, or routing the message incorrectly.
 In order to evaluate network-based techniques for mitigating such attacks,
 we develop a decentralized {\em partial trust} model,
-similar to a web of trust
+similar to the commonly used web of trust approach
 \cite{zimmermann_official_1995,ferguson_practical_2003},
-but making weaker assumptions of trust transitivity.
-While privacy and secrecy are often concerns in secure communication,
+but making weaker (more realistic) assumptions of trust transitivity,
+and incorporating network structure.
+The partial trust model can be used to design and analyze communication
+schemes that tolerate adversarial faults,
+even when no single path through the network is fully trusted.
+
+In addition we provide a novel concurrent multipath routing algorithm
+on the butterfly network topology and use the partial trust model to prove
+a high level of adversarial fault tolerance.
+While the ability to control network topology is only achievable in some
+applications, those applications are nonetheless significant,
+e.g. overlay networks \cite{lua_survey_2005, korzun_structured_2013},
+formal organizations \cite{mohr_explaining_1982},
+government-regulated cellular networks \cite{walker_mass_2012},
+and call tree notification systems \cite{nickerson_thinking_2010}.
+
+While {\em confidentiality} is a common concern in secure communication,
 it is not the focus of this paper.
-Existing techniques for privacy and secrecy are relatively mature compared
-to those for tolerating blocked or corrupted messages.
-In fact, an attacker might use message disruption as a fallback when
-surveillance isn't feasible.
-However, we would like to stress that the technqiues presented in this paper
+Existing cryptographic techniques for confidentiality are relatively
+mature compared to those for tolerating censorship.
+In fact, an attacker might use targeted attacks to achieve censorship
+as a fallback when surveillance isn't feasible.
+However, we stress that the technqiues presented in this paper
 are entirely compatible with, and in some cases could enhance, existing
 privacy and secrecy techniques.
+For example, the well-known {\em man-in-the-middle} attack exploits a privileged
+network position to attack otherwise secure cryptography,
+suggesting that structural approaches can complement cryptographic ones.
 
 Given the above framework, we develop and evaluate a \emph{multipath routing} technique to reduce 
 the likelihood that compromised nodes are undetected during the information 
