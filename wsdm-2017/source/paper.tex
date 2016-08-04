@@ -337,15 +337,6 @@ And Section 8. concludes.
 
 \section{Background and Related Work}
 
-In {\em structured networks}, link structure is predetermined.
-Such networks can be designed to have favorable structural and routing properties,
-at the expense of complicating the addition or removal of nodes.
-Structured networks have been a popular tool in parallel and distributed
-computing architectures \cite{kshemkalyani_distributed_2008}.
-More recently, peer-to-peer systems based on distributed hash tables have used
-structured ``overlay'' networks to map table keys to local TCP/IP routes
-\cite{lua_survey_2005,korzun_structured_2013}.
-
 Many distributed consensus protocols (such as those used by crypto-currencies)
 are designed to provide tolerance against arbitrary or adversarial faults.
 Byzantine agreement protocols
@@ -354,47 +345,72 @@ provide tolerance against arbitrary faults (including attacks) under
 some circumstances, but are limited to small networks due to poor scalability.
 Proof-of-work \cite{dwork_pricing_1993,nakamoto_bitcoin:_2008}
 and proof-of-stake \cite{king_ppcoin:_2012}
-provide better scalability, but wasteful of computational and energy
-resources.
+provide better scalability,
+but are wasteful of computational and energy resources.
 Federated Byzantine Agreement (FBA) \cite{mazieres_stellar_2015}
-is scalable and optimal, guaranteeing that the protocol only fails when
-success is impossible, although it does not provide a way to evaluate
-the probability of failure.
-All of these protocols rely on the assumption that their cryptography
-cannot be compromised.
-While cryptography can be extremely resistant to technological attacks,
-it can still be compromised through coercion (e.g., legal action).
-In additon, the fault-tolerance of FBA depends on redundancy in the network structure
-but leaves an unanswerd question: how should a network be structured to achieve
-fault tolerance?
-This paper addresses both of these issues by analyzing the role of network
-structure on adversarial faults, without relying on assumptions of cryptographic
-integrity.
+is scalable, allows for flexible trust,
+and guarantees that failure only occurs when the structure of the trust
+network makes success impossible.
+However, FBA does not provide a method for optimizing trust networks or
+evaluating the probability of failure.
+The mutlipath fault tolerance scheme we propose is the
+first example we're aware of that allows adversarial fault tolerance
+to be quantified as a function of network structure.
 
-{\em Multipath} routing uses multiple paths when routing a message through a
-network, in contrsast to traditional {\em unipath} routing, which uses
+Most existing adversarial fault tolerance schemes focus on end-to-end,
+protocol-based, cryptographic solutions
+\cite{ferguson_practical_2003}.
+There are however, a few notable exceptions that focus on network structure.
+Fiat and Saia described a scheme that combines the butterfly topology
+with expander graphs to create a highly censorship-resistant content-addressable
+network \cite{fiat_censorship_2002},
+although this scheme exhibits poor scaling due to a very high level of data
+replication.
+Perhaps the most mature structural solution is the Freenet collaboration
+\cite{clarke_freenet:_2001}.
+Freenet uses secret sharing and small-world routing
+\cite{zhang_using_2002,kleinberg_small-world_2000}
+to create a content-addressable network with a high level of both
+confidentiality and censorship resistance.
+
+{\em Multipath routing} protocols use multiple paths when
+routing a message through a network,
+in contrsast to traditional {\em unipath} routing, which uses
 a single path.
 Multipath routing can have many benefits, including reduced congestion,
 increased throughput, and more reliability
 \cite{qadir_exploiting_2015}.
-Many of these routing protocols offer better security 
+Many of these routing protocols offer increased confidentiality
 \cite{zin_survey_2015}.
 Some approaches utilize redundant paths as backups for increased
 fault tolerance
 \cite{alrajeh_secure_2013},
 and some specificially protect against adversarial faults
 \cite{kohno_improvement_2012, khalil_unmask:_2010, lou_h-spread:_2006}.
-The method of Liu et al.
-\cite{liu_secure_2012}
-routes multiple messages first to random peers and then
-to their final destination.
-The butterfly algorithm we present takes a conceptually similar approach.
 Most work on multipath routing has been motivated by applications related to
 wireless sensor networks (WSNs),
 and have thus focused on ad-hoc, unstructured networks, often having a central
 base station.
-The trust model presented in this paper provides a more general way to evaluate
-the effect of network structure on adversarial fault-tolerance.
+The partial trust model presented in this paper provides a more general
+way to evaluate the effect of network structure on adversarial fault-tolerance.
+The method of Liu et al.
+\cite{liu_secure_2012}
+routes multiple messages first to random peers and then
+to their final destination.
+The butterfly routing algorithm we present takes a conceptually similar
+approach,
+routing from the source to several intermediaries, and then to the destination.
+
+Our proposed routing algorithm makes use of a
+{\em structured network}, in which link structure is predetermined.
+Such networks can be designed to have favorable structural and routing
+properties,
+at the expense of complicating the addition or removal of nodes.
+Structured networks have been a popular tool in parallel processing
+architectures \cite{kshemkalyani_distributed_2008}.
+More recently, peer-to-peer systems based on distributed hash tables have used
+structured ``overlay'' networks to map table keys to local TCP/IP routes
+\cite{lua_survey_2005,korzun_structured_2013}.
 
 \section{Attack-Tolerant Networks Infrastructure}
 
