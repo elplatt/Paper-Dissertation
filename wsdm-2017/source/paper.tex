@@ -253,16 +253,6 @@ The partial trust model can be used to design and analyze communication
 schemes that tolerate adversarial faults,
 even when no single path through the network is fully trusted.
 
-In addition we provide a novel concurrent multipath routing algorithm
-on the butterfly network topology and use the partial trust model to prove
-a high level of adversarial fault tolerance.
-While the ability to control network topology is only achievable in some
-applications, those applications are nonetheless significant,
-e.g. overlay networks \cite{lua_survey_2005, korzun_structured_2013},
-formal organizations \cite{mohr_explaining_1982},
-government-regulated cellular networks \cite{walker_mass_2012},
-and call tree notification systems \cite{nickerson_thinking_2010}.
-
 While {\em confidentiality} is a common concern in secure communication,
 it is not the focus of this paper.
 Existing cryptographic techniques for confidentiality are relatively
@@ -276,55 +266,73 @@ For example, the well-known {\em man-in-the-middle} attack exploits a privileged
 network position to attack otherwise secure cryptography,
 suggesting that structural approaches can complement cryptographic ones.
 
-Given the above framework, we develop and evaluate a \emph{multipath routing} technique to reduce 
-the likelihood that compromised nodes are undetected during the information 
-routing process by allowing multiple copies of a message to be sent through independent paths,
-which can be used for error-detection and error-correction by the receiver. 
-
-The multipath routing technique relies on the existence and discoverability of
-multiple redundant paths between the source and the destination. Thus, network 
-structure and routing algorithms play a key role in the success of the technique.
-We formally evaluate the 
+Using the partial trust model, we are able to reduce complex networks to
+simply a number of redundant, independent paths.
+This reduction enables the application of standard error detection techniques,
+which rely on statistically independent errors.
+While adversarial faults along a single path are correlated,
+faults in randomly-chosen independent paths are not.
+Thus fault tolerance techniques can be applied,
+even in the presence of adversarial errors,
+when messages are sent in parallel,
+a technique known as {\em concurrent multipath routing}
+\cite{zin_survey_2015, qadir_exploiting_2015}.
+The receiver can then use the redundant messages to detect and/or correct
+errors.
+Using the partial trust model, we formally evaluate the 
 effects of network structure on attack-resistance and show that the probability
-of undetected 
-errors decreases exponentially with the number of independent paths between 
-source and destination.
+of undetected errors decreases exponentially with the number of
+independent paths between source and destination,
+even when no individual path is entirely trusted.
 
-The mutlipath routing technique is well-suted for {\em structured networks},
+Our specific multipath fault tolerance scheme relies on the existence
+and discoverability of multiple redundant paths between the source and
+the destination.
+Implementation thus requires a routing algorithm.
+While not a requirement, this technique is well-suited for
+{\em structured networks},
 in which links between nodes are constrained to a particular architecture.
-Specifically, we employ the butterfly network topology,
-used elsewhere in parallel computing \cite{kshemkalyani_distributed_2008}
-and peer-to-peer \cite{lua_survey_2005, korzun_structured_2013}
-applications.
-For this network topology,
-we propose an efficient, attack-tolerant multipath routing algorithm.
+
+In particular, we provide a novel concurrent multipath routing algorithm
+on the butterfly network topology and use the partial trust model to prove
+a high level of adversarial fault tolerance.
+The butterfly topology is popular in parallel processing
+\cite{kshemkalyani_distributed_2008} and
+peer-to-peer \cite{lua_survey_2005, korzun_structured_2013}
+applications, due to its regular structure and high connectivity.
+While the ability to control network topology is only achievable in some
+applications, those applications are nonetheless significant,
+e.g. overlay networks \cite{lua_survey_2005, korzun_structured_2013},
+formal organizations \cite{mohr_explaining_1982},
+government-regulated cellular networks \cite{walker_mass_2012},
+and call tree notification systems \cite{nickerson_thinking_2010}.
 
 Our main contributions are:
 \begin{itemize}
 \item{We develop a decentralized {\em partial trust model},
-which makes weaker transitivity assumptions than previous web-of-trust models,
-and use this model to quantify the effects of network structure on
-fault tolerance;}
-\item{We show that as the number of disjoint paths between the neighborhoods
-of the sender and reciever grows,
-the probability of successfully detecting adversarial faults
-approaches 1 exponentially.
-Furthermore, we show that the number of disjoint paths is a function of
-network structure;}
-\item{We present a scalable, efficient, and attack-tolerant multipath
-routing algorithm on the butterfly network topology.}
+which makes weaker transitivity assumptions than web-of-trust models,
+and makes it possible to analyze the effect of network structure on
+adversarial fault tolerance;}
+\item{We show that the partial trust model enables standard fault
+tolerance techniques to be applied to adversarial faults in
+complex communication networks.
+We find that the probability of detecting adversarial faults
+approaches 1 exponentially as the number of independent paths between
+sender and receiver increases;}
+\item{We present a scalable, efficient, and attack-tolerant concurrent
+multipath routing algorithm on the butterfly network topology.}
 \end{itemize}
 
 This paper is organized as follows.
 Section 2. reviews background and related work.
 Section 3. discusses the desired properties of attack-tolerant network
 infrastructure.
-Section 4. proposes the partial trust model.
-Section 5. proposes a general technique for multipath fault tolerance on
+Section 4. describes the partial trust model.
+Section 5. describes a general technique for multipath fault tolerance on
 structured networks.
-Section 6. proposes a specific application of this technique to the butterfly
-network topology.
-Section 7. discusses these results.
+Section 6. describes a routing algorithm for multipath fault tolerance
+on the butterfly network topology.
+Section 7. discusses the our results.
 And Section 8. concludes.
 
 \section{Background and Related Work}
