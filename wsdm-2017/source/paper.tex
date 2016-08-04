@@ -412,32 +412,38 @@ More recently, peer-to-peer systems based on distributed hash tables have used
 structured ``overlay'' networks to map table keys to local TCP/IP routes
 \cite{lua_survey_2005,korzun_structured_2013}.
 
-\section{Attack-Tolerant Networks Infrastructure}
+\section{Attack-Tolerant Infrastructure}
 
 In this section, we describe the functional properties required of an
 attack-tolerant network infrastructure and how those properties translate
-into constraints on network structure.
+into constraints on network structure and fault tolerance protocols.
 We pay special attention to a property we call
 {\em stabilizing asymmetry}.
 
 \subsection{Functional Properties}
 
 \begin{description}
-\item[Scalability]
-For large scale networks it is important that the infrastructure allows for the network to grow while remaining functional. In practice, people, devises, and connections, have limited capabilities and these limitations need to be considered as part of the design of the infrastructure. 
+\item[Scalability:]
+For large scale networks it is important that the infrastructure allows
+for the network to grow while remaining functional.
+In practice, people, devices, and connections, have limited capabilities
+and these limitations need to be considered as part of the design of the
+infrastructure. 
 
-\item [Decentralization]
-Systems having single points of failure are less tolerant against faults at those
-points, which both raises the likelihood of a failure and creates targets
-where attackers might be able to focus their resources efficiently.
-Attack-tolerant infrastructure must be decentralized in order to minimize single points of failure.
+\item [Decentralization:]
+Systems having single points of failure are less tolerant against faults at
+those points.
+The existence of such points not only increases the likelihood that an attack
+will succeed,
+but also incentivises attack by presenting effective targets.
+Attack-tolerant infrastructure must be decentralized in order to
+minimize single points of failure.
 
-\item[Stabilizing asymmetry]
+\item[Stabilizing asymmetry:]
 In the context of international conflict,
-\cite{mack_why_1975}
-observed that power imbalance usually determines the outcome of a conflict
-(with the more powerful side winning)
-except in the special case of {\em asymmetric conflicts}.
+{\em asymetric conflicts} are a special case that makes it possible for the
+less powerful party to have an advantage over the more powerful party
+\cite{mack_why_1975}.
 In asymmetric conflicts, the same level of resource expenditure yields different
 results for different parties.
 There are two possible cases:
