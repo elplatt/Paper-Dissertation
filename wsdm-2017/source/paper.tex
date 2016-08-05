@@ -555,29 +555,78 @@ a different trust model is needed.
 
 \subsection{Partial Trust Model}
 
-We now propose a decentralized trust model based on weaker transitivity
-assumptions than existing web of trust models.
-In following sections, we will use this model along with network redundancy to minimize vulnerabilities due to single points of failure.
-Our model is based on the assumption of partially-transitive trust.
-While this assumption is still idealized, it is a more realistic improvement
-on fully-transitive models.
+We now propose the {\em partial trust model}:
+a technique for modeling communication between any two nodes
+in an arbitrary network as communication across a number of
+independent, direct links,
+each of which might be compromised by an adversary.
+Two links are considered {\em independent} if they do not
+share a single point of failure.
+Rather than assuming that trust is infinitely transitive (as in webs of trust),
+this model assumes that trust is transitive up to a fixed number of hops.
+The level of trust transitivity enters the model as a parameter called the
+{\em trust radius}.
+Any paths longer than this radius will contain some untrusted links,
+hence {\em partial trust}.
+The benefit of the partial trust model is its ability to abstract
+away the details of the network structure,
+while quantifying the amount of structural redundancy that can be
+utilized by fault tolerance schemes.
 
-Our model (Figure \ref{fig:trust-source})
-is represented as an undirected graph,
-with nodes representing individual
-agents and edges representing mutual trust relationships.
+To apply the partial trust model to a network,
+we begin with an undirected graph $G = (V,E)$,
+with nodes representing individual agents
+and with edges representing mutual trust relationships
+between those agents.
 We define a {\em trust radius} $h$ and assume that trust is transitive
-up to $h$ hops away.
-In other words, the nodes $v$ and $w$ trust each other if the distance between $v$ and $w$, $d(u,v)$ is less than $h$.
-For a given node $v$, we call the set of nodes that $v$ trusts the {\em trusted neighborhood} $T_h(v)$,
-and all nodes at exactly distance $h$ from $v$ the {\em trust boundary} $B_h(v)$:
+up to $h - 1$ hops away.
+In other words, the nodes $v$ and $w$ trust each other if the distance between
+$v$ and $w$, $d(v,w)$ is less than $h$.
+For a given node $v$,
+we call the set of nodes that $v$ trusts the
+{\em trusted neighborhood} $T_h(v)$,
+and all nodes at exactly distance $h$ from $v$ the
+{\em trust boundary} $B_h(v)$:
 \beq
 T_h(v) &=& \left\{ w \mid d(v,w) < h \right\} \\
 B_h(v) &=& \left\{ w \mid d(v,w) = h \right\}.
 \eeq
-We assume that $v$ is very familiar with nodes in its trusted neighbor and $v$ would know if any of these nodes were compromised by an attacher. Hence, an adversary of $v$ has no incentive to compromise a node in  $T_h(v)$. We thus assume that no nodes within the trusted neighborhood are compromised
-by an adversary of $v$. However, by compromising all nodes in the trust boundary, an adversary can
-ensure that all communications leaving the trusted neighborhood are compromised. 
+The trust boundary $B_h$ plays an important role because these nodes are not
+trusted by $v$,
+but if compromised can entirely isolate $v$ from the rest of the network.
+
+Using the above definitions, we now model communication between a
+source $v$ (Alice) and a destination $w$ (Bob).
+We assume that nodes trusted by {\em either} Alice or Bob will not
+compromise the message.
+In other words,
+faults are assumed to occur only in the part of the network lying
+between Alice and Bob's trust boundaries.
+We call this part of the network the {\em untrusted region}.
+Our goal is now to model the maximum number of independent paths a message
+can take through the untrusted region.
+This is exactly the problem of finding $\delta_{v,w,h}$: the max-flow/min-cut of
+the graph after each trusted neighborhood has been
+collapsed into a single vertex.
+Each trust boundary forms a cut of the network and places an upper bound on the
+min-cut:
+\beq
+\delta_{v,w,h} \leq \min\left( \mid B_h(v) \mid, \mid B_h(w) \mid \right).
+\eeq
+Equality holds when there are no bottlenecks within the untrusted region.
+For reasonably decentralized networks, equality should hold for all
+values of $h$.
+The redundancy of the entire graph can be characterized by the minimum over
+all vertex pairs:
+\beq
+\delta_h(V) \equiv \min_{v,w \in V} \delta_{v,w,h}.
+\eeq
+Thus, for any pair of nodes in the network, at least $\delta_h$ independent,
+redundant paths can be contstructed between them.
+While $\delta_h$ is a purely structural property of the network,
+it places an upper bound on the effectiveness of any
+redundancy-based fault tolerance scheme.
+We will now describe such a scheme.
 
 \begin{figure}
 \centerline{\includegraphics[width=2.12in,height=1.46in]{fig-alice_trusted_neigh2}}
@@ -593,11 +642,6 @@ all communications leaving Alice's trusted neighborhood are compromised.
 }
 \label{fig:trust-source}
 \end{figure}
-
-Now we consider a source $v$ (Alice) and a destination $w$ (Bob),
-shown in Figure \ref{fig:trust-source-destionation}. We also consider an adversary who aims at disrupting all possible communication paths between Alice and Bob. Since the adversary cannot compromise any nodes in the trusted neighborhoods of Alicia or Bob, the only option is to compromise nodes outside of the trust neighborhoods. An adversary could, for example, compromise all possible paths between Alice and Bob by compromising either Alice or Bob's entire trust boundary. This would require compromising $\min(|T_h(v)|, |T_h(w)|)$ nodes. In a vertex transitive network, these two trust boundaries will be the same size. Alternatively, the adversary could try to compromise a small set of nodes such that all paths between Alice and Bob pass through one of these nodes. However, If disjoint paths exist connecting each node in Alice's trust boundary to
-a node in Bob's, then the cut size between the two can never be smaller than
-$|T_h(v)| = |T_h(v)|$, so an adversary who compromises fewer nodes cannot compromise all possible paths between Alice and Bob.
 
 \begin{figure}
 \centerline{\includegraphics[width=3.33in,height=1.46in]{fig-bob_Alice_trusted_neigh2}}
