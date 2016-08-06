@@ -607,9 +607,10 @@ Mal can only cause faults in the set of nodes outside both of their trusted
 neighborhoods: $V \setminus \left(T_h(v) \cup T_h(w)\right)$.
 We refer to this set of nodes as the {\em untrusted region}.
 
-Our goal is now to model the maximum number of independent paths a message
-can take through the untrusted region.
-This is exactly the problem of finding $\delta_{v,w,h}$: the max-flow/min-cut of
+Having defined the assumptions of the partial trust model,
+we now quantify the effective redundancy between Alice and Bob
+when trust radius $h$ is assumed.
+This quantity, $\delta_{v,w,h}$ is exactly the max-flow/min-cut of
 the graph after each trusted neighborhood has been
 collapsed into a single vertex.
 Each trust boundary forms a cut of the network and places an upper bound on the
@@ -617,9 +618,8 @@ min-cut:
 \beq
 \delta_{v,w,h} \leq \min\left( \mid B_h(v) \mid, \mid B_h(w) \mid \right).
 \eeq
-Equality holds when there are no bottlenecks within the untrusted region.
-For reasonably decentralized networks, equality should hold for all
-values of $h$.
+Equality holds when there are no bottlenecks within the untrusted region,
+an indication that the network is decentralized.
 The redundancy of the entire graph can be characterized by the minimum over
 all vertex pairs:
 \beq
@@ -627,10 +627,16 @@ all vertex pairs:
 \eeq
 Thus, for any pair of nodes in the network, at least $\delta_h$ independent,
 redundant paths can be contstructed between them.
-While $\delta_h$ is a purely structural property of the network,
+While $\delta_h$ is a purely structural property of the graph and
+may have additional applications,
+we are interested in this quantity because
 it places an upper bound on the effectiveness of any
 redundancy-based fault tolerance scheme.
-We will now describe such a scheme.
+Furthermore, by applying the partial trust model,
+an adversarial fault tolerance scheme can treat each pair of nodes as being
+directly connected by a virtual channel with redundancy at least $\delta_h$.
+We will now describe such a scheme and evaluate its fault
+tolerance properties.
 
 \begin{figure}
 \centerline{\includegraphics[width=2.12in,height=1.46in]{fig-alice_trusted_neigh2}}
