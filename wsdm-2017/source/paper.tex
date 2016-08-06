@@ -557,68 +557,56 @@ a different trust model is needed.
 
 We can allow for more realistic transitivity assumptions and incorporate
 network structure into a trust model with one key insight:
-even if no single path between sender and receiver is fully trusted,
-multiple message copies can be sent along different paths and compared
-by the receiver to detect and correct errors.
+even if no single path between a sender and receiver is fully trusted,
+multiple copies of a message can be sent along different paths and compared
+by the reciever to detect and correct errors.
 However, in the presence of an attacker, there is only benefit in sending an
-additional message along a path if that path does not share untrusted,
+additional message along a path if that path does not share untrusted
 single points of failure with any of the existing message paths
 (otherwise, the adversary can compromise both messages
-with the same effort required to compromise one of them).
-The maximum number of such paths represents the effective redundancy that
-can be utilized by any redundancy-based fault tolerance scheme.
-We now propose a model for quantifying the effective redundancy of a network
-as a function of its structure and the level of trust transitivity.
-We will then use this model to evaluate a specific fault-tolerance scheme.
+by causing a single fault).
+We call paths that do not share any untrusted single points of failure
+{\em independent}.
+The maximum number of independent paths represents the effective redundancy that
+can be utilized by any redundancy-based fault-tolerance scheme.
+We now propose a method for quantifying the effective redundancy of a network
+as a function of its structure and level of trust transitivity.
+For the purpose of analyzing adversarial fault-tolerance,
+this method allows a communication network
+to be modeled as a set of virtual channels that directly
+connect each node pair,
+with each channel providing some level of redundancy.
 
-We now propose the {\em partial trust model}:
-a technique for modeling communication between any two nodes
-in an arbitrary network as communication across a number of
-independent, direct links,
-each of which might be compromised by an adversary.
-Two links are considered {\em independent} if they do not
-share a single point of failure.
-Rather than assuming that trust is infinitely transitive (as in webs of trust),
-this model assumes that trust is transitive up to a fixed number of hops.
-The level of trust transitivity enters the model as a parameter called the
-{\em trust radius}.
-Any paths longer than this radius will contain some untrusted links,
-hence {\em partial trust}.
-The benefit of the partial trust model is its ability to abstract
-away the details of the network structure,
-while quantifying the amount of structural redundancy that can be
-utilized by fault tolerance schemes.
-
-To apply the partial trust model to a network,
-we begin with an undirected graph $G = (V,E)$,
-with nodes representing individual agents
-and with edges representing mutual trust relationships
-between those agents.
-We define a {\em trust radius} $h$ and assume that trust is transitive
-up to $h - 1$ hops away.
-In other words, the nodes $v$ and $w$ trust each other if the distance between
-$v$ and $w$, $d(v,w)$ is less than $h$.
-For a given node $v$,
-we call the set of nodes that $v$ trusts the
-{\em trusted neighborhood} $T_h(v)$,
-and all nodes at exactly distance $h$ from $v$ the
-{\em trust boundary} $B_h(v)$:
+We now specify the {\em partial trust model}.
+We begin with an undirected graph $G = (V,E)$,
+with vertices representing agents,
+and with edges representing mutually trusted communication links.
+Let $v \in V$ be an arbitrary sender (Alice)
+and $w \in V$ be an arbitrary receiver (Bob).
+We assume the presence of an adversary (Mal) who knows the
+full structure of the network,
+and who can compromise a fixed number of agents,
+gaining complete control of their behavior,
+as long as those agents are not trusted by either Alice or Bob.
+We define a {\em trust radius} $h$ and that nodes $u$ and
+$u^\prime$ trust each other if their distance is less than $h$.
+For a given node $u$,
+we call the set of trusted nodes its
+{\em trusted neighborhood} $T_h(u)$,
+and all nodes at exactly distance $h$ the
+{\em trust boundary} $B_h(u)$:
 \beq
-T_h(v) &=& \left\{ w \mid d(v,w) < h \right\} \\
-B_h(v) &=& \left\{ w \mid d(v,w) = h \right\}.
+T_h(u) &=& \left\{ u \mid d(u,u^\prime) < h \right\} \\
+B_h(u) &=& \left\{ u \mid d(u,u^\prime) = h \right\}.
 \eeq
 The trust boundary $B_h$ plays an important role because these nodes are not
-trusted by $v$,
-but if compromised can entirely isolate $v$ from the rest of the network.
+trusted by $u$,
+but if compromised can entirely isolate $u$ from the rest of the network.
+These trust assumptions imply that when Alice sends a message to Bob,
+Mal can only cause faults in the set of nodes outside both of their trusted
+neighborhoods: $V \setminus \left(T_h(v) \cup T_h(w)\right)$.
+We refer to this set of nodes as the {\em untrusted region}.
 
-Using the above definitions, we now model communication between a
-source $v$ (Alice) and a destination $w$ (Bob).
-We assume that nodes trusted by {\em either} Alice or Bob will not
-compromise the message.
-In other words,
-faults are assumed to occur only in the part of the network lying
-between Alice and Bob's trust boundaries.
-We call this part of the network the {\em untrusted region}.
 Our goal is now to model the maximum number of independent paths a message
 can take through the untrusted region.
 This is exactly the problem of finding $\delta_{v,w,h}$: the max-flow/min-cut of
