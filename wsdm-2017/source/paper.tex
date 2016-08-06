@@ -505,7 +505,7 @@ compromised, the whole message is not revealed
 
 \end{description}
 
-\section{Trust}
+\section{Trust and Fault Tolerance}
 
 The requirement that networks remain sparse has important implications for
 resilience.
@@ -548,12 +548,28 @@ of the trust network:
 trusted nodes are all trusted equally,
 regardless of how many nodes trust them.
 Similarly, while the process of building a web of trust is decentralized,
-the emergent structure of the trust network itself can be centralized.
+the emergent structure of the trust network itself might be centralized.
 In order to analyze the influence of network structure on adversarial
 fault tolerance,
 a different trust model is needed.
 
 \subsection{Partial Trust Model}
+
+We can allow for more realistic transitivity assumptions and incorporate
+network structure into a trust model with one key insight:
+even if no single path between sender and receiver is fully trusted,
+multiple message copies can be sent along different paths and compared
+by the receiver to detect and correct errors.
+However, in the presence of an attacker, there is only benefit in sending an
+additional message along a path if that path does not share untrusted,
+single points of failure with any of the existing message paths
+(otherwise, the adversary can compromise both messages
+with the same effort required to compromise one of them).
+The maximum number of such paths represents the effective redundancy that
+can be utilized by any redundancy-based fault tolerance scheme.
+We now propose a model for quantifying the effective redundancy of a network
+as a function of its structure and the level of trust transitivity.
+We will then use this model to evaluate a specific fault-tolerance scheme.
 
 We now propose the {\em partial trust model}:
 a technique for modeling communication between any two nodes
@@ -655,7 +671,7 @@ compromise all possible paths between Alice and Bob.
 \label{fig:trust-source-destionation}
 \end{figure}
 
-\section{Multipath Fault Tolerance}
+\subsection{Multipath Fault Tolerance}
 
 When the assumptions of the partial trust model hold, a network can achieve
 robust fault tolerance by utilizing the redundancy of multiple paths
