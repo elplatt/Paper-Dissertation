@@ -784,19 +784,19 @@ message copies and the number of adversarial faults.
 \label{fig:pfail}
 \end{figure}
 
-\section{Multipath Routing on the Butterfly Topology}
+\section{Multipath Butterfly Routing}
 
 In previous sections, we showed that reliable communication across a network
 can be achieved even when any single message path might be compromised by
 an adversary,
 provided the network has sufficient redundancy,
-and provided the sender and intermediaries know how to route messages
-such that they follow independent paths.
+and provided the sender and intermediaries know how to route message
+copies along independent paths.
 In this section, we address the latter requirement by proposing a novel routing
 algorithm for constructing independent paths on the butterfly network topology.
 This architecture and routing algorithm achieve an
 effective redundancy that increases exponentially with the trust radius,
-allowing a very high level of fault tolerance.
+allowing a very high level of adversarial fault tolerance.
 
 The structure of the butterfly network is highly constrained,
 making it most suitable for applications where network structure can be
@@ -809,7 +809,7 @@ and call tree notification systems \cite{nickerson_thinking_2010}.
 For critical security applications in particular,
 the novel level of adversarial fault-tolerance offered by this scheme
 is highly desirable,
-even if it requires new approaches to designing decentralized communication
+even if it requires new approaches to designing communication
 and trust networks.
 Lastly, we note that the partial trust model and multipath fault tolerance
 schemes of the previous section do not rely on any particular network
@@ -818,53 +818,53 @@ and are not necessarily limited to such applications.
 
 \subsection{Butterfly Network Topology}
 
-We now present a decentralized, fault-tolerant, multipath routing algorithm
-on a specific topology known as the butterfly network topology
-\cite{kshemkalyani_distributed_2008}.
-Several variations on the butterfly network exist.
-Specifically, we utilize the wrap-around butterfly.
-We denote the $m$-dimensional, directed wrap-around butterfly as $\wbf(m)$:
+We choose the butterfly topology
+\cite{kshemkalyani_distributed_2008}
+because of several desirable properties (described below)
+and because its strucutre allows for relatively straightforward
+design and analysis of routing algorithms.
+While several variations on the butterfly network exist,
+we utilize the wrap-around butterfly.
+We denote the $m$-dimensional, directed wrap-around butterfly as a
+graph $\wbf(m)$:
 \beq
 \wbf(m) &=& (V, E_\downarrow \cup E_\rightarrow) \\
 V &=& \mathbb{Z}_{m} \times \mathbb{Z}_2^m \\
 E_\downarrow
 &=&
-\{((l,z),(l+1 (\text{mod } m),z) \} \\
+\{((l,z),(l+1 \; (\text{mod } m),z) \} \\
 E_\rightarrow
 &=&
-\{(l,z),(l+1 (\text{mod } m),
-(z_0, \ldots, z_{l-1},z_l \oplus 1, z_{l+1}, \ldots, z_{m-1}) \},
+\{(l,z),(l+1 \; (\text{mod } m),
+z \oplus 1_l \},
 \eeq
 where $\mathbb{Z}_m$ is the set of integers modulo $m$,
-and $\oplus$ represents the addition modulo 2.
+$\oplus$ represents copmonent-wise addition modulo 2,
+and $1_l$ is a vector with a 1 in index $l$ and 0 elsewhere.
 Each node is associated with a level $l$ and an $m$-bit string $z$
 known as {\em the place-within-level}.
-There are two types of edges, shown in Figure \ref{fig:butterfly}.
+There are two types of edges (shown in Figure \ref{fig:butterfly}).
 Down edges ($E_\downarrow$) connect nodes sharing the same $z$ value
 in a cycle of increasing level $l$.
 Down-right edges ($E_\rightarrow$) also link to a node of level $l + 1$,
 but one having the place-within-level equal to $z$ with the $l$th bit inverted.
 
 The wrap-around butterfly network has a number of properties desirable for
-a scalable, decentralized communication network.
+a scalable, decentralized communication network:
 \begin{description}
-\item[Vertex-transitive]
+\item[Vertex-transitivity:]
 Because the wraparound butterfly is vertex transitive,
-it is maximally decentralized.
-We will also use this property throught the proof, noting that
-the problem of finding a route between arbitrary nodes $\tilde{v}$ and $\tilde{w}$
-can be reduced to finding a route from node $(0,0)$ to some node $w$.
-\item[Small-diameter]
+it is maximally decentralized;
+\item[Small-diameter:]
 For any two nodes, the length of the shortest path between them is
-$O(\log N)$, where N is the number of nodes in the network.
-\item[Sparse]
+$O(\log N)$, where N is the number of nodes in the network;
+\item[Sparsity:]
 With a constant degree of 4, the wraparound butterfly is extremely sparse,
-and can scale indefnitely without node degree becoming a limitation.
-\item [Redundant] 
-The number of independent paths between the $h$-trusted neighborhoods of two
-nodes in the wraparound butterfly increases exponentially in $h$.
-We prove this assertion below by giving an algorithm to explicitly construct
-these paths.
+and can scale indefnitely without node degree becoming a limitation;
+\item [Redundancy:]
+The number of independent paths between two
+nodes in the wraparound butterfly increases exponentially in the trust
+radius $h$ (the routing algorithm below constructs thes explicitly).
 \end{description}
 
 \begin{figure}
@@ -872,92 +872,34 @@ these paths.
 \includegraphics{fig-butterfly.pdf}
 \end{center}
 \caption{
-Schematic illustration of the two types of edges in a directed butterfly network.
-The node $(l,z)$ is shown as the bit string $z$ with a square around the $l$th bit.
-"Down" edges increment $l$, leaving $z$ unchanged, while "down-right" edges
-increment $l$ and invert the $l$th bit of $z$.
+Schematic illustration of the two types of edges in a directed butterfly
+network.
+The node $(l,z)$ is shown as the bit string $z$ with a square around the
+$l$th bit.
+``Down'' edges increment $l$, leaving $z$ unchanged,
+while ``down-right'' edges increment $l$ and invert the $l$th bit of $z$.
 \label{fig:butterfly}
 }
 \end{figure}
 
-\subsection{Routing Algorithm: Overview}
+The structure of the butterfly network lends itself to a well-known
+(unipath) routing algorithm,
+which we later extend to the multipath case.
+The unipath algorithm first follows a down or down-right edge at every step,
+increasing the level $l$ by 1 and cycling through the
+indeces of the place-within-level.
+If the current node's place-within-level matches the destination node's at
+index $l$,
+a down edge is chosen and the place-within-level does not change.
+Otherwise, a down-right edge is chosen and the $l$th component of the
+place-within-level is flipped,
+after which it matches the destination.
+After $m$ interations of this, all levels have been visited
+and the place-within-level matches that of the destination.
+Simply following down (or up) edges will then increment (decrement) the
+level until the destination node is reached.
 
-This section gives an informal overview of the multipath routing algorithm.
-In a wraparound butterfly network with trusted radius $h$,
-the algorithm constructs $2^h$ disjoint paths between the trusted neighborhoods
-of any two nodes $v$ and $w = (l_w, z_w)$.
-Because of vertex transitivity,
-we can make the simplifying assumption that $v = (0,0)$ without loss of generality.
-Each path is parameterized by an $h$-bit string $s \in \mathbb{Z}_2^h$ (see Table \ref{tab:routing}).
-Each path cycles around the levels of the butterfly network at most twice.
-
-During the first cycle, the place-within-level $z$ of all nodes is set such that
-no two paths overlap outside the trusted neighborhoods.
-During the second cycle, the place-within-level is set to its destination value
-and the algorithm terminates when the destination level is reached.
-
-More specifically, consider any node, $(l,z)$, in the path corresponding to $s$. The algorithm can be understood by dividing the $m$ bits of
-$z$ into four segments: $A, B, C, D$ (see figure \ref{fig:route-overview}).
-$A$ is the first $h$ bits,
-and $C$ is the $h$ bits preceeding index $l_w$.
-$B$ is formed by the remaining bits between $A$ and $C$,
-while $D$ refers to the remaining bits after $C$.
-Hence, $A, B, C, $ and $D$ occupy $h$, $l_w - 2h$, $h$, and $m - l_w$ bits of $z$, respectively
-(we leave the caase of overlapping $A$ and $C$ for the formal proof).
-Note that due to the construction of the network,
-as we walk through any path $\{p_1, p_2, \dots\}$,
-the level $l_{t+1}$ of node $p_{t+1}$ is always one higher (mod $m$)
-than level $l_t$ the previous node $p_t$.
-Also, $z_{t+1}$ is always the same as the $z_t$,
-except for possibly the $(l+1)^{th}$ bit of $z_{t+1}$,
-which can be either 0 or 1.
-Hence, as the routing algorithm progresses through the levels $l$,
-the segments of $z$ get updated in order. 
-
-There are 7 stages of the algorithm to construct a path from $v$ to $w$.
-Stages (1) through (4) consist of the first cycle thought the levels of
-the network and stages (5) though (7) consists of the second
-(potentially partial) cycle.
-We start at the source node $v = (0,0)$ and begin constructing the path.
-During stage (1), $A$ is set to match $s$.
-During stage (2) the bits of $B$ are inverted.
-During stage (3) a cyclic permutation of $s$ is placed into $C$
-(the details of the permutation are necessary for the overlapping case,
-but not relevant for this overview).
-After this, in stages (4--7), $D$, $A$, $B$, and $C$ are set to their
-destination values (see figure \ref{fig:route-overview}).
-Figure \ref{fig:routing} shows an explicit example of the routing algorithm
-for one value of $s$.
-
-We now argue that in the above routing algorithm,
-given $s, s' \in \mathbb{Z}_2^h$ such that $s \neq s'$,
-the corresponding paths, $P_s$ and $P_{s'}$,
-are disjoint when they are both outside of the trusted neighborhoods of
-$v$ and $w$.
-We informally refer to different segments of nodes in $s$ and $s'$ as
-$A,B,C,D$ and $A',B',C',D'$, respectively.
-
-First note that any overlap between the two paths must occur either while they
-are at the same stage of the routing, or while one is at stage (1) and the other one at (5), one is at stage (2) and the other one at (6), or one is at stage (3) and the other one at (7).
-This is because in any other case,
-the nodes in the paths will be at different levels, $l$,
-and thus they cannot overlap.
-Furthermore, when a path is in stage (1) or (7),
-it is in the trusted neighborhoods of $v$ or $w$,
-hence we are not concerned with overlaps within stages (1) or (7). 
-
-When both paths are in stages (2), (3), or (4), they do not overlap because
-segment $A$ is set to $s$ and segment $A'$ is set to $s'$.
-When both paths are in stages (5) or (6),
-they do not overlap because segment $C$ is set to a cyclic permutation of $s$
-and segment $C'$ is the same cyclic permutation of $s'$.
-When one path is in stage (1) and the other one is in stage (5),
-say $P_s$ is in (1) and $P_{s'}$ is in (5),
-they do not overlap because all bits in $B$ are set to the original bits in the
-source node and all bits in $B'$ are set to the inverted bits of the source node.
-When one path is in stage (2) and the other one is in stage (6), they do not
-overlap because at least one pair of bits in $B$ and $B'$ are still inverted
-while stage (6) is being processed. 
+\subsection{Multipath Routing Algorithm}
 
 \begin{figure}
 \begin{center}
@@ -1135,8 +1077,6 @@ and $w = (6, 0110111_2)$.
 \label{fig:routing}
 }
 \end{figure}
-
-\subsection{Routing Algorithm: Specification and Proof}
 
 We now specify the multipath routing scheme and prove
 that provides $2^h$ disjoint paths between
