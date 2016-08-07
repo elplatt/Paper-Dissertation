@@ -253,25 +253,13 @@ The partial trust model can be used to design and analyze communication
 schemes that tolerate adversarial faults,
 even when no single path through the network is fully trusted.
 
-While {\em confidentiality} is a common concern in secure communication,
-it is not the focus of this paper.
-Existing cryptographic techniques for confidentiality are relatively
-mature compared to those for tolerating censorship.
-In fact, an attacker might use targeted attacks to achieve censorship
-as a fallback when surveillance isn't feasible.
-However, we stress that the technqiues presented in this paper
-are entirely compatible with, and in some cases could enhance, existing
-privacy and secrecy techniques.
-For example, the well-known {\em man-in-the-middle} attack exploits a privileged
-network position to attack otherwise secure cryptography,
-suggesting that structural approaches can complement cryptographic ones.
-
 Using the partial trust model, we are able to reduce complex networks to
 simply a number of redundant, independent paths.
-This reduction enables the application of standard error detection techniques,
-which rely on statistically independent errors.
+This reduction enables the application of standard error detection techniques
+\cite{avizienis_basic_2004, von_neumann_probabilistic_1956},
+which rely on independent errors.
 While adversarial faults along a single path are correlated,
-faults in randomly-chosen independent paths are not.
+faults in independent paths are not.
 Thus fault tolerance techniques can be applied,
 even in the presence of adversarial errors,
 when messages are sent in parallel,
@@ -373,8 +361,8 @@ Freenet uses secret sharing and small-world routing
 to create a content-addressable network with a high level of both
 confidentiality and censorship resistance.
 
-{\em Multipath routing} protocols use multiple paths when
-routing a message through a network,
+{\em Multipath routing} protocols send redundant information
+over multiple paths when routing a message through a network,
 in contrsast to traditional {\em unipath} routing, which uses
 a single path.
 Multipath routing can have many benefits, including reduced congestion,
@@ -392,7 +380,7 @@ wireless sensor networks (WSNs),
 and have thus focused on ad-hoc, unstructured networks, often having a central
 base station.
 The partial trust model presented in this paper provides a more general
-way to evaluate the effect of network structure on adversarial fault-tolerance.
+way to evaluate the effect of network structure on adversarial fault tolerance.
 The method of Liu et al.
 \cite{liu_secure_2012}
 routes multiple messages first to random peers and then
@@ -488,7 +476,7 @@ in the network.
 In a network, redundancy refers to the existence of multiple non-overlapping
 paths between nodes or components.
 Redundancy can help reduce single points of failure as well as
-increase fault-tolerance.
+increase fault tolerance.
 One measure of redundancy is given by the ratio of edges to nodes
 \cite{baran_distributed_1964}.
 A single point of failure occurs when a node holds a uniquely
@@ -496,7 +484,7 @@ central position.
 When alterative paths are added to bypass central nodes,
 the network becomes more redundant.
 Similarly, as we will later show,
-redundancy in a network can enable fault-tolerance techniques
+redundancy in a network can enable fault tolerance techniques
 that reduce the effectiveness of attacks and creating stabilizing asymmetry.
 When secrecy is desired, redundancy can help by allowing messages to be
 divided into parts and sent along different paths so even if one path is
@@ -513,7 +501,26 @@ As such networks grow, the number of nodes will exceed the number of links
 any single node can support.
 As a result, some pairs of nodes are only connected indirectly,
 through at least one intermediary node.
-These intermediary nodes are targets for potential attacks.
+These intermediary nodes are targets for potential attacks,
+making network paths potentially unreliable.
+
+Within the field of {\em fault tolerance},
+many techniques have been developed for building reliable systems
+out of unreliable components
+\cite{avizienis_basic_2004, von_neumann_probabilistic_1956}.
+We will make use of standard fault tolerance terminology, summarized here.
+A {\em fault} occurs when one component
+of a system behaves incorrectly (e.g., a routing node blocking or
+altering a message).
+The result of that fault (e.g., a recipient receiving conflicting messages)
+is an {\em error} state.
+If the error is undetected or incorrectly corrected, the system is
+said to have experienced a {\em failure} (e.g., an altered message is
+accepted as authentic).
+We are concerned in particular with {\em adversarial faults},
+which (as opposed to random faults)
+are chosen strategically to maximize the liklihood of a failure.
+
 In communication networks, 
 the threat model is as follows: Alice sends a message to
 Bob via one or more intermediaries,
@@ -568,14 +575,14 @@ by causing a single fault).
 We call paths that do not share any untrusted single points of failure
 {\em independent}.
 The maximum number of independent paths represents the effective redundancy that
-can be utilized by any redundancy-based fault-tolerance scheme.
+can be utilized by any redundancy-based fault tolerance scheme.
 We now propose a method for quantifying the effective redundancy of a network
 as a function of its structure and level of trust transitivity.
-For the purpose of analyzing adversarial fault-tolerance,
+For the purpose of analyzing adversarial fault tolerance,
 this method allows a communication network
-to be modeled as a set of virtual channels that directly
+to be modeled as a set of virtual links that directly
 connect each node pair,
-with each channel providing some level of redundancy.
+with each virtual link providing some level of redundancy.
 
 We now specify the {\em partial trust model}.
 We begin with an undirected graph $G = (V,E)$,
@@ -632,11 +639,15 @@ may have additional applications,
 we are interested in this quantity because
 it places an upper bound on the effectiveness of any
 redundancy-based fault tolerance scheme.
+As a function of $h$, $\delta_h$ describes a network's ability to create
+redundancy from trust.
+For attack-tolerant networks,
+it is thus desirable for $\delta_h$ to increase quickly as a function of $h$.
 Furthermore, by applying the partial trust model,
 an adversarial fault tolerance scheme can treat each pair of nodes as being
-directly connected by a virtual channel with redundancy at least $\delta_h$.
-We will now describe such a scheme and evaluate its fault
-tolerance properties.
+directly connected by a virtual link with least $\delta_h$ redundant
+channels.
+We will now describe such a scheme and evaluate its fault tolerance properties.
 
 \begin{figure}
 \centerline{\includegraphics[width=2.12in,height=1.46in]{fig-alice_trusted_neigh2}}
@@ -667,95 +678,68 @@ compromise all possible paths between Alice and Bob.
 
 \subsection{Multipath Fault Tolerance}
 
-When the assumptions of the partial trust model hold, a network can achieve
-robust fault tolerance by utilizing the redundancy of multiple paths
-between the sender and receiver.
-Furthermore, this fault tolerance can remain robust even when faults are
-adversarially chosen by an attacker who has access to more resources
-than the sender and receiver.
-On a structured network, multipath fault tolerance reveals not just when
-an error has occured, but also provides information about which paths provide
-conflicting information,
-which could be used to help locate compromised nodes.
+Once we have determined a network's effective redundancy,
+we can apply redundancy-based fault tolerance techniques,
+by sending multiple copies of a message
+({\em concurrent multipath routing}).
+We model our sender (Alice) and receiver (Bob) as
+communicating over a direct link with $\delta_h$ redundant channels.
+The partial trust model allows us to make this simplifying assumption
+for analyzing the a fault tolerance scheme,
+but implementing such a scheme will require a method for constructing
+specific network paths.
+We will return to the question of constructing paths in the next section.
+For now, we concern ourselves with the question:
+given that the newtowrk provides $\delta_h$ redundant channels between
+Alice and Bob,
+what is the probability that an adversary (Mal) causes an undetectable
+error?
 
-In the terminology of fault tolerance, a {\em fault} occurs when one component
-of a system behaves incorrectly (e.g., a routing node blocking or
-altering a message).
-The result of that fault (e.g., a recipient receiving conflicting messages)
-is an {\em error} state.
-If the error is undetected or incorrectly corrected, the system is
-said to have experienced a {\em failure} (e.g., an altered message is
-accepted as authentic).
-We are concerned in particular with {\em adversarial faults},
-which (as opposed to random faults)
-are chosen strategically (within the assumptions of the trust model)
-to maximize the liklihood of a failure.
-In this section, we focus on the simplest possible question:
-when using multipath fault tolerance,
-what is the probability that adversarial faults will cauase an undetectable
-error, and thus guarantee a failure?
-
-They key idea behind multipath fault tolerance is that several copies of
-a message are sent, along multiple routes,
-rather than using traditional unicast routing.
-If any of the message copies differ from one another or do not arrive,
-the receiver can conclude that an error has occurred,
-and possibly correct it, depending on the magnitude of the error
-and the desired fault tolerance properties.
-
-In the simplest such scheme, a sender (Alice) broadcasts copies of a message
-along all possible routes to the receiver (Bob).
-Such an approach takes advantage of all possible redundancy in the network,
-and requires an adversary (Mal) to compromise at least one node on each path
-in order to create an undetectable error.
-But how many nodes is that?
-The answer depends on the smallest {\em vertex cut} of the untrusted
-portion of the network---the smallest set of nodes than can be removed
-to separate the network into two components.
-Any path between Alice and Bob must pass through all such sets,
-so to guarantee an undetectable error, Mal must compromise at least as many
-nodes as are in the smallest vertex cut.
-Alice and Bob's trust boundaries are both vertex cuts,
-so the smaller of the two is an upper bound.
-It is not difficult to construct networks in which the trust boundary is exactly
-the smallest vertex cut,
-and we will show this to be true for the networks we consider below.
-We denote the size of the smallest vertex cut---the
-maximum number of disjoint paths between Alice and Bob's trusted
-neighborhoods---as $B$.
-
-Realistically, the sender may only have the resources to send a limited number of
-copies, or the network may not be able to handle the congestion caused by
-sending all messages along all paths.
-However, we will now show that a network can provide a high level of
-fault tolerance with only a few copies of a message,
-provided the number of disjoint paths $B$ is large.
+Let us first assume that Alice sends a message copy over each available
+channel.
+When Bob recieves the messages, there are several possibilities.
+If some of the messages are missing
+(Alice can include the number of messages as part of the message)
+or if some of the messages disagree,
+Bob knows that some of the messages were either blocked or altered,
+and he has successfully detecetd an error.
+Bob has not accepted any compromised information,
+and can request retransmission, so no failure has occurred.
+If Bob receives all of the messages, and they all agree,
+he accepts the message.
+If the messages agree, there are two possible cases.
+The first case is that Mal has not compromised any of the messages,
+and Bob has correctly accepted them, so no failure has occurred.
+The second case is that Mal has compromised {\em all} of the messages,
+so Bob has accepted an erroneous message and a failure has occurred.
+In the present scenario,
+whether this occurs depends only on whether Mal has the resources to
+compromise all of the channels.
+In a more realistic, and more interesting, scenario,
+both Alice and Mal have limited resources and are not able to use or
+compromise all available channels.
 
 In a more sophisticated multipath fault tolerance scheme,
-Alice randomly chooses $k$ paths and sends a copy of
+Alice randomly chooses $k \leq \delta_h$ channels and sends a copy of
 her message on each.
-We further assume that Alice posesses a routing algorithm
-(such as described in the next section)
-that enables her to construct paths that
-do not intersect between trusted neighborhoods.
-So the maximum number of paths Alice could choose is $B$,
-otherwise two paths would have to intersect in the minimum vertex cut.
-Let us assume that Mal is capable of compromising up to $l$ nodes.
-Mal's best adversarial strategy is now to compromise as many nodes in the smallest
-vertex cut as possible,
-succeeding when each of Alice's paths include one of the compromised nodes.
-Since Alice chooses paths randomly,
-all nodes in the vertex cut are equally likely to contain a path,
-so Mal can do no better than also choosing randomly.
+We assume that Mal is capable of compromising $l \leq \delta_h$ channels.
+Having full knowledge of the network,
+Mal's best strategy is to identify a minimum node cut in the network
+and compromise nodes from that cut.
+With this strategy, each compromised node reduces effective redundancy by one,
+effectively compromising one of the virtual channels between Alice and Bob.
+Since Alice chooses channels randomly,
+all channels are equally likely to contain a message,
+so Mal can do no better than also chosing randomly.
 If $k > l$, at least one message will get through uncompromised and all
 errors are detectable.
 Otherwise, the probability of Mal producing an undetectable error is
-the probability that all of Alice's paths contain compromised nodes:
+the probability that all of Alice's chosen channels are compromised:
 \beq
 \label{eq:pf}
-p_f &=& \frac{l!(B-k)!}{B!(l-k)!}.
+p_f &=& \frac{l!(\delta_h-k)!}{\delta_h!(l-k)!}.
 \eeq
-Letting $k=\alpha B$ and $l=\beta B$, then applying Stirling's
+Letting $k=\alpha \delta_h$ and $l=\beta \delta_h$, then applying Stirling's
 approximation gives:
 \begin{eqnarray}
 \label{eq:pf_approx}
@@ -765,40 +749,72 @@ p_f &\approx&
     \left( \frac{\beta-\alpha}{1-\alpha} \right)^{\alpha}
     \left( \frac{\beta}{\beta-\alpha} \right)^{\beta}
     (1-\alpha)
-\right]^B.
+\right]^{\delta_h}.
 \end{eqnarray}
 
 Figure \ref{fig:pfail} shows the value of $p_f$
-as a function of $k$ and $l$ for various values of $B$.
+as a function of $k$ and $l$.
 Equation (\ref{eq:pf_approx}) shows that while $p_f$
 depends on the fractions of
 redundant paths actually utilized $\alpha$ and compromised $\beta$,
-it decreases exponentially in the total number of {\em possible}
-redundant paths.
-This result is significant because $B$ depends only on the network structure,
+it decreases exponentially with the effective redundancy $\delta_h$.
+This result is significant because $\delta_h$
+depends only on the network structure
+and the strength of trust transitivity,
 not on the amount of resources available to the sender or the adversary.
-In other words, senders can tolerate attacks from significantly more powerful
-adversaries, as long as the network structure provides large $B$.
-Formally we have shown that under the partial trust assumption,
-multipath fault tolerance can provide {\em asymptotic security}
-against adversarial faults if $B$ can be made arbitrarily large.
-Similarly, because the cost of an attack is prohibitively large
-compared to the cost of protecting against an attack,
-this architecture creates what a stabilizing asymmetry.
+In other words, this scheme exhibits a {\em stabilizing asymmetry},
+senders can tolerate attacks from significantly more powerful
+adversaries, as long as the network structure provides large $\delta_h$.
 By putting attackers at a disadvantage, attacks are not only tolerated
-but also disincentivized.
+but also disincentivized,
+further decreasing the likelihood of a successful attack.
+
+In order to derive the above results, we have assumed that Alice and all
+intermediary agents are able to identify specific,
+independent network paths that achieve the effective redundancy $\delta_h$.
+We now proceed to describe a routing algorithm for doing so in the special case
+of the butterfly network topology.
 
 \begin{figure}
 \centerline{\includegraphics{fig-perror}}
 \caption{
 The probability of an undetectable error as a function of the number of
-message copies and the number of adversarial faults,
-for various numbers of redundant paths.
+message copies and the number of adversarial faults.
 }
 \label{fig:pfail}
 \end{figure}
 
 \section{Multipath Routing on the Butterfly Topology}
+
+In previous sections, we showed that reliable communication across a network
+can be achieved even when any single message path might be compromised by
+an adversary,
+provided the network has sufficient redundancy,
+and provided the sender and intermediaries know how to route messages
+such that they follow independent paths.
+In this section, we address the latter requirement by proposing a novel routing
+algorithm for constructing independent paths on the butterfly network topology.
+This architecture and routing algorithm achieve an
+effective redundancy that increases exponentially with the trust radius,
+allowing a very high level of fault tolerance.
+
+The structure of the butterfly network is highly constrained,
+making it most suitable for applications where network structure can be
+designed or dictated.
+Examples of such networks include:
+overlay networks \cite{lua_survey_2005, korzun_structured_2013},
+formal organizations \cite{mohr_explaining_1982},
+government-regulated cellular networks \cite{walker_mass_2012},
+and call tree notification systems \cite{nickerson_thinking_2010}.
+For critical security applications in particular,
+the novel level of adversarial fault-tolerance offered by this scheme
+is highly desirable,
+even if it requires new approaches to designing decentralized communication
+and trust networks.
+Lastly, we note that the partial trust model and multipath fault tolerance
+schemes of the previous section do not rely on any particular network
+topology or routing algorithm,
+and are not necessarily limited to such applications.
 
 \subsection{Butterfly Network Topology}
 
@@ -1293,6 +1309,19 @@ to secrecy and privacy.
 For example, if a message is broken into parts and each part is sent along
 a different random subset of routes, an attacker who succesfully compromises
 one part of the message will still be unable to compromise the rest.
+
+While {\em confidentiality} is a common concern in secure communication,
+it is not the focus of this paper.
+Existing cryptographic techniques for confidentiality are relatively
+mature compared to those for tolerating censorship.
+In fact, an attacker might use targeted attacks to achieve censorship
+as a fallback when surveillance isn't feasible.
+However, we stress that the technqiues presented in this paper
+are entirely compatible with, and in some cases could enhance, existing
+privacy and secrecy techniques.
+For example, the well-known {\em man-in-the-middle} attack exploits a privileged
+network position to attack otherwise secure cryptography,
+suggesting that structural approaches can complement cryptographic ones.
 
 Our present contributions are limited in several ways.
 The partial trust model, while making fewer assumptions than web of trust
