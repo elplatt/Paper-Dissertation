@@ -264,7 +264,7 @@ Thus fault tolerance techniques can be applied,
 even in the presence of adversarial errors,
 when messages are sent in parallel,
 a technique known as {\em concurrent multipath routing}
-\cite{zin_survey_2015, qadir_exploiting_2015}.
+\cite{zin_survey_2015, qadir_exploiting_2015, khiani_comparative_2013}.
 The receiver can then use the redundant messages to detect and/or correct
 errors.
 Using the partial trust model, we formally evaluate the 
@@ -901,6 +901,30 @@ level until the destination node is reached.
 
 \subsection{Multipath Routing Algorithm}
 
+We now present a routing algorithm to construct multiple independent paths
+between two nodes in a butterfly network.
+Independence requires that routes between two nodes $v$ and $w$ have no nodes
+in common, unless those nodes are less than distance $h$ from either $v$ or $w$.
+Informally, the algorithm achieves this by using the first $h$ hops to
+reach as many distinct nodes as possible,
+then routing from each of those to a distinct intermediary node,
+and finally routing from the intermediary to the destination.
+By ensuring that the place-within-level differs for all paths
+(outside of the trusted neighborhoods of $v$ and $w$)
+the algorithm guarnatees independence.
+As with the unipath routing algorithm,
+each of the multiple paths proceed using down and down-right edges,
+cycling through levels one at a time.
+However, we cycle through the levels twice, once to route from $v$ to a
+particular path's intermediary node,
+and again to route from the intermediary to $w$.
+In the first cycle, path independence is guaranteed by ensuring that
+all paths differ in the first $h$ bits of the place-within-level.
+Similarly, in the second cycle,
+independence is guaranteed by ensuring that all paths differ in the
+$h$ bits of the place-within-level preceeding the destination index
+(see Figure \ref{fig:route-overview}).
+
 \begin{figure}
 \begin{center}
 \begin{tikzpicture}[
@@ -947,7 +971,7 @@ node distance=0pt,
                 outer sep=0pt, on chain},
     Y/.style = {rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
-                outer sep=0pt, on chain, thick},
+                outer sep=0pt, on chain, double},
                         ]
 \foreach \i in {$s$}% <-- content of nodes
     \node[X] {\i};
@@ -1078,7 +1102,7 @@ and $w = (6, 0110111_2)$.
 }
 \end{figure}
 
-We now specify the multipath routing scheme and prove
+We now formally specify the multipath routing scheme and prove
 that provides $2^h$ disjoint paths between
 the $h$-hop trusted neighborhoods of any two nodes in an $m$-bit
 wrap-around butterfly network.
@@ -1101,26 +1125,8 @@ Let $R_s$ ($\overline{R_s}$) be the set of $m$-bit strings with the lowest $h$
 bits all matching (not all matching) the bits of $s$.
 Let $S_s$ ($\overline{S_s}$) be the set of $m$-bit strings with the $h$ bits
 preceeding index $l_w$ all matching (not all matching) the bits of $\tilde{s}$,
-where $\tilde{s}$ is a cyclic permutation of $s$ defined below.
+where $\tilde{s}$ is a cyclic permutation of $s$:
 \beq
-Q_{v^{(0)}} &=&
-\{z \in \mathbb{Z}_2^m \mid \;
-\neg \exists i \in \mathbb{Z} : h \leq (i < l_w - h) \land z_i \neq z_i^{(0)} \}
-\\
-\overline{Q_{v^{(0)}}} &=& \mathbb{Z}_2^m \setminus Q_{v^{(0)}}
-\\
-R_s &=&
-\{z \in \mathbb{Z}_{2}^m \mid \;
-\forall i \in \mathbb{Z}_2^h z_i = s_i \}
-\\
-\overline{R_s} &=& \mathbb{Z}_2^m \setminus R_s
-\\
-S_s &=&
-\{z \in \mathbb{Z}_{2}^m \mid \;
-\forall i \in \mathbb{Z}_2^h z_{(l_w - h + i)} = \tilde{s}_i \}
-\\
-\overline{S_s} &=& \mathbb{Z}_2^m \setminus S_s
-\\
 \tilde{s}_i &=& s_{(i + l_w) \text{ mod } h}.
 \eeq
 We will make use of the fact that:
@@ -1225,64 +1231,71 @@ adverarial faults, even from a very powerful attacker.
 
 \section{Discussion}
 
-While decentralized architectures have recieved much attention,
-methods for classifying, and evaluating decentralization
-are in their infancy.
-The trust model and multipath fault tolerance technique proposed in this
-paper provide a practical fault tolerance architecture for applications when
-network structure can be imposed,
-as well as a more general method for evaluating the role of network structure
-on fault tolerance.
+While decentralized protocols have received much attention for their potential
+fault tolerance applications,
+a better understanding of how network structure contributes to fault tolerance
+is necessary.
+We have proposed a number of contributions towards this understanding:
+a {\em partial trust model} for quantifying the effective redundancy
+of a network,
+a {\em multipath fault tolerance} scheme for using that redundancy to detect
+errors,
+and a {\em concurrent multipath routing} algorithm enabling this scheme to
+be implemented on the butterfly network.
 
 Fault-tolerant network infrastructures have many direct applications.
-Areas such as cryptocurrency, secure multiparty computation, and wireless
-sensor networks have immediate need for scalable, fault-tolerant
-infrastructures.
-Many Internet services---email, social networks, cloud storage---are still
-highly centralized and vulnearble to technical and non-technical attacks.
-Decentralized fault tolerance is one approach to securing these important
+Areas such as cryptocurrency
+\cite{mazieres_stellar_2015,nakamoto_bitcoin:_2008,king_ppcoin:_2012},
+secure multiparty computation
+\cite{yao_protocols_1982,chaum_multiparty_1988,goldreich_how_1987},
+and wireless sensor networks
+\cite{khiani_comparative_2013}
+have immediate need for scalable, fault-tolerant infrastructures.
+Many Internet services (e.g., email, social networks, cloud storage)
+are still highly centralized and vulnearble to technical and
+non-technical (i.e. coercive) attacks.
+Fault tolerance using {\em both} decentralized protocols and
+decentralized network structures
+is one approach to securing these important
 services and making networked communication safer.
 
-While the primary purpose of our proposed fault tolerance technique is the
-threat of message blocking or corruption, it can provide some improvements
-to secrecy and privacy.
-For example, if a message is broken into parts and each part is sent along
-a different random subset of routes, an attacker who succesfully compromises
-one part of the message will still be unable to compromise the rest.
-
-While {\em confidentiality} is a common concern in secure communication,
-it is not the focus of this paper.
+We have also focused specifically on adversarial faults that block or
+change messages (e.g., censorship).
+We have not specifically addressed {\em confidentiality}:
+how to keep those messages private.
 Existing cryptographic techniques for confidentiality are relatively
 mature compared to those for tolerating censorship.
 In fact, an attacker might use targeted attacks to achieve censorship
 as a fallback when surveillance isn't feasible.
-However, we stress that the technqiues presented in this paper
+However, the technqiues presented in this paper
 are entirely compatible with, and in some cases could enhance, existing
-privacy and secrecy techniques.
+confidentiality techniques.
 For example, the well-known {\em man-in-the-middle} attack exploits a privileged
 network position to attack otherwise secure cryptography,
 suggesting that structural approaches can complement cryptographic ones.
 
-Our present contributions are limited in several ways.
-The partial trust model, while making fewer assumptions than web of trust
-approaches, still depends on some transitivity of trust,
-which may be a questionable assumption in many cases.
-Better trust models are still needed.
-
-The primary limitation of our structured network approach is that
-link structure is imposed rather than self-organized.
-This requirement may be appropriate for appliations such as
-wireless sensor networks,
-or slow-changing institutional infrastructure,
-in which the architect has considerable control over link structure.
-But in general, it remains an open question whether self-organized networks
-can be restructured, or buit from the ground up in such a way that
-structured multipath fault tolerance technqiues can be applied.
-Similarly, structured network topologies such as the butterfly are defined
-only for specific values.
-Although these values can be as large as desired,
-how to apply methods such as ours to networks with an intermediate number
-of nodes remains an open question.
+Our multipath fault tolerance scheme can be applied to any network
+that has both sufficient redundancy and a routing algorithm
+that maps local links to independent network paths.
+These requirements make the approach well-suited for structured networks,
+in which link structure can be dictated,
+such as the butterfy.
+While the ability to control network topology is only achievable in some
+applications, those applications are nonetheless significant
+(e.g. overlay networks \cite{lua_survey_2005, korzun_structured_2013},
+formal organizations \cite{mohr_explaining_1982},
+government-regulated cellular networks \cite{walker_mass_2012},
+and call tree notification systems \cite{nickerson_thinking_2010}).
+Furthermore, when high levels of adversarial fault tolerance are required,
+new socio-technical systems might choose to incorporate such networks.
+For example,
+a coallition of groups supporting free expression could use our results
+to construct a censorship-resistant communication network
+by cultivating the necessary trust relationships.
+In the general case,
+while the partial trust model can be applied to unstructured networks,
+additional work is needed to identify how to ensure redundancy and
+identify independent paths in unstructured networks.
 
 \section{Conclusion}
 
