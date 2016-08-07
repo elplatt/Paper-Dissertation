@@ -1300,23 +1300,26 @@ identify independent paths in unstructured networks.
 \section{Conclusion}
 
 We have developed a partial trust model which enables a formal analysis
-of the effect of decentralized network structure on fault tolerance properties.
-We have also proposed a general technique for achieving and evaluating adversarial
-fault tolerance in a structured network with partial trust.
-We found that the probability of an adversary causing an undetectable error
-decreases exponentially as the number of redundant paths between the
-neighborhoods of the sender and receiver grows.
-This property puts attackers at a disadvantage, creating a stabilizing
-asymmetry which disincentivizes attack.
-We also presented a specific implementation of the multipath fault tolerance
-technique on a wraparound butterfly network topology and proved that the
-number of redundant paths grows exponentially with number of network hops
-that can be trusted.
-Our results are directly applicable to architectures in which the link structure
-can be imposed by the architect,
-and provide a formalism that can be used more generally to evaluate the role
-of network structure and redundancy on the fault tolerance of decentralized
-networks.
+of the effect of network structure and trust transitivity on
+redundancy.
+We have also proposed a multipath fault tolerance scheme
+for using this redundancy to achieve adversarial
+fault tolerance.
+Under this scheme, the probability of an adversary causing an undetectable error
+decreases exponentially with the network's effective redundancy.
+Furthermore, a small increase in the number of messages sent can compensate
+for a large increase in the number of messages compromised by an adversary.
+This stabilizing asymetry puts attackers at a disadvantage,
+disincentivizing attack.
+We also presented a novel multipath routing algorithm allowing multipath fault
+tolerance to be used on the butterfly topology,
+and proved that the effective redundancy of the butterfly network increases
+exponentially with the trust radius.
+These results are directly applicable to architectures in which the link
+structure can be imposed by the architect,
+and more generally, provide a formalism that can be used more to evaluate
+the role of network structure, trust transitivity, and effective redundancy
+on adversarial fault tolerance.
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
