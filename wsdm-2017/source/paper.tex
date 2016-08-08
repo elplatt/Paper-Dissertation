@@ -18,6 +18,7 @@
 \newcommand{\beq}{\begin{eqnarray}}
 \newcommand{\eeq}{\end{eqnarray}}
 \DeclareMathOperator{\wbf}{wBF}
+\newtheorem{theorem}{Theorem}
 
 \begin{document}
 
@@ -657,30 +658,24 @@ channels.
 We will now describe such a scheme and evaluate its fault tolerance properties.
 
 \begin{figure}
-\centerline{\includegraphics[width=2.12in,height=1.46in]{fig-alice_trusted_neigh2}}
+\centerline{\includegraphics[width=3in,height=2.08in]{fig-partial-trust}}
 \caption{
-Illustration of the {\em partial trust} model.
-Edges represent direct, mutual trust relationships.
-Alice ($v$) trusts all nodes less than
-$h$ hops away---her {\em trusted neighborhood} $T_h(v)$.
-Beyond that, the nodes at distance $h$ form her {\em trust boundary} $B_h(v)$.
-We assume adversaries are unable to compromise nodes in the trusted neighborhood.
-By compromising all nodes in the trust boundary, an adversary can ensure that
-all communications leaving Alice's trusted neighborhood are compromised.
+Illustration of a trusted communication network and the network properties
+used by the {\em partial trust model}.
+Edges represent mutually trusted communication links.
+The sender (Alice, $v$) and receiver (Bob, $w$) trust all nodes
+less than the {\em trust radius} $h$ hops away.
+These nodes form their {\em trusted neighborhoods} $T_h(v)$ and $T_h(w)$.
+We assume that all faults occur in the remaining nodes: the
+{\em untrusted region}.
+The untrusted nodes in contact with the trusted neighborhoods for the
+{\em trust boundaries} $B_h(v)$ and $B_h(w)$,
+which (in the absence of central bottlenecks) determine the
+{\em effective redundancy} $\delta_h$ provided by the network.
+Alice and Bob can be modelled as connected by a direct link with
+at least $\delta_h$ redundant channels.
 }
 \label{fig:trust-source}
-\end{figure}
-
-\begin{figure}
-\centerline{\includegraphics[width=3.33in,height=1.46in]{fig-bob_Alice_trusted_neigh2}}
-\caption{
-Partial trust model with sender (Alice) and receiver (Bob).
-If disjoint paths exist connecting each node in Alice's trust boundary to
-a node in Bob's,
-than an adversary needs to compromise at least $|T_h(v)|$ nodes to
-compromise all possible paths between Alice and Bob.
-}
-\label{fig:trust-source-destionation}
 \end{figure}
 
 \subsection{Multipath Fault Tolerance}
@@ -856,8 +851,8 @@ in a cycle of increasing level $l$.
 Down-right edges ($E_\rightarrow$) also link to a node of level $l + 1$,
 but one having the place-within-level equal to $z$ with the $l$th bit inverted.
 
-The wrap-around butterfly network has a number of properties desirable for
-a scalable, decentralized communication network:
+The wrap-around butterfly network is known to have several of the properties
+we desire for scalable, decentralized communication networks:
 \begin{description}
 \item[Vertex-transitivity:]
 Because the wraparound butterfly is vertex transitive,
@@ -869,9 +864,10 @@ $O(\log N)$, where N is the number of nodes in the network;
 With a constant degree of 4, the wraparound butterfly is extremely sparse,
 and can scale indefnitely without node degree becoming a limitation;
 \item [Redundancy:]
-The number of independent paths between two
-nodes in the wraparound butterfly increases exponentially in the trust
-radius $h$ (the routing algorithm below constructs thes explicitly).
+Multiple paths exist between any two nodes.
+Specifically, we will prove below that the number of independent paths between two
+nodes increases exponentially with the trust
+radius $h$.
 \end{description}
 
 \begin{figure}
@@ -1111,10 +1107,8 @@ and $w = (6, 0110111_2)$.
 }
 \end{figure}
 
-We now formally specify the multipath routing scheme and prove
-that provides $2^h$ disjoint paths between
-the $h$-hop trusted neighborhoods of any two nodes in an $m$-bit
-wrap-around butterfly network.
+We now begin the formal specification of our multipath routing scheme for the
+wraparound butterfly network.
 Utilizing vertex transitivity, we label the source node as
 $(l^{(0)}, z^{(0)}) = (0, 0)$ and denote the destination node as $w = (l_w, z_w)$,
 without loss of generality.
@@ -1204,9 +1198,16 @@ After this stage, $v^{(m + l_w)} = w$ and routing is complete.
 }
 \end{description}
 
-For all $2^h$ of these paths, the components excluding nodes within $h$ hops
-of $v$ or $w$ (in their trusted neighborhoods) are pairwise disjoint,
-which we now prove.
+\begin{theorem}
+Given an $m$-bit wraparound ($m \geq 0$) butterfly network,
+and a trust radius $h \geq 1$,
+for all node pairs $(v, w)$,
+if there exists a node $u$ that belongs to
+two distinct routes $v^{(\cdot)}_s$ and $v^{(\cdot)}_{s^\prime}$
+($s \neq s^\prime$),
+it implies that $u \in T_h(v) \cup T_h(w)$.
+\end{theorem}
+\begin{proof}
 Nodes from two paths can only coincide if their levels are the same.
 Nodes which share a level must either be in the same stage, or 4 stages
 apart.
@@ -1228,12 +1229,18 @@ This leaves only (3,7), a collision which can occur only for only one path
 neighborhood in stage 3.
 For this single path, we can proceed directly from stage 2 to stage 7,
 eliminating the last possible collision.
+\end{proof}
 
-Thus, we have shown that assuming the partial trust model, with trust transitive
+Thus, assuming the partial trust model with trust transitive
 for $h$ hops, we can construct $2^h$ paths on a wraparound butterfly topology
 which do not intersect outside the trusted neighborhoods of the source and
 destination.
-This is a lower bound on the value $B$ in Equation (\ref{eq:pf}),
+Note that the node sequence $v_s^{(t)}$ can be calculated entirely
+from the source $v$, destination $w$, and path parameter $s$,
+meaning that with this informaiton nodes are able to determine which neighbor
+to route a given message copy to.
+Furthermore, the existence of $2^h$ paths places a lower bound on the
+effective redundancy $\delta_h$,
 showing that the decentralized, redundant, structured networks such as the
 butterfly can have a very low probability of failure when faced with
 adverarial faults, even from a very powerful attacker.
