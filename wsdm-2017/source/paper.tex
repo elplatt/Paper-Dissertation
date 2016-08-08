@@ -211,10 +211,8 @@ random failures are highly likely to pick low-degree nodes, thus having
 little effect,
 while adversarial faults target the small number of high-degree nodes,
 thus removing a large number of edges with each fault.
-It may seem to be a contradiction that the Internet both be decentralized
-and exhibit a heavy-tailed degree distribution.
-This contradiction is resolved by observing that the Internet is decentralized
-in its {\em protocols}, but somewhat centralized in its {\em network structure}.
+So while the {\em protocols} of the Internet are decentralized,
+the {\em network structure} is somewhat centralized. 
 In other words, the protocols of the Internet do not {\em require}
 centralization, but centralization may still emerge from the socio-technical
 processes that create its network structure.
@@ -244,7 +242,7 @@ limited resources and thus can only compromise a fixed number of nodes.
 Compromised nodes may behave incorrectly by blocking the message,
 changing the message content, or routing the message incorrectly.
 In order to evaluate network-based techniques for mitigating such attacks,
-we develop a decentralized {\em partial trust} model,
+we develop a {\em partial trust} model,
 similar to the commonly used web of trust approach
 \cite{zimmermann_official_1995,ferguson_practical_2003},
 but making weaker (more realistic) assumptions of trust transitivity,
@@ -253,9 +251,10 @@ The partial trust model can be used to design and analyze communication
 schemes that tolerate adversarial faults,
 even when no single path through the network is fully trusted.
 
-Using the partial trust model, we are able to reduce complex networks to
-simply a number of redundant, independent paths.
-This reduction enables the application of standard error detection techniques
+Using the partial trust model, we are able to model the nodes in complex
+networks as being directly linked to each other by a number of
+redundant channels.
+This models enables the application of standard error detection techniques
 \cite{avizienis_basic_2004, von_neumann_probabilistic_1956},
 which rely on independent errors.
 While adversarial faults along a single path are correlated,
@@ -337,10 +336,10 @@ provide better scalability,
 but are wasteful of computational and energy resources.
 Federated Byzantine Agreement (FBA) \cite{mazieres_stellar_2015}
 is scalable, allows for flexible trust,
-and guarantees that failure only occurs when the structure of the trust
-network makes success impossible.
-However, FBA does not provide a method for optimizing trust networks or
-evaluating the probability of failure.
+and optimal fault tolerance for a given network (under its assumptions).
+However, FBA does not provide a method for evaluating the
+fault tolerance properties of different network structures
+or calculating how the failure probability for a particular network.
 The mutlipath fault tolerance scheme we propose is the
 first example we're aware of that allows adversarial fault tolerance
 to be quantified as a function of network structure.
@@ -348,7 +347,10 @@ to be quantified as a function of network structure.
 Most existing adversarial fault tolerance schemes focus on end-to-end,
 protocol-based, cryptographic solutions
 \cite{ferguson_practical_2003}.
-There are however, a few notable exceptions that focus on network structure.
+A fully decentralized architecture must be decentalized both in protocol and
+in network structure.
+There are however, a few notable fault tolerance schemes
+that focus on network structure.
 Fiat and Saia described a scheme that combines the butterfly topology
 with expander graphs to create a highly censorship-resistant content-addressable
 network \cite{fiat_censorship_2002},
@@ -356,10 +358,15 @@ although this scheme exhibits poor scaling due to a very high level of data
 replication.
 Perhaps the most mature structural solution is the Freenet collaboration
 \cite{clarke_freenet:_2001}.
-Freenet uses secret sharing and small-world routing
+Freenet uses secret sharing
+\cite{shamir_how_1979, blakley_safeguarding_1979}
+and small-world routing
 \cite{zhang_using_2002,kleinberg_small-world_2000}
 to create a content-addressable network with a high level of both
 confidentiality and censorship resistance.
+Freenet guarantees that data is stored redundantly,
+but still allows for centralized network structure and thus single points
+of failure as data travels from its origin to the redundant storage locations.
 
 {\em Multipath routing} protocols send redundant information
 over multiple paths when routing a message through a network,
@@ -403,8 +410,8 @@ structured ``overlay'' networks to map table keys to local TCP/IP routes
 \section{Attack-Tolerant Infrastructure}
 
 In this section, we describe the functional properties required of an
-attack-tolerant network infrastructure and how those properties translate
-into constraints on network structure and fault tolerance protocols.
+attack-tolerant network,
+which serve as guiding principles in later sections.
 We pay special attention to a property we call
 {\em stabilizing asymmetry}.
 
@@ -424,8 +431,9 @@ those points.
 The existence of such points not only increases the likelihood that an attack
 will succeed,
 but also incentivises attack by presenting effective targets.
-Attack-tolerant infrastructure must be decentralized in order to
-minimize single points of failure.
+In order to minimize single points of failure,
+attack tolerant infrastructures must use decentralized protocols and
+decentralized network structures.
 
 \item[Stabilizing asymmetry:]
 In the context of international conflict,
@@ -433,8 +441,7 @@ In the context of international conflict,
 less powerful party to have an advantage over the more powerful party
 \cite{mack_why_1975}.
 In asymmetric conflicts, the same level of resource expenditure yields different
-results for different parties.
-There are two possible cases:
+results for different parties;
 the attacker's resources are either more or less effective than the defender's.
 We call the latter case stabilizing asymmetry,
 because it lowers the incentive to attack.
@@ -444,7 +451,10 @@ level of stabilizing asymmetry.
 \end{description}
 \subsection{Structural Properties}
 
-We now describe the structural properties of a network that allow it to achieve the functional properties described above. 
+We are specifically concerned with network structure-based approaches to
+fault tolerance.
+In networks, specific structural properties are required to achieve the
+functional properties described above.
 \begin{description}
 \item [Sparsity and low diameter:]
 To achieve scalability, networks must be {\em sparse} and have a
@@ -475,21 +485,14 @@ in the network.
 \item [Redundancy:]
 In a network, redundancy refers to the existence of multiple non-overlapping
 paths between nodes or components.
-Redundancy can help reduce single points of failure as well as
-increase fault tolerance.
+Redundancy can help reduce single points of failure and decrease
+centralization.
 One measure of redundancy is given by the ratio of edges to nodes
 \cite{baran_distributed_1964}.
 A single point of failure occurs when a node holds a uniquely
 central position.
 When alterative paths are added to bypass central nodes,
 the network becomes more redundant.
-Similarly, as we will later show,
-redundancy in a network can enable fault tolerance techniques
-that reduce the effectiveness of attacks and creating stabilizing asymmetry.
-When secrecy is desired, redundancy can help by allowing messages to be
-divided into parts and sent along different paths so even if one path is
-compromised, the whole message is not revealed
-\cite{shamir_how_1979, blakley_safeguarding_1979}. 
 
 \end{description}
 
@@ -514,7 +517,7 @@ of a system behaves incorrectly (e.g., a routing node blocking or
 altering a message).
 The result of that fault (e.g., a recipient receiving conflicting messages)
 is an {\em error} state.
-If the error is undetected or incorrectly corrected, the system is
+If the error is undetected or corrected to the wrong value, the system is
 said to have experienced a {\em failure} (e.g., an altered message is
 accepted as authentic).
 We are concerned in particular with {\em adversarial faults},
@@ -548,7 +551,7 @@ making it possible to extend their web of trust to a large
 number of nodes.
 However, the web of trust approach assumes that trust can be extended
 transitively,
-which is not generally true
+which is unrealistic
 \cite{christianson_why_1997}.
 The web of trust model also fails to account for the structure
 of the trust network:
@@ -585,8 +588,9 @@ connect each node pair,
 with each virtual link providing some level of redundancy.
 
 We now specify the {\em partial trust model}.
-We begin with an undirected graph $G = (V,E)$,
-with vertices representing agents,
+We assume an undirected graph $G = (V,E)$,
+although the model can easily be extended to directed multigraphs.
+Vertices representing agents,
 and with edges representing mutually trusted communication links.
 Let $v \in V$ be an arbitrary sender (Alice)
 and $w \in V$ be an arbitrary receiver (Bob).
@@ -618,8 +622,8 @@ Having defined the assumptions of the partial trust model,
 we now quantify the effective redundancy between Alice and Bob
 when trust radius $h$ is assumed.
 This quantity, $\delta_{v,w,h}$ is exactly the max-flow/min-cut of
-the graph after each trusted neighborhood has been
-collapsed into a single vertex.
+the graph after Alice's and Bob's trusted neighborhoods have been
+collapsed into single source/sink vertices.
 Each trust boundary forms a cut of the network and places an upper bound on the
 min-cut:
 \beq
@@ -641,6 +645,9 @@ it places an upper bound on the effectiveness of any
 redundancy-based fault tolerance scheme.
 As a function of $h$, $\delta_h$ describes a network's ability to create
 redundancy from trust.
+Combined with a {\em routing algorithm} that tells nodes how to forward
+messages to guarantee they take independent paths,
+this redudnacy can be used to achieve fault tolerance.
 For attack-tolerant networks,
 it is thus desirable for $\delta_h$ to increase quickly as a function of $h$.
 Furthermore, by applying the partial trust model,
@@ -685,7 +692,7 @@ by sending multiple copies of a message
 We model our sender (Alice) and receiver (Bob) as
 communicating over a direct link with $\delta_h$ redundant channels.
 The partial trust model allows us to make this simplifying assumption
-for analyzing the a fault tolerance scheme,
+for analyzing a fault tolerance scheme,
 but implementing such a scheme will require a method for constructing
 specific network paths.
 We will return to the question of constructing paths in the next section.
@@ -702,7 +709,7 @@ If some of the messages are missing
 (Alice can include the number of messages as part of the message)
 or if some of the messages disagree,
 Bob knows that some of the messages were either blocked or altered,
-and he has successfully detecetd an error.
+and he has successfully detected an error.
 Bob has not accepted any compromised information,
 and can request retransmission, so no failure has occurred.
 If Bob receives all of the messages, and they all agree,
@@ -792,7 +799,7 @@ an adversary,
 provided the network has sufficient redundancy,
 and provided the sender and intermediaries know how to route message
 copies along independent paths.
-In this section, we address the latter requirement by proposing a novel routing
+In this section, we address the both requirements by proposing a novel routing
 algorithm for constructing independent paths on the butterfly network topology.
 This architecture and routing algorithm achieve an
 effective redundancy that increases exponentially with the trust radius,
@@ -971,7 +978,7 @@ node distance=0pt,
                 outer sep=0pt, on chain},
     Y/.style = {rectangle, draw,% styles of nodes in string (chain)
                 minimum width=10ex, minimum height=3ex,
-                outer sep=0pt, on chain, double},
+                outer sep=0pt, on chain, thick},
                         ]
 \foreach \i in {$s$}% <-- content of nodes
     \node[X] {\i};
@@ -1077,6 +1084,7 @@ cycles through the levels of the butterfly network.
 \begin{table}%
 \caption{Butterfly Multipath Routing Variables\label{tab:routing}}
 {
+\begin{center}
 \begin{tabular}{|l|l|}
 \hline
 NAME & VARIABLE \\\hline
@@ -1086,6 +1094,7 @@ node place within level & $z \in \mathbb{Z}_2^m$ \\\hline
 trust radius & $h \in \mathbb{Z} : 1 \leq h \leq \lfloor m/2 \rfloor$ \\\hline
 path index & $s \in \mathbb{Z}_2^h$ \\\hline
 \end{tabular}
+\end{center}
 }
 \end{table}%
 
