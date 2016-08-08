@@ -11,6 +11,7 @@
 %\SetAlCapHSkip{0pt}
 
 \usepackage[utf8]{inputenc}
+\usepackage{afterpage}
 \usepackage{tikz}
 \usetikzlibrary{arrows,chains,decorations.pathreplacing}
 %\usepackage{draftwatermark}
@@ -928,7 +929,25 @@ independence is guaranteed by ensuring that all paths differ in the
 $h$ bits of the place-within-level preceeding the destination index
 (see Figure \ref{fig:route-overview}).
 
-\begin{figure}
+\afterpage{
+\begin{table}[h!]
+\caption{Butterfly Multipath Routing Variables\label{tab:routing}}
+{
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+NAME & VARIABLE \\\hline
+butterfly dimension & $m \in \mathbb{Z}_+$ \\\hline
+node level & $l \in \mathbb{Z} : 0 \leq l < m$ \\\hline
+node place within level & $z \in \mathbb{Z}_2^m$ \\\hline
+trust radius & $h \in \mathbb{Z} : 1 \leq h \leq \lfloor m/2 \rfloor$ \\\hline
+path index & $s \in \mathbb{Z}_2^h$ \\\hline
+\end{tabular}
+\end{center}
+}
+\end{table}
+
+\begin{figure}[t!]
 \begin{center}
 \begin{tikzpicture}[
 node distance=0pt,
@@ -1073,28 +1092,8 @@ node distance=0pt,
 \caption{
 Progression of place-within-level $z$ as the multipath routing algorithm
 cycles through the levels of the butterfly network.
-}
 \label{fig:route-overview}
-\end{figure}
-
-\begin{table}%
-\caption{Butterfly Multipath Routing Variables\label{tab:routing}}
-{
-\begin{center}
-\begin{tabular}{|l|l|}
-\hline
-NAME & VARIABLE \\\hline
-butterfly dimension & $m \in \mathbb{Z}_+$ \\\hline
-node level & $l \in \mathbb{Z} : 0 \leq l < m$ \\\hline
-node place within level & $z \in \mathbb{Z}_2^m$ \\\hline
-trust radius & $h \in \mathbb{Z} : 1 \leq h \leq \lfloor m/2 \rfloor$ \\\hline
-path index & $s \in \mathbb{Z}_2^h$ \\\hline
-\end{tabular}
-\end{center}
 }
-\end{table}%
-
-\begin{figure}
 \begin{center}
 \includegraphics{fig-routing.pdf}
 \end{center}
@@ -1106,6 +1105,7 @@ and $w = (6, 0110111_2)$.
 \label{fig:routing}
 }
 \end{figure}
+}
 
 We now begin the formal specification of our multipath routing scheme for the
 wraparound butterfly network.
