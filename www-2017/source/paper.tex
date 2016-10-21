@@ -3,10 +3,14 @@
 \usepackage[utf8]{inputenc}
 \usepackage{afterpage}
 \usepackage{tikz}
+\usepackage{soul}
+\usepackage[framemethod=tikz]{mdframed}
 \usetikzlibrary{arrows,chains,decorations.pathreplacing}
 
 \newcommand{\beq}{\begin{eqnarray}}
 \newcommand{\eeq}{\end{eqnarray}}
+\newcommand{\bhlpar}{\begin{mdframed}[innerleftmargin=0,innerrightmargin=0,hidealllines=true,backgroundcolor=yellow!20]}
+\newcommand{\ehlpar}{\end{mdframed}}
 \DeclareMathOperator{\wbf}{wBF}
 \newtheorem{theorem}{Theorem}
 
@@ -128,7 +132,7 @@ We describe a novel, adversarial fault-tolerant,
 concurrent multipath routing algorithm for the decentralized
 butterfly network topology.
 We also develop a partial trust model that makes it possible to
-quantify the adversarial fault-tolerance of a network,
+quantify the adversarial fault tolerance of a network,
 while also making more realistic transitivity assumptions than webs of trust.
 When network topology can be dictated, these results can be used to create
 scalable, attack-tolerant infrastructures. More generally, our results provide
@@ -195,11 +199,17 @@ As with any critical infrastructure, the cost of a failure can be
 immense, so methods for tolerating various kind of faults are an
 important and ongoing area of research
 \cite{zin_survey_2015,albert_error_2000,sterbenz_resilience_2010}.
-In fact, the decentralized design of the Internet was intended to protect
-against targeted attacks, such as nuclear strikes
+{\hl{
+In fact, the decentralized design of the Internet was motivated
+by the need to withstand nuclear strikes
+}}
 \cite{baran_distributed_1964}.
-Such targeted attacks are formally described as {\em adversarial faults}
-and are some of the most difficult to protect against.
+{\em Adversarial faults},
+{\hl{
+in which an adversary can strategically target attacks,
+are some of the most difficult to protect against.
+Such attacks are often used for censorship and targeted surveilance.
+}}
 Both theoretical results and recent events (described below)
 have demonstrated that
 the Internet is surprisingly vulnerable to adversarial faults.
@@ -214,10 +224,13 @@ These results have been attributed to the scale-free structure of the Internet's
 router network
 \cite{barabasi_emergence_1999,barabasi_scale-free_2009}.
 In scale-free networks and other networks with heavy-tail degree distributions,
-random failures are highly likely to pick low-degree nodes, thus having
-little effect,
-while adversarial faults target the small number of high-degree nodes,
-thus removing a large number of edges with each fault.
+random failures are highly likely to
+{\hl{
+affect only low-degree nodes, thus having
+little effect.
+However, Adversarial faults target the few high-degree nodes,
+and therefore remove a large number of edges with each fault.
+}}
 So while the {\em protocols} of the Internet are decentralized,
 the {\em network structure} is somewhat centralized. 
 In other words, the protocols of the Internet do not {\em require}
@@ -239,97 +252,144 @@ methods for analyzing structural vulnerabilities and for designing
 fault tolerant networks are needed.
 This paper presents several contributions towards advancing those goals.
 
+\bhlpar
 We consider a setting in which a source node (Alice)
 in a network attempts to route a message
 to a target node (Bob) by forwarding it through the links of the network.
 We assume that some nodes in the network may be compromised by an attacker
 (Mal).
+Compromised nodes may behave incorrectly by blocking, altering,
+or incorrectly routing messages.
 We assume that Mal has full knowledge of the network structure, but has
 limited resources and thus can only compromise a fixed number of nodes.
-Compromised nodes may behave incorrectly by blocking the message,
-changing the message content, or routing the message incorrectly.
-In order to evaluate network-based techniques for mitigating such attacks,
-we develop a {\em partial trust} model,
-similar to the commonly used web of trust approach
-\cite{zimmermann_official_1995,ferguson_practical_2003},
-but making weaker (more realistic) assumptions of trust transitivity,
-and incorporating network structure.
-The partial trust model can be used to design and analyze communication
-schemes that tolerate adversarial faults,
-even when no single path through the network is fully trusted.
+We also assume that nodes within a fixed network
+distance of either Alice or Bob are
+{\em trusted}
+and cannot be compromised.
+This assumption,
+which we call
+{\em partial trust transitivity},
+is a weaker (more realistic) form of the transitive
+trust assumption used by the popular 
+web of trust approach
+\cite{zimmermann_official_1995,ferguson_practical_2003}.
 
-Using the partial trust model, we are able to model the nodes in complex
-networks as being directly linked to each other by a number of
-redundant channels.
-This models enables the application of standard error detection techniques
+Under the above assumptions,
+we show how to evaluate the influence of network structure
+on attack-tolerance,
+and propose a method for achieving a high-level of attack-tolerance on
+the butterfly network topology.
+The butterfly topology is popular in parallel processing
+\cite{kshemkalyani_distributed_2008} and
+peer-to-peer \cite{lua_survey_2005, korzun_structured_2013}
+applications, due to its regular structure and high connectivity.
+While it may seem questionable to dictate the topology of trust relationships,
+there are many applications where this occurs,
+e.g., overlay networks
+\cite{lua_survey_2005, korzun_structured_2013},
+formal organizations \cite{mohr_explaining_1982},
+government-regulated cellular networks \cite{walker_mass_2012},
+and call tree notification systems \cite{nickerson_thinking_2010}.
+Furthermore, we stress that trust is not static, it changes over time
+(ableit slowly).
+In this sense, we approach trust as deliberate infrastructure.
+Since centralized network structure is inherently
+vulnerable to attack, the ability to deliberately structure trust relationships
+is a necessary component of any attack-tolerance scheme.
+
+We first describe how fault tolerance techniques can be adapted and
+evaluated in a network setting with partial trust.
+Generally, faults in network paths can be correlated,
+preventing the appliation of standard fault tolerance techniques
 \cite{avizienis_basic_2004, von_neumann_probabilistic_1956},
-which rely on independent errors.
-While adversarial faults along a single path are correlated,
-faults in independent paths are not.
-Thus fault tolerance techniques can be applied,
-even in the presence of adversarial errors,
-when messages are sent in parallel,
+which assume independent faults.
+By using {\em independent paths},
+which have no untrusted nodes in common,
+we model communication across a complex network by a number of
+redundant and independent channels.
+Fault-tolerance schemes can then be applied when redundant messages
+are sent in parallel,
 a technique known as {\em concurrent multipath routing}
 \cite{zin_survey_2015, qadir_exploiting_2015, khiani_comparative_2013}.
 The receiver can then use the redundant messages to detect and/or correct
 errors.
-Using the partial trust model, we formally evaluate the 
+We formally evaluate the
 effects of network structure on attack-resistance and show that the probability
 of undetected errors decreases exponentially with the number of
 independent paths between source and destination,
 even when no individual path is entirely trusted.
 
-Our specific multipath fault tolerance scheme relies on the existence
-and discoverability of multiple redundant paths between the source and
-the destination.
-Implementation thus requires a routing algorithm.
-While not a requirement, this technique is well-suited for
-{\em structured networks},
-in which links between nodes are constrained to a particular architecture.
-
-In particular, we provide a novel concurrent multipath routing algorithm
-on the butterfly network topology and use the partial trust model to prove
-a high level of adversarial fault tolerance.
-The butterfly topology is popular in parallel processing
-\cite{kshemkalyani_distributed_2008} and
-peer-to-peer \cite{lua_survey_2005, korzun_structured_2013}
-applications, due to its regular structure and high connectivity.
-While the ability to control network topology is only achievable in some
-applications, those applications are nonetheless significant,
-e.g. overlay networks \cite{lua_survey_2005, korzun_structured_2013},
-formal organizations \cite{mohr_explaining_1982},
-government-regulated cellular networks \cite{walker_mass_2012},
-and call tree notification systems \cite{nickerson_thinking_2010}.
+We also propose a novel concurrent multipath routing algorithm for the butterfly
+topology.
+The algorithm identifies independent paths,
+which when combined with the fault-tolerant concurrent multipath routing
+scheme above,
+achieves a high level of adversarial fault tolerance on the butterfly topology.
+\ehlpar
 
 Our main contributions are:
 \begin{itemize}
-\item{We develop a decentralized {\em partial trust model},
-which makes weaker transitivity assumptions than web-of-trust models,
-and makes it possible to analyze the effect of network structure on
-adversarial fault tolerance;}
-\item{We show that the partial trust model enables standard fault
-tolerance techniques to be applied to adversarial faults in
+\item{
+\bhlpar
+We show that {\em independent paths} with {\em partial trust transitivity}
+enable standard fault tolerance techniques to be applied to adversarial faults in
 complex communication networks.
 We find that the probability of detecting adversarial faults
 approaches 1 exponentially as the number of independent paths between
-sender and receiver increases;}
+sender and receiver increases;
+\ehlpar}
 \item{We present a scalable, efficient, and attack-tolerant concurrent
 multipath routing algorithm on the butterfly network topology.}
 \end{itemize}
 
 This paper is organized as follows.
-Section 2. reviews background and related work.
-Section 3. discusses the desired properties of attack-tolerant network
+Section \ref{sec-related}. reviews background and related work.
+Section \ref{sec-infrastructure}. discusses the desired properties of attack-tolerant network
 infrastructure.
-Section 4. describes the partial trust model.
-Section 5. describes a general technique for multipath fault tolerance on
+Section \ref{sec-ft}. describes adversarial fault tolerance on
 structured networks.
-Section 6. describes a routing algorithm for multipath fault tolerance
+Section \ref{sec-butterfly}. describes a routing algorithm for multipath fault tolerance
 on the butterfly network topology.
-Section 7. discusses the our results.
-And Section 8. concludes.
+Section \ref{sec-discussion}. discusses the our results.
+And Section \ref{sec-conclusion}. concludes.
 
 \section{Background and Related Work}
+\label{sec-related}
+
+There has been considerable work on trust in network security.
+Both centralized and decentralized approaches are commonly used to create
+trust infrastructures.
+Centralized approaches such as {\em public key infrastructure} (PKI)
+suffer from a number of vulnerabilities
+\cite{ellison_ten_2000},
+which stem largely from the single points of failure inherent to
+centralization.
+The well-known and widely-used {\em web of trust} approach
+\cite{zimmermann_official_1995,ferguson_practical_2003}
+is a decentralized alternative.
+In a web of trust,
+individuals choose who they trust initially.
+Trust is then extended to new individuals if they are vouched for by a
+currently-trusted individual,
+making it possible to extend their web of trust to a large
+number of nodes.
+However, the web of trust approach assumes that trust can be extended
+transitively,
+which is unrealistic
+\cite{christianson_why_1997}.
+\bhlpar
+Previous work on evaluating network structure has focused on authentication
+protocols, showing that independent paths can reduce an adversary's ability
+to impersonate a target
+\cite{levien_attack-resistant-2009}.
+Other work has shown that identifying independent paths in arbitrary networks
+is NP-hard and provided approximation algorithms
+\cite{reiter_resilient_1998}.
+Our work complements these by explicitly quantifying the effects of partial
+trust transitivity,
+and providing a routing algorithm to efficiently construct independent
+paths on a structured network.
+\ehlpar
 
 Many distributed consensus protocols (such as those used by cryptocurrencies)
 are designed to provide tolerance against arbitrary or adversarial faults.
@@ -342,20 +402,19 @@ and proof-of-stake \cite{king_ppcoin:_2012}
 provide better scalability,
 but are wasteful of computational and energy resources.
 Federated Byzantine Agreement (FBA) \cite{mazieres_stellar_2015}
+{\hl{
 is scalable, allows for flexible trust,
-and optimal fault tolerance for a given network (under its assumptions).
+and is highly fault-tolerant on networks meeting a set of requirements.
+}}
 However, FBA does not provide a method for evaluating the
 fault tolerance properties of different network structures
 or calculating how the failure probability for a particular network.
-The multipath fault tolerance scheme we propose is the
-first example we're aware of that allows adversarial fault tolerance
-to be quantified as a function of network structure.
 
 Most existing adversarial fault tolerance schemes focus on end-to-end,
 protocol-based, cryptographic solutions
-\cite{ferguson_practical_2003}.
-A fully decentralized architecture must be decentralized both in protocol and
-in network structure.
+\cite{ferguson_practical_2003},
+without addressing single points of failure in-between
+(i.e., {\em man-in-the-middle attacks}).
 There are however, a few notable fault tolerance schemes
 that focus on network structure.
 Fiat and Saia described a scheme that combines the butterfly topology
@@ -393,15 +452,15 @@ Most work on multipath routing has been motivated by applications related to
 wireless sensor networks (WSNs),
 and have thus focused on ad hoc, unstructured networks, often having a central
 base station.
-The partial trust model presented in this paper provides a more general
-way to evaluate the effect of network structure on adversarial fault tolerance.
 The method of Liu et al.
 \cite{liu_secure_2012}
+{\hl{
 routes multiple messages first to random peers and then
-to their final destination.
+to a central base station,
+with the network edges constrained by sensors' physical location.
 The butterfly routing algorithm we present takes a conceptually similar
-approach,
-routing from the source to several intermediaries, and then to the destination.
+approach in a different network setting.
+}}
 
 Our proposed routing algorithm makes use of a
 {\em structured network}, in which link structure is predetermined.
@@ -415,6 +474,7 @@ structured ``overlay'' networks to map table keys to local TCP/IP routes
 \cite{lua_survey_2005,korzun_structured_2013}.
 
 \section{Attack-Tolerant Infrastructure}
+\label{sec-infrastructure}
 
 In this section, we describe the functional properties required of an
 attack-tolerant network,
@@ -450,8 +510,10 @@ less powerful party to have an advantage over the more powerful party
 In asymmetric conflicts, the same level of resource expenditure yields different
 results for different parties;
 the attacker's resources are either more or less effective than the defender's.
+{\hl{
 We call the latter case stabilizing asymmetry,
-because it lowers the incentive to attack.
+because it reduces an attacker's power relative to their target.
+}}
 With this in mind, an attack-resistant infrastructure will benefit from a high
 level of stabilizing asymmetry.
 
@@ -504,15 +566,7 @@ the network becomes more redundant.
 \end{description}
 
 \section{Trust and Fault Tolerance}
-
-The requirement that networks remain sparse has important implications for
-resilience.
-As such networks grow, the number of nodes will exceed the number of links
-any single node can support.
-As a result, some pairs of nodes are only connected indirectly,
-through at least one intermediary node.
-These intermediary nodes are targets for potential attacks,
-making network paths potentially unreliable.
+\label{sec-ft}
 
 Within the field of {\em fault tolerance},
 many techniques have been developed for building reliable systems
@@ -530,45 +584,6 @@ accepted as authentic).
 We are concerned in particular with {\em adversarial faults},
 which (as opposed to random faults)
 are chosen strategically to maximize the likelihood of a failure.
-
-In communication networks, 
-the threat model is as follows: Alice sends a message to
-Bob via one or more intermediaries,
-but some intermediaries may block, change, or re-route the message.
-The ability to tolerate these types of adversarial attacks depends on
-Alice and Bob's ability to either find a path they {\em trust},
-or to communicate successfully across untrusted paths.
-
-Both centralized and decentralized approaches are commonly used to create
-trust infrastructures.
-Centralized approaches such as {\em public key infrastructure} (PKI)
-suffer from a number of vulnerabilities
-\cite{ellison_ten_2000},
-which stem largely from the single points of failure inherent to
-centralization.
-
-The well-known and widely-used {\em web of trust} model
-\cite{zimmermann_official_1995,ferguson_practical_2003}
-is a decentralized alternative.
-In a web of trust,
-individuals choose who they trust initially.
-Trust is then extended to new individuals if they are vouched for by a
-currently-trusted individual,
-making it possible to extend their web of trust to a large
-number of nodes.
-However, the web of trust approach assumes that trust can be extended
-transitively,
-which is unrealistic
-\cite{christianson_why_1997}.
-The web of trust model also fails to account for the structure
-of the trust network:
-trusted nodes are all trusted equally,
-regardless of how many nodes trust them.
-Similarly, while the process of building a web of trust is decentralized,
-the emergent structure of the trust network itself might be centralized.
-In order to analyze the influence of network structure on adversarial
-fault tolerance,
-a different trust model is needed.
 
 \subsection{Partial Trust Model}
 
@@ -793,6 +808,7 @@ message copies and the number of adversarial faults.
 \end{figure}
 
 \section{Multipath Butterfly Routing}
+\label{sec-butterfly}
 
 In previous sections, we showed that reliable communication across a network
 can be achieved even when any single message path might be compromised by
@@ -815,7 +831,7 @@ formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}.
 For critical security applications in particular,
-the novel level of adversarial fault-tolerance offered by this scheme
+the novel level of adversarial fault tolerance offered by this scheme
 is highly desirable,
 even if it requires new approaches to designing communication
 and trust networks.
@@ -1251,6 +1267,7 @@ butterfly can have a very low probability of failure when faced with
 adversarial faults, even from a very powerful attacker.
 
 \section{Discussion}
+\label{sec-discussion}
 
 While decentralized protocols have received much attention for their potential
 fault tolerance applications,
@@ -1319,6 +1336,7 @@ additional work is needed to identify how to ensure redundancy and
 identify independent paths in unstructured networks.
 
 \section{Conclusion}
+\label{sec-conclusion}
 
 We have developed a partial trust model which enables a formal analysis
 of the effect of network structure and trust transitivity on
