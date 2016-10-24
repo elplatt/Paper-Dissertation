@@ -587,6 +587,19 @@ are chosen strategically to maximize the likelihood of a failure.
 
 \subsection{Partial Trust Model}
 
+\bhlpar
+An important challenge in large-scale, secure communication is the ability to
+communicate reliably and securely with remote parties for whom no direct,
+trusted link exists.
+The commonly-used web of trust approach
+\cite{zimmermann_official_1995,ferguson_practical_2003}.
+extends trust infinitely transitively,
+to friends of friends, and friends of friends of friends, and so on.
+However, the assumption of infinitely transitive trust is unrealistic
+\cite{christianson_why_1997},
+and does not allow for the analysis of network structure.
+\ehlpar
+
 We can allow for more realistic transitivity assumptions and incorporate
 network structure into a trust model with one key insight:
 even if no single path between a sender and receiver is fully trusted,
@@ -597,7 +610,8 @@ additional message along a path if that path does not share untrusted
 single points of failure with any of the existing message paths
 (otherwise, the adversary can compromise both messages
 by causing a single fault).
-We call paths that do not share any untrusted single points of failure
+Following \cite{reiter_resilient_1998},
+we call paths that do not share any untrusted single points of failure
 {\em independent}.
 The maximum number of independent paths represents the effective redundancy that
 can be utilized by any redundancy-based fault tolerance scheme.
@@ -612,7 +626,7 @@ with each virtual link providing some level of redundancy.
 We now specify the {\em partial trust model}.
 We assume an undirected graph $G = (V,E)$,
 although the model can easily be extended to directed multigraphs.
-Vertices representing agents,
+Vertices representing commiunicating agents,
 and with edges representing mutually trusted communication links.
 Let $v \in V$ be an arbitrary sender (Alice)
 and $w \in V$ be an arbitrary receiver (Bob).
