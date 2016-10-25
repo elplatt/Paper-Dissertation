@@ -123,9 +123,10 @@ Centralized networks have single points of failure by definition,
 leading to a growing popularity in decentralized architectures and protocols.
 However, centralized network structure can arise even when protocols are
 decentralized.
-While based on decentralized protocols, the Internet and World-Wide Web have
+Despite being based on decentralized protocols,
+the Internet and World-Wide Web have
 been shown both theoretically and historically to be highly susceptible to
-adversarial faults, in part due to emergent, structural centralization.
+adversarial faults, in part due to emergent structural centralization.
 Existing network trust models, such as webs of trust, fail to adequately address
 network structure.
 We describe a novel, adversarial fault-tolerant,
@@ -133,7 +134,7 @@ concurrent multipath routing algorithm for the decentralized
 butterfly network topology.
 We also develop a partial trust model that makes it possible to
 quantify the adversarial fault tolerance of a network,
-while also making more realistic transitivity assumptions than webs of trust.
+and which makes more realistic transitivity assumptions than webs of trust.
 When network topology can be dictated, these results can be used to create
 scalable, attack-tolerant infrastructures. More generally, our results provide
 a formalism for evaluating the effects of network structure on adversarial
@@ -190,6 +191,8 @@ Multipath Routing;
 Censorship;
 Decentralization}
 
+\vskip 3em
+
 \section{Introduction}
 
 Large-scale communication networks, exemplified by the Internet,
@@ -209,9 +212,20 @@ Such attacks are often used for censorship and targeted surveilance.
 Both theoretical results and recent events (described below)
 have demonstrated that
 the Internet is surprisingly vulnerable to adversarial faults.
-Decentralization remains a promising approach to building resilient networks,
+Decentralization remains a promising approach towards
+building resilient networks,
 but further work is needed to understand the relationship between
 decentralized network structure and adversarial fault tolerance.
+
+The Internet's vulnerability to censorship and other targeted attacks
+has been confirmed by the success of several such attacks.
+For example, in 2008, YouTube suffered a worldwide outage for several hours
+when a service provider in Pakistan advertised false routing information
+\cite{hunter_pakistan_2008}.
+The action (known as a {\em black hole attack}) was intended to censor YouTube
+within Pakistan only, but resulted in a worldwide cascading failure.
+Such vulnerabilities are not limited to any one system or protocol,
+but result from the network structure itself.
 
 Analysis of the Internet's router network has shown that while it is remarkably
 resilient against random faults,
@@ -231,24 +245,17 @@ In other words, the protocols of the Internet do not {\em require}
 centralization, but centralization may still emerge from the sociotechnical
 processes that create its network structure.
 
-The Internet's vulnerability to censorship and other targeted attacks
-has been confirmed by the success of several such attacks.
-For example, in 2008, YouTube suffered a worldwide outage for several hours
-when a service provider in Pakistan advertised false routing information
-\cite{hunter_pakistan_2008}.
-The action (known as a {\em black hole attack}) was intended to censor YouTube
-within Pakistan only, but resulted in a worldwide cascading failure.
-Such vulnerabilities are not limited to any one system or protocol,
-but result from the network structure itself.
 With strong theoretical and historical evidence that network structure
 can create vulnerabilities,
 methods for analyzing structural vulnerabilities and for designing
-fault tolerant networks are needed.
+fault-tolerant networks are needed.
 This paper presents several contributions towards advancing those goals.
 
 We consider a setting in which a source node (Alice)
 in a network attempts to route a message
 to a target node (Bob) by forwarding it through the links of the network.
+A ``link'' in this context could represent any kind of connection
+(e.g., physical cables, encrypted channels).
 We assume that some nodes in the network may be compromised by an attacker
 (Mal).
 Compromised nodes may behave incorrectly by blocking, altering,
@@ -283,8 +290,8 @@ e.g., overlay networks
 formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}.
-Furthermore, we stress that trust is not static, it changes over time
-(ableit slowly).
+Furthermore, we stress that trust is not static;
+it changes over time (ableit slowly).
 In this sense, we approach trust as deliberate infrastructure.
 Since centralized network structure is inherently
 vulnerable to attack, the ability to deliberately structure trust relationships
@@ -300,24 +307,24 @@ By using {\em independent paths},
 which have no untrusted nodes in common,
 we model communication across a complex network by a number of
 redundant and independent channels.
-Fault-tolerance schemes can then be applied when redundant messages
-are sent in parallel,
+Redundant messages can be sent across these channels in parallel,
 a technique known as {\em concurrent multipath routing}
-\cite{zin_survey_2015, qadir_exploiting_2015, khiani_comparative_2013}.
+\cite{zin_survey_2015, qadir_exploiting_2015, khiani_comparative_2013},
+and used for fault tolerance.
 The receiver can then use the redundant messages to detect and/or correct
 errors.
 We formally evaluate the
-effects of network structure on attack-resistance and show that the probability
-of undetected errors decreases exponentially with the number of
+effects of network structure on attack-tolerance and show that the probability
+of an undetected error decreases exponentially with the number of
 independent paths between source and destination,
 even when no individual path is entirely trusted.
 
 We also propose a novel concurrent multipath routing algorithm for the butterfly
 topology.
 The algorithm identifies independent paths,
-which when combined with the fault-tolerant concurrent multipath routing
-scheme above,
-achieves a high level of adversarial fault tolerance on the butterfly topology.
+which can combined with the fault-tolerant concurrent multipath routing
+scheme above to
+achieve a high level of adversarial fault tolerance on the butterfly topology.
 
 Our main contributions are:
 \begin{itemize}
@@ -339,8 +346,8 @@ Section \ref{sec-infrastructure}. discusses the desired properties of attack-tol
 infrastructure.
 Section \ref{sec-ft}. describes adversarial fault tolerance on
 structured networks.
-Section \ref{sec-butterfly}. describes a routing algorithm for multipath fault tolerance
-on the butterfly network topology.
+Section \ref{sec-butterfly}. describes the concurrent multipath routing
+algorithm for the butterfly network topology.
 Section \ref{sec-discussion}. discusses the our results.
 And Section \ref{sec-conclusion}. concludes.
 
@@ -362,13 +369,14 @@ In a web of trust,
 individuals choose who they trust initially.
 Trust is then extended to new individuals if they are vouched for by a
 currently-trusted individual,
-making it possible to extend their web of trust to a large
-number of nodes.
-However, the web of trust approach assumes that trust can be extended
-transitively,
+making it possible to quickly establish a large group of trusted nodes.
+However, the web of trust approach assumes that trust is infinitely
+transitive,
 which is unrealistic
 \cite{christianson_why_1997}.
-Previous work on evaluating network structure has focused on authentication
+
+Previous work on evaluating incorporating network structure into
+trust models has focused on authentication
 protocols, showing that independent paths can reduce an adversary's ability
 to impersonate a target
 \cite{levien_attack-resistant_2009}.
@@ -381,7 +389,7 @@ and providing a routing algorithm to efficiently construct independent
 paths on a structured network.
 
 Many distributed consensus protocols (such as those used by cryptocurrencies)
-are designed to provide tolerance against arbitrary or adversarial faults.
+are designed to tolerate arbitrary or adversarial faults.
 Byzantine agreement protocols
 \cite{lamport_byzantine_1982,castro_practical_1999}
 provide tolerance against arbitrary faults (including attacks) under
@@ -395,18 +403,15 @@ is scalable, allows for flexible trust,
 and is highly fault-tolerant on networks meeting a set of requirements.
 However, FBA does not provide a method for evaluating the
 fault tolerance properties of different network structures
-or calculating how the failure probability for a particular network.
+or for calculating the failure probabilities within a particular network.
 
-Most existing adversarial fault tolerance schemes focus on end-to-end,
-protocol-based, cryptographic solutions
-\cite{ferguson_practical_2003},
-without addressing single points of failure in-between
-(i.e., {\em man-in-the-middle attacks}).
-There are however, a few notable fault tolerance schemes
-that focus on network structure.
+There are relatively few attack-tolerance schemes
+that focus on network structure,
+compared to more popular cryptographic approaches
+\cite{ferguson_practical_2003}.
 Fiat and Saia described a scheme that combines the butterfly topology
-with expander graphs to create a highly censorship-resistant content-addressable
-network \cite{fiat_censorship_2002},
+with expander graphs to create a highly censorship-resistant,
+content-addressable network \cite{fiat_censorship_2002},
 although this scheme exhibits poor scaling due to a very high level of data
 replication.
 Perhaps the most mature structural solution is the Freenet collaboration
@@ -418,8 +423,9 @@ and small-world routing
 to create a content-addressable network with a high level of both
 confidentiality and censorship resistance.
 Freenet guarantees that data is stored redundantly,
-but still allows for centralized network structure and thus single points
-of failure as data travels from its origin to the redundant storage locations.
+but still allows for centralized network structure,
+and thus single points of failure,
+as data travels from its origin to the redundant storage locations.
 
 {\em Multipath routing} protocols send redundant information
 over multiple paths when routing a message through a network,
@@ -449,14 +455,14 @@ approach in a different network setting.
 
 Our proposed routing algorithm makes use of a
 {\em structured network}, in which link structure is predetermined.
-Such networks can be designed to have favorable structural and routing
-properties,
-at the expense of complicating the addition or removal of nodes.
 Structured networks have been a popular tool in parallel processing
 architectures \cite{kshemkalyani_distributed_2008}.
 More recently, peer-to-peer systems based on distributed hash tables have used
 structured ``overlay'' networks to map table keys to local TCP/IP routes
 \cite{lua_survey_2005,korzun_structured_2013}.
+Such networks can be designed to have favorable structural and routing
+properties,
+which can be used to to guarantee attack-tolerance properties.
 
 \section{Attack-Tolerant Infrastructure}
 \label{sec-infrastructure}
@@ -471,7 +477,7 @@ We pay special attention to a property we call
 
 \begin{description}
 \item[Scalability:]
-For large scale networks it is important that the infrastructure allows
+For large-scale networks, it is important that the infrastructure allows
 for the network to grow while remaining functional.
 In practice, people, devices, and connections, have limited capabilities
 and these limitations need to be considered as part of the design of the
@@ -484,13 +490,13 @@ The existence of such points not only increases the likelihood that an attack
 will succeed,
 but also incentivizes attack by presenting effective targets.
 In order to minimize single points of failure,
-attack tolerant infrastructures must use decentralized protocols and
+attack tolerant infrastructures must use {\em both} decentralized protocols and
 decentralized network structures.
 
 \item[Stabilizing asymmetry:]
 In the context of international conflict,
-{\em asymmetric conflicts} are a special case that makes it possible for the
-less powerful party to have an advantage over the more powerful party
+{\em asymmetric conflicts} allow a
+less powerful party to have an advantage over a more powerful party
 \cite{mack_why_1975}.
 In asymmetric conflicts, the same level of resource expenditure yields different
 results for different parties;
@@ -517,7 +523,7 @@ of connections they can maintain (e.g., Dunbar's number
 In sparse networks, the number of links grows slowly as the network grows in
 size, allowing the network to scale without exceeding the nodes' capacity for
 links.
-Similarly, low-diameter guarantees that as a network grows, a short path will
+Similarly, a low diameter guarantees that as a network grows, a short path will
 still exist between any pair of nodes.
 While low diameter guarantees a path exists,
 paths are only useful if an efficient {\em routing} algorithm exists
@@ -535,7 +541,7 @@ In other words, all nodes occupy structurally indistinguishable positions
 in the network.
 
 \item [Redundancy:]
-In a network, redundancy refers to the existence of multiple non-overlapping
+In a network, redundancy refers to the existence of multiple disjoint
 paths between nodes or components.
 Redundancy can help reduce single points of failure and decrease
 centralization.
@@ -557,16 +563,15 @@ out of unreliable components
 \cite{avizienis_basic_2004, von_neumann_probabilistic_1956}.
 We will make use of standard fault tolerance terminology, summarized here.
 A {\em fault} occurs when one component
-of a system behaves incorrectly (e.g., a routing node blocking or
-altering a message).
+of a system behaves incorrectly (e.g., a routing node blocks or
+alters a message).
 The result of that fault (e.g., a recipient receiving conflicting messages)
 is an {\em error} state.
 If the error is undetected or corrected to the wrong value, the system is
 said to have experienced a {\em failure} (e.g., an altered message is
 accepted as authentic).
 We are concerned in particular with {\em adversarial faults},
-which (as opposed to random faults)
-are chosen strategically to maximize the likelihood of a failure.
+which are chosen strategically to maximize the likelihood of a failure.
 
 \subsection{Partial Trust Model}
 
@@ -574,12 +579,12 @@ An important challenge in large-scale, secure communication is the ability to
 communicate reliably and securely with remote parties for whom no direct,
 trusted link exists.
 The commonly-used web of trust approach
-\cite{zimmermann_official_1995,ferguson_practical_2003}.
-extends trust infinitely transitively,
+\cite{zimmermann_official_1995,ferguson_practical_2003}
+extends trust infinitely transitively:
 to friends of friends, and friends of friends of friends, and so on.
 However, the assumption of infinitely transitive trust is unrealistic
 \cite{christianson_why_1997},
-and does not allow for the analysis of network structure.
+and does not allow for the analysis of the effects of network structure.
 
 We can allow for more realistic transitivity assumptions and incorporate
 network structure into a trust model with one key insight:
@@ -596,13 +601,14 @@ we call paths that do not share any untrusted single points of failure
 {\em independent}.
 The maximum number of independent paths represents the effective redundancy that
 can be utilized by any redundancy-based fault tolerance scheme.
+
 We now propose a method for quantifying the effective redundancy of a network
 as a function of its structure and level of trust transitivity.
 For the purpose of analyzing adversarial fault tolerance,
 this method allows a communication network
-to be modeled as a set of virtual links that directly
+to be modeled as a set of virtual channels that directly
 connect each node pair,
-with each virtual link providing some level of redundancy.
+with each virtual channel providing some level of redundancy.
 
 We now specify the {\em partial trust model}.
 We assume an undirected graph $G = (V,E)$,
@@ -613,10 +619,12 @@ Let $v \in V$ be an arbitrary sender (Alice)
 and $w \in V$ be an arbitrary receiver (Bob).
 We assume the presence of an adversary (Mal) who knows the
 full structure of the network,
-and who can compromise a fixed number of agents,
-gaining complete control of their behavior,
-as long as those agents are not trusted by either Alice or Bob.
-We define a {\em trust radius} $h$ and that nodes $u$ and
+and who can compromise a fixed number of nodes,
+gaining complete control of their behavior.
+We also assume that Mal is an adversary of Alice and/or Bob specifically,
+rather than the network as a whole.
+So Mal can compromise any node except for those trusted by Alice or Bob.
+We define a {\em trust radius} $h$ such that nodes $u$ and
 $u^\prime$ trust each other if their distance is less than $h$.
 For a given node $u$,
 we call the set of trusted nodes its
@@ -624,8 +632,8 @@ we call the set of trusted nodes its
 and all nodes at exactly distance $h$ the
 {\em trust boundary} $B_h(u)$:
 \beq
-T_h(u) &=& \left\{ u \mid d(u,u^\prime) < h \right\} \\
-B_h(u) &=& \left\{ u \mid d(u,u^\prime) = h \right\}.
+T_h(u) &=& \left\{ u^\prime \mid d(u,u^\prime) < h \right\} \\
+B_h(u) &=& \left\{ u^\prime \mid d(u,u^\prime) = h \right\}.
 \eeq
 The trust boundary $B_h$ plays an important role because these nodes are not
 trusted by $u$,
@@ -636,7 +644,7 @@ neighborhoods: $V \setminus \left(T_h(v) \cup T_h(w)\right)$.
 We refer to this set of nodes as the {\em untrusted region}.
 
 Having defined the assumptions of the partial trust model,
-we now quantify the effective redundancy between Alice and Bob
+we now quantify the {\em effective redundancy} between Alice and Bob
 when trust radius $h$ is assumed.
 This quantity, $\delta_{v,w,h}$ is exactly the max-flow/min-cut of
 the graph after Alice's and Bob's trusted neighborhoods have been
@@ -655,23 +663,14 @@ all vertex pairs:
 \eeq
 Thus, for any pair of nodes in the network, at least $\delta_h$ independent,
 redundant paths can be constructed between them.
-While $\delta_h$ is a purely structural property of the graph and
-may have additional applications,
-we are interested in this quantity because
-it places an upper bound on the effectiveness of any
+$\delta_h$ is a purely structural network property,
+and places an upper bound on the effectiveness of any
 redundancy-based fault tolerance scheme.
-As a function of $h$, $\delta_h$ describes a network's ability to create
-redundancy from trust.
-Combined with a {\em routing algorithm} that tells nodes how to forward
-messages to guarantee they take independent paths,
-this redundancy can be used to achieve fault tolerance.
-For attack-tolerant networks,
-it is thus desirable for $\delta_h$ to increase quickly as a function of $h$.
-Furthermore, by applying the partial trust model,
-an adversarial fault tolerance scheme can treat each pair of nodes as being
-directly connected by a virtual link with least $\delta_h$ redundant
-channels.
-We will now describe such a scheme and evaluate its fault tolerance properties.
+The more quickly $\delta_h$ grows with $h$,
+the better a network is at creating redundancy from trust.
+Thus, the scaling of $\delta_h$ can be used to quantify a network's ability
+to withstand targeted attacks,
+even when the exact trust radius $h$ is unknown.
 
 \begin{figure}
 \centerline{\includegraphics[width=3in,height=2.08in]{fig-partial-trust}}
@@ -713,8 +712,8 @@ Alice and Bob,
 what is the probability that an adversary (Mal) causes an undetectable
 error?
 
-Let us first assume that Alice sends a message copy over each available
-channel.
+Let us first consider the case when
+Alice sends a message copy over each available channel.
 When Bob receives the messages, there are several possibilities.
 If some of the messages are missing
 (Alice can include the number of messages as part of the message)
@@ -731,9 +730,9 @@ and Bob has correctly accepted them, so no failure has occurred.
 The second case is that Mal has compromised {\em all} of the messages,
 so Bob has accepted an erroneous message and a failure has occurred.
 In the present scenario,
-whether this occurs depends only on whether Mal has the resources to
+whether a failure occurs depends only on whether Mal has the resources to
 compromise all of the channels.
-In a more realistic, and more interesting, scenario,
+In a more realistic scenario,
 both Alice and Mal have limited resources and are not able to use or
 compromise all available channels.
 
@@ -778,14 +777,13 @@ redundant paths actually utilized $\alpha$ and compromised $\beta$,
 it decreases exponentially with the effective redundancy $\delta_h$.
 This result is significant because $\delta_h$
 depends only on the network structure
-and the strength of trust transitivity,
-not on the amount of resources available to the sender or the adversary.
-In other words, this scheme exhibits a {\em stabilizing asymmetry},
+and the strength of trust transitivity.
+Thus, the scheme can be effective, even when the number of copies
+sent $k$ is a small fraction of the effective redundancy.
+In other words, this scheme exhibits a {\em stabilizing asymmetry}:
 senders can tolerate attacks from significantly more powerful
-adversaries, as long as the network structure provides large $\delta_h$.
-By putting attackers at a disadvantage, attacks are not only tolerated
-but also disincentivized,
-further decreasing the likelihood of a successful attack.
+adversaries,
+as long as the network structure provides large $\delta_h$.
 
 In order to derive the above results, we have assumed that Alice and all
 intermediary agents are able to identify specific,
@@ -862,7 +860,8 @@ $\oplus$ represents componentwise addition modulo 2,
 and $1_l$ is a vector with a 1 in index $l$ and 0 elsewhere.
 Each node is associated with a level $l$ and an $m$-bit string $z$
 known as {\em the place-within-level}.
-There are two types of edges (shown in Figure \ref{fig:butterfly}).
+There are two types of edges: down, and down-right
+(shown in Figure \ref{fig:butterfly}).
 Down edges ($E_\downarrow$) connect nodes sharing the same $z$ value
 in a cycle of increasing level $l$.
 Down-right edges ($E_\rightarrow$) also link to a node of level $l + 1$,
@@ -1136,18 +1135,21 @@ in the path parameterized by $s$.
 For convenience,
 we will omit the subscript $s$ when it is obvious from context.
 We define three distinct partitions of $m$-bit binary strings.
-Let $Q_{v^{(0)}}$ ($\overline{Q_{v^{(0)}}}$) be the set of $m$-bit
+Let $Q_{v^{(0)}}$ be the set of $m$-bit
 strings in which the bits at
-all indices $h \leq i < l_w - h$ match (do not all match) those of $z^{(0)}$.
+all indices $h \leq i < l_w - h$ match those of $z^{(0)}$,
+and let $\overline{Q_{v^{(0)}}}$ be its complement.
 Note that $Q_{v^{(0)}}$ is trivially all $m$-bit strings if $l_w < 2h$.
-Let $R_s$ ($\overline{R_s}$) be the set of $m$-bit strings with the lowest $h$
-bits all matching (not all matching) the bits of $s$.
-Let $S_s$ ($\overline{S_s}$) be the set of $m$-bit strings with the $h$ bits
-preceding index $l_w$ all matching (not all matching) the bits of $\tilde{s}$,
+Let $R_s$ be the set of $m$-bit strings with the lowest $h$
+bits all matching the bits of $s$,
+and let $\overline{R_s}$ be its complement.
+Let $S_s$ be the set of $m$-bit strings with the $h$ bits
+preceding index $l_w$ all matching the bits of $\tilde{s}$,
 where $\tilde{s}$ is a cyclic permutation of $s$:
 \beq
-\tilde{s}_i &=& s_{(i + l_w) \text{ mod } h}.
+\tilde{s}_i &=& s_{(i + l_w) \text{ mod } h},
 \eeq
+and let $\overline{S_s}$ be its complement.
 We will make use of the fact that:
 \beq
 s \neq s^\prime &\implies&
@@ -1286,7 +1288,7 @@ and wireless sensor networks
 have immediate need for scalable, fault-tolerant infrastructures.
 Many Internet services (e.g., email, social networks, cloud storage)
 are still highly centralized and vulnerable to technical and
-non-technical (i.e. coercive) attacks.
+non-technical (i.e., coercive) attacks.
 Fault tolerance using {\em both}
 decentralized protocols and
 decentralized network structures
@@ -1303,7 +1305,7 @@ as a fallback when surveillance isn't feasible.
 However, the techniques presented in this paper
 are entirely compatible with, and in some cases could enhance, existing
 confidentiality techniques.
-For example, the well-known {\em man-in-the-middle} attack exploits a privileged
+For example, {\em man-in-the-middle} attacks exploit a privileged
 network position to attack otherwise secure cryptography,
 suggesting that structural approaches can complement cryptographic ones.
 
@@ -1322,7 +1324,7 @@ formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}).
 Furthermore, when high levels of adversarial fault tolerance are required,
-designers of new sociotechnical systems might choose
+designers of new sociotechnical systems might choose to
 incorporate such networks.
 For example,
 a coalition of groups supporting free expression could use our results
@@ -1330,7 +1332,7 @@ to construct a censorship-resistant communication network
 by cultivating the necessary trust relationships.
 
 Our work suggests several directions for future work towards developing
-practical attack-tolerant communication infrastructure.
+practical, attack-tolerant communication infrastructure.
 The development of new multipath routing algorithms on other structured
 networks could achieve higher levels of redundancy.
 It is also desirable to identify dynamics that give
