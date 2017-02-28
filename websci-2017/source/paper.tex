@@ -196,7 +196,7 @@ Decentralization}
 
 \section{Introduction}
 
-\epigraph{The Net interprets censorship as damage and routes around it.}{\textit{--John Gilmore}\cite{first_elmer-dewitt_1993}}
+\epigraph{The Net interprets censorship as damage and routes around it.}{\textit{--John Gilmore}\cite{elmer-dewitt_first_1993}}
 
 Much of the world's infrastructure is networked: power grids,
 cellular networks, raods, and of course, the Internet.
@@ -215,13 +215,12 @@ the information flowing through them.
 The Internet's decentralized design was motivated
 by the need to withstand targeted attacks, such as nuclear strikes
 \cite{baran_distributed_1964}.
-But despite longstanding common wisdom \cite{first_elmer-dewitt_1993},
+But despite longstanding common wisdom \cite{elmer-dewitt_first_1993},
 both theoretical results and recent events (described below)
-have demonstrated that
-the Internet is surprisingly vulnerable to attack.
+have demonstrated that the Internet can be surprisingly vulnerable to attack.
 Decentralization remains a promising approach towards
 building resilient networks,
-but further work is needed to understand the relationship between
+but there is a need to better understand the relationship between
 decentralized network structure and adversarial fault tolerance.
 
 The Internet's vulnerability to censorship and other targeted attacks
@@ -240,12 +239,22 @@ single router to propagate globally.
 And while the action was not an intentional attack against the global Internet,
 the ability of an attacker to succeed without trying only strengthens our
 claim of the Intenrnet's vulnerability.
+In 2013, the Texas-based email provider Lavabit was compelled by to turn
+their private SSL keys over to the FBI \cite{poulsen_edward_2013}.
+In order to protect their users from surveillance,
+Lavabit ceased operations.
+While originally intended as surveillance,
+this action effectively became an act of censorship.
+In this case, the attack was again successful due to a highly centralized
+architecture:
+SSL keys under control of a single entity, in a single legal jurisdiction.
+It is also important to note that there was no technological failure,
+the attack was achieved through coercion.
+So we see that such vulnerabilities are not limited to any one system or protocol,
+but result from centralized structure itself.
 
-Such vulnerabilities are not limited to any one system or protocol,
-but result from the network structure itself.
-
-Analysis of the Internet's router network has shown that while it is remarkably
-resilient against random faults,
+Analysis of the Internet's router network has shown that while it
+is remarkably resilient against random faults,
 it is highly susceptible to adversarial faults \cite{albert_error_2000}.
 These results have been attributed to the scale-free structure of the Internet's
 router network
@@ -262,8 +271,8 @@ In other words, the protocols of the Internet do not {\em require}
 centralization, but centralization may still emerge from the sociotechnical
 processes that create its network structure.
 
-With strong theoretical and historical evidence that network structure
-can create vulnerabilities,
+With strong theoretical and historical evidence that centralized
+network structure can create vulnerabilities,
 methods for analyzing structural vulnerabilities and for designing
 fault-tolerant networks are needed.
 This paper presents several contributions towards advancing those goals.
@@ -275,44 +284,61 @@ A ``link'' in this context could represent any kind of connection
 (e.g., physical cables, encrypted channels).
 We assume that some nodes in the network may be compromised by an attacker
 (Mal).
+We also assume that Mal is an adversary of Alice specifically and targets
+nodes strategically with the goal of interfering with Alice's communications
+(rather than disrupting the network as a whole).
 Compromised nodes may behave incorrectly by blocking, altering,
 or incorrectly routing messages.
 We assume that Mal has full knowledge of the network structure, but has
 limited resources and thus can only compromise a fixed number of nodes.
-We also assume that nodes within a fixed network
-distance of either Alice or Bob are
-{\em trusted}
-and cannot be compromised.
-This assumption,
-which we call
+
+We also assume that nodes {\em trust} their immediate neighbors,
+so Mal is unable to compromise Alice's node, or her direct neighbors.
+In the commonly used {\em web of trust} approach
+\cite{zimmermann_official_1995,ferguson_practical_2003},
+we would extend that trust transitively to the entire network.
+However, we make a weaker and more realistic assumption:
+that trust is extended transitively to nodes within a fixed
+distance.
+So only the beginning and end of a path between Alice and Bob is trusted
+against interference from Mal.
+We call this assumption
 {\em partial trust transitivity},
-is a weaker (more realistic) form of the transitive
-trust assumption used by the popular 
-web of trust approach
-\cite{zimmermann_official_1995,ferguson_practical_2003}.
+and refer to such paths as {\em partially trusted}.
 
 Under the above assumptions,
 we show how to evaluate the influence of network structure
 on attack-tolerance,
+how to constructed trusted channels from redundant partially trusted paths,
 and propose a method for achieving a high-level of attack-tolerance on
 the butterfly network topology.
 The butterfly topology is popular in parallel processing
 \cite{kshemkalyani_distributed_2008} and
 peer-to-peer \cite{lua_survey_2005, korzun_structured_2013}
-applications, due to its regular structure and high connectivity.
-While it may seem questionable to dictate the topology of trust relationships,
-there are many applications where this occurs,
-e.g., overlay networks
+applications, due to its regular structure, low degree, and high connectivity.
+
+The reader may wonder whether it is realistic or useful to assume control over
+the network structure.
+We have already seen that whenever a single point of failure exists in the network,
+there is a potential to exploit it through coercion,
+without an attacker needing to compromise the technology.
+So, {\em attack-tolerance cannot be achieved without the ability to influence
+network structure}.
+Luckily, there are scenarios in which network topology can be dictated.
+Examples include overlay networks
 \cite{lua_survey_2005, korzun_structured_2013},
 formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}.
-Furthermore, we stress that trust is not static;
-it changes over time (ableit slowly).
-In this sense, we approach trust as deliberate infrastructure.
-Since centralized network structure is inherently
-vulnerable to attack, the ability to deliberately structure trust relationships
-is a necessary component of any attack-tolerance scheme.
+In general,
+{\em when the need for attack-tolerance is high enough to warrant investment
+in infrastructure, networks can be engineered and maintained as infrastructure}.
+It is also worth noting that attack-tolerant networks may be sub-components of
+larger, less-constrained systems.
+For example, a single server might be replaced by a distributed network of servers,
+each with different ownership, physical location, and legal jurisdiction,
+without placing any unrealistic constraints on the clients connecting to
+those servers.
 
 We first describe how fault tolerance techniques can be adapted and
 evaluated in a network setting with partial trust.
