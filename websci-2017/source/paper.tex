@@ -37,9 +37,9 @@
 %\isbn{123-4567-24-567/08/06}
 
 %Conference
-\conferenceinfo{WWW '17}{April 3--7, 2017, Perth, Australia}
+\conferenceinfo{WebSci '17}{June 26--8, 2017, Troy, NY, USA}
 
-\acmPrice{\$15.00}
+%\acmPrice{\$15.00}
 
 %
 % --- Author Metadata here ---
@@ -116,12 +116,12 @@ Daniel M. Romero \\
 \maketitle
 \begin{abstract}
 Targeted attacks against network infrastructure are notoriously difficult
-to withstand.
+to guard against.
 Much of the existing work on network fault-tolerance focuses on random faults and
 does not apply to adversarial faults (attacks).
 In the case of communication networks,
 targeted attacks can leave users vulnerable to
-censorship and targeted surveillance,
+censorship and surveillance,
 even when cryptography is used.
 Centralized networks have single points of failure by definition,
 leading to a growing popularity in decentralized architectures and protocols
@@ -194,7 +194,7 @@ of network structure on adversarial fault-tolerance.
 %\terms{Theory}
 
 \keywords{
-Butterfly Network;
+Butterfly Topology;
 Fault Tolerance;
 Adversarial Faults;
 Multipath Routing;
@@ -286,6 +286,12 @@ network structure can create vulnerabilities,
 methods for analyzing structural vulnerabilities and for designing
 fault-tolerant networks are needed.
 This paper presents several contributions towards advancing those goals.
+While our motivation comes from the Internet router network and
+World Wide WEb,
+our work is theoretical, focusing on abstract networks,
+and could potentially be applied to many different types of networks,
+whether made of physical wires, virtual tunnels,
+or other types of links.
 
 We consider a setting in which a source node (Alice)
 in a network attempts to route a message
@@ -354,7 +360,7 @@ We begin by describing how fault tolerance techniques can be adapted and
 evaluated in a network setting with partial trust transitivity and
 adversarial faults.
 Generally, faults in network paths can be correlated,
-preventing the appliation of standard fault tolerance techniques
+preventing the application of standard fault tolerance techniques
 \cite{avizienis_basic_2004, von_neumann_probabilistic_1956},
 which assume independent faults.
 By constructing {\em independent paths},
@@ -433,7 +439,7 @@ and does not distinguish between paths of different lengths.
 Our work addresses both of these limitations by incorporating a more realistic
 assumption of partial transitivity.
 
-Previous work on evaluating incorporating network structure into
+Previous work on incorporating network structure into
 trust models has focused on authentication
 protocols, showing that independent paths can reduce an adversary's ability
 to impersonate a target
@@ -812,7 +818,7 @@ an adversary,
 provided the network has sufficient redundancy,
 and provided the sender and intermediaries know how to route message
 copies along independent paths.
-In this section, we address the both requirements by proposing a novel routing
+In this section, we address both requirements by proposing a novel routing
 algorithm for constructing independent paths on the butterfly network topology.
 This architecture and routing algorithm achieve an
 effective redundancy that increases exponentially with the trust radius,
