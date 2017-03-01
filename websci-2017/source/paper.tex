@@ -240,10 +240,11 @@ And while the action was not an intentional attack against the global Internet,
 the ability of an attacker to succeed without even trying only highlights
 the Internet's vulnerability to adversarial faults.
 
-In 2013, the Texas-based email provider Lavabit was compelled by to turn
-their private SSL keys over to the FBI \cite{poulsen_edward_2013}.
-In order to protect their users from surveillance,
-Lavabit ceased operations.
+In 2013, the Texas-based email provider Lavabit was ordered to disclose
+their private SSL keys to the FBI \cite{poulsen_edward_2013}.
+Rather than complying,
+Lavabit ceased operations
+in order to protect their users from surveillance.
 While originally intended as surveillance,
 this action effectively became an act of censorship.
 In this case, the attack was again successful due to a highly centralized
@@ -533,97 +534,7 @@ Such networks can be designed to have favorable structural and routing
 properties,
 which can be used to to guarantee attack-tolerance properties.
 
-\section{Attack-Tolerant Infrastructure}
-\label{sec-infrastructure}
-
-In this section, we describe the functional properties required of an
-attack-tolerant network,
-which serve as guiding principles in later sections.
-We pay special attention to a property we call
-{\em stabilizing asymmetry}.
-
-\subsection{Functional Properties}
-
-\begin{description}
-\item[Scalability:]
-For large-scale networks, it is important that the infrastructure allows
-for the network to grow while remaining functional.
-In practice, people, devices, and connections, have limited capabilities
-and these limitations need to be considered as part of the design of the
-infrastructure. 
-
-\item [Decentralization:]
-Systems having single points of failure are less tolerant against faults at
-those points.
-The existence of such points not only increases the likelihood that an attack
-will succeed,
-but also incentivizes attack by presenting effective targets.
-In order to minimize single points of failure,
-attack tolerant infrastructures must use {\em both} decentralized protocols and
-decentralized network structures.
-
-\item[Stabilizing asymmetry:]
-In the context of international conflict,
-{\em asymmetric conflicts} allow a
-less powerful party to have an advantage over a more powerful party
-\cite{mack_why_1975}.
-In asymmetric conflicts, the same level of resource expenditure yields different
-results for different parties;
-the attacker's resources are either more or less effective than the defender's.
-We call the latter case stabilizing asymmetry,
-because it reduces an attacker's power relative to their target.
-With this in mind, an attack-resistant infrastructure will benefit from a high
-level of stabilizing asymmetry.
-
-\end{description}
-\subsection{Structural Properties}
-
-We are specifically concerned with network structure-based approaches to
-fault tolerance.
-In networks, specific structural properties are required to achieve the
-functional properties described above.
-\begin{description}
-\item [Sparsity and low diameter:]
-To achieve scalability, networks must be {\em sparse} and have a
-{\em low diameter}.
-In practical settings, humans and devices have an upper limit on the number
-of connections they can maintain (e.g., Dunbar's number
-\cite{dunbar_neocortex_1992}).
-In sparse networks, the number of links grows slowly as the network grows in
-size, allowing the network to scale without exceeding the nodes' capacity for
-links.
-Similarly, a low diameter guarantees that as a network grows, a short path will
-still exist between any pair of nodes.
-While low diameter guarantees a path exists,
-paths are only useful if an efficient {\em routing} algorithm exists
-to find them.
-
-\item [Uniform centrality:]
-There are many ways to measure node centrality in networks
-\cite{freeman_centrality_1978}.
-The more uniform these measures are across nodes, the more decentralized
-a network is.
-Centrality is minimized in {\em vertex transitive} networks,
-for which an edge-preserving map
-always exists from any node to any other node.
-In other words, all nodes occupy structurally indistinguishable positions
-in the network.
-
-\item [Redundancy:]
-In a network, redundancy refers to the existence of multiple disjoint
-paths between nodes or components.
-Redundancy can help reduce single points of failure and decrease
-centralization.
-One measure of redundancy is given by the ratio of edges to nodes
-\cite{baran_distributed_1964}.
-A single point of failure occurs when a node holds a uniquely
-central position.
-When alternative paths are added to bypass central nodes,
-the network becomes more redundant.
-
-\end{description}
-
-\section{Trust and Fault Tolerance}
+\section{Trust Networks and Fault Tolerance}
 \label{sec-ft}
 
 Within the field of {\em fault tolerance},
@@ -631,22 +542,25 @@ many techniques have been developed for building reliable systems
 out of unreliable components
 \cite{avizienis_basic_2004, von_neumann_probabilistic_1956}.
 We will make use of standard fault tolerance terminology, summarized here.
-A {\em fault} occurs when one component
+A {\em fault} is said to occur when one component
 of a system behaves incorrectly (e.g., a routing node blocks or
 alters a message).
 The result of that fault (e.g., a recipient receiving conflicting messages)
-is an {\em error} state.
+is called an {\em error} state.
 If the error is undetected or corrected to the wrong value, the system is
 said to have experienced a {\em failure} (e.g., an altered message is
 accepted as authentic).
+Note that when an error is detected but cannot be corrected,
+the system has still tolerated the fault because it has not accepted an error
+state.
 We are concerned in particular with {\em adversarial faults},
 which are chosen strategically to maximize the likelihood of a failure.
 
 \subsection{Partial Trust Model}
 
-An important challenge in large-scale, secure communication is the ability to
-communicate reliably and securely with remote parties for whom no direct,
-trusted link exists.
+A central question in large-scale, secure communication is this:
+how can two parties communicate reliably and securely
+when no direct trusted link exists between them?
 The commonly-used web of trust approach
 \cite{zimmermann_official_1995,ferguson_practical_2003}
 extends trust infinitely transitively:
@@ -655,32 +569,22 @@ However, the assumption of infinitely transitive trust is unrealistic
 \cite{christianson_why_1997},
 and does not allow for the analysis of the effects of network structure.
 
-We can allow for more realistic transitivity assumptions and incorporate
-network structure into a trust model with one key insight:
-even if no single path between a sender and receiver is fully trusted,
-multiple copies of a message can be sent along different paths and compared
-by the receiver to detect and correct errors.
-However, in the presence of an attacker, there is only benefit in sending an
-additional message along a path if that path does not share untrusted
-single points of failure with any of the existing message paths
-(otherwise, the adversary can compromise both messages
-by causing a single fault).
-Following \cite{reiter_resilient_1998},
-we call paths that do not share any untrusted single points of failure
-{\em independent}.
-The maximum number of independent paths represents the effective redundancy that
-can be utilized by any redundancy-based fault tolerance scheme.
+An alternative assumption might be that each hop away from Alice in
+in the network,
+reduces the probability that a node can resist compromise exponentially.
+Such a situation might occur because nodes more distant from Alice may be
+more favorably disposed to Alice's adversary, more likely to cooperate with that
+adversary, and less likely to take proactive security measures against that
+adversary.
+The above model can be further
+approximated by assuming that nodes up to some fixed number
+of hops cannot be compromised, and those beyond can.
+This simplified version is still more realistic than infinite transitivity
+and will be convenient for proving our results.
+We now proceed to define it formally.
 
-We now propose a method for quantifying the effective redundancy of a network
-as a function of its structure and level of trust transitivity.
-For the purpose of analyzing adversarial fault tolerance,
-this method allows a communication network
-to be modeled as a set of virtual channels that directly
-connect each node pair,
-with each virtual channel providing some level of redundancy.
-
-We now specify the {\em partial trust model}.
-We assume an undirected graph $G = (V,E)$,
+We define the {\em partial trust model} on
+an undirected graph $G = (V,E)$,
 although the model can easily be extended to directed multigraphs.
 Vertices representing commiunicating agents,
 and with edges representing mutually trusted communication links.
@@ -711,6 +615,30 @@ These trust assumptions imply that when Alice sends a message to Bob,
 Mal can only cause faults in the set of nodes outside both of their trusted
 neighborhoods: $V \setminus \left(T_h(v) \cup T_h(w)\right)$.
 We refer to this set of nodes as the {\em untrusted region}.
+
+We can allow for more realistic transitivity assumptions and incorporate
+network structure into a trust model with one key insight:
+even if no single path between a sender and receiver is fully trusted,
+multiple copies of a message can be sent along different paths and compared
+by the receiver to detect and correct errors.
+However, in the presence of an attacker, there is only benefit in sending an
+additional message along a path if that path does not share untrusted
+single points of failure with any of the existing message paths
+(otherwise, the adversary can compromise both messages
+by causing a single fault).
+Following \cite{reiter_resilient_1998},
+we call paths that do not share any untrusted single points of failure
+{\em independent}.
+The maximum number of independent paths represents the effective redundancy that
+can be utilized by any redundancy-based fault tolerance scheme.
+
+We now propose a method for quantifying the effective redundancy of a network
+as a function of its structure and level of trust transitivity.
+For the purpose of analyzing adversarial fault tolerance,
+this method allows a communication network
+to be modeled as a set of virtual channels that directly
+connect each node pair,
+with each virtual channel providing some level of redundancy.
 
 Having defined the assumptions of the partial trust model,
 we now quantify the {\em effective redundancy} between Alice and Bob
