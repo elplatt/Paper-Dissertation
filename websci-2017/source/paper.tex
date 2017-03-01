@@ -115,31 +115,40 @@ Daniel M. Romero \\
 
 \maketitle
 \begin{abstract}
-Networks with single points of failure are particularly susceptible to
-targeted attacks.
-In communication networks, these types of faults can leave users vulnerable to
+Targeted attacks against network infrastructure are notoriously difficult
+to withstand.
+Much of the existing work on network fault-tolerance focuses on random faults and
+does not apply to adversarial faults (attacks).
+In the case of communication networks,
+targeted attacks can leave users vulnerable to
 censorship and targeted surveillance,
-even when cryptography is utilized.
+even when cryptography is used.
 Centralized networks have single points of failure by definition,
-leading to a growing popularity in decentralized architectures and protocols.
-However, centralized network structure can arise even when protocols are
+leading to a growing popularity in decentralized architectures and protocols
+for greater fault-tolerance.
+However, centralized network {\em structure} can arise even when {\em protocols} are
 decentralized.
-Despite being based on decentralized protocols,
+Despite their decentralized protocols,
 the Internet and World-Wide Web have
 been shown both theoretically and historically to be highly susceptible to
-adversarial faults, in part due to emergent structural centralization.
-Existing network trust models, such as webs of trust, fail to adequately address
-network structure.
-We describe a novel, adversarial fault-tolerant,
-concurrent multipath routing algorithm for the decentralized
-butterfly network topology.
-We also develop a partial trust model that makes it possible to
-quantify the adversarial fault tolerance of a network,
-and which makes more realistic transitivity assumptions than webs of trust.
-When network topology can be dictated, these results can be used to create
-scalable, attack-tolerant infrastructures. More generally, our results provide
-a formalism for evaluating the effects of network structure on adversarial
-fault tolerance.
+attack, in part due to emergent structural centralization.
+When single points of failure exist,
+they are potentially vulnerable to non-technological
+(i.e., coercive) attacks,
+suggesting the importance of a structural approach to attack-tolerance.
+We show how the assumption of partial trust transitivity,
+while more realistic than the assumption used by webs of trust,
+can be used to quantify the effective redundancy of a network
+as a function of trust transitivity.
+We also prove that the effective redundancy of the wrap-around butterfly topology
+increases exponentially with trust transitivity and
+describe a novel concurrent multipath routing algorithm for constructing
+paths to utilize that redundancy.
+When network structure can be dictated
+our results can be used to create scalable,
+attack-tolerant infrastructures.
+More generally, our results provide a theoretical formalism for evaluating the effects
+of network structure on adversarial fault-tolerance.
 \end{abstract}
 
 
@@ -192,7 +201,6 @@ Multipath Routing;
 Censorship;
 Decentralization}
 
-\vskip 3em
 
 \section{Introduction}
 
@@ -1273,15 +1281,41 @@ adversarial faults, even from a very powerful attacker.
 
 While decentralized protocols have received much attention for their potential
 fault tolerance applications,
-a better understanding of how network structure contributes to fault tolerance
-is necessary.
-We have proposed a network-based scheme for adversarial fault tolerance on the
+centralized structures are always vulnerable to exploitation by non-technical means (i.e., coercion),
+and there is a need for a better understanding of the relationship between network
+structure and attack-tolerance.
+We have proposed a network-based scheme for {\em adversarial} fault tolerance on the
 butterfly topology,
-utilizing a novel {\em concurrent multipath routing} algorithm.
+utilizing a novel concurrent multipath routing algorithm.
 We have also demonstrated how {\em partial trust transitivity},
 in addition to being more realistic than infinite transitivity,
-enables the analysis of the relationship between trust, network structure,
-and fault tolerance.
+provides a theoretical foundation for
+quantitative analysis of the relationship between trust,
+network structure, and attack tolerance.
+
+Such attacks include many forms of censorship and surveillance,
+which have important social implications.
+We have already discussed two such cases:
+Pakistan's inadvertant censorship of YouTube
+\cite{hunter_pakistan_2008}
+and the FBI's surveillance-turned-censorship of Lavabit
+\cite{poulsen_edward_2013}
+The reader may wonder how our methods could be employed in scenarios
+such as large-scale state-sponsored censorship.
+Censorship-resistant infrastructure often replaces central servers
+(e.g., the router in the 2008 YouTube incident) with multiple servers across
+the world, synchronized through consensus protocols.
+The {\em directory authorities} used by the Tor
+\cite{dingledine_tor_2004} network are one example.
+However, the size of such authority networks is often limited by the number of
+trust relationships (degree) each node can maintain, and the inherent insecurity of
+extending transitive trust to an ever-larger network.
+Our work fills a much-needed gap by quantifying the connection between network-structure,
+trust transitivity,
+and attack-tolerance.
+We provide both a theoretical framework and specific example of how network structure
+can be engineered to leverage trust for a high level of attack-tolerance,
+without sacrificing scalability.
 
 Fault-tolerant network infrastructures have many direct applications.
 Areas such as cryptocurrency
@@ -1299,17 +1333,13 @@ decentralized protocols and
 decentralized network structures
 is one promising approach to securing these services.
 
-We have focused specifically on adversarial faults that block or
+We have focused primarily on adversarial faults that block or
 change messages (e.g., censorship).
-We have not specifically addressed {\em confidentiality}:
-how to keep those messages private.
-Existing cryptographic techniques for confidentiality are relatively
-mature compared to those for tolerating censorship.
-In fact, an attacker might use targeted attacks to achieve censorship
-as a fallback when surveillance isn't feasible.
+Existing cryptographic techniques for circumventing surveillance
+are relatively mature compared to those for tolerating censorship.
 However, the techniques presented in this paper
 are entirely compatible with, and in some cases could enhance, existing
-confidentiality techniques.
+anti-surveillance techniques.
 For example, {\em man-in-the-middle} attacks exploit a privileged
 network position to attack otherwise secure cryptography,
 suggesting that structural approaches can complement cryptographic ones.
@@ -1321,20 +1351,20 @@ routing algorithm to discover independent paths.
 For general networks, finding all such paths is NP-hard,
 but efficient, suboptimal algorithms exist
 \cite{reiter_resilient_1998}.
-However, our approach is best suited for structured networks.
-While the ability to control network topology is only achievable in some
-applications, those applications are nonetheless significant
-(e.g. overlay networks \cite{lua_survey_2005, korzun_structured_2013},
-formal organizations \cite{mohr_explaining_1982},
-government-regulated cellular networks \cite{walker_mass_2012},
-and call tree notification systems \cite{nickerson_thinking_2010}).
-Furthermore, when high levels of adversarial fault tolerance are required,
-designers of new sociotechnical systems might choose to
-incorporate such networks.
-For example,
-a coalition of groups supporting free expression could use our results
-to construct a censorship-resistant communication network
-by cultivating the necessary trust relationships.
+However, we have argued that attack-tolerance requires the ability to
+influence network structure and reduce reilance on single points of failure.
+Our work is most applicable to cases where the need for attack-tolerance
+justifies investment in deliberate infrastructure.
+For example, a coalition of groups supporting free expression could use our work
+to construct a censorship-resistant communication network.
+In general, such groups would need to invest resources into vetting their neighbors
+to establish trust, but there are scenarios in which the attack-tolerance
+requirement would justify that investment.
+It is also worth noting that because faulty paths can be identified in our scheme,
+it may at times be appropriate to assume mutual trust and revoke that relationship
+when it is violated.
+Any entities dependent on the proper functioning of the network would have an incentive
+to resist attack in order to maintain their ability to participate.
 
 Our work suggests several directions for future work towards developing
 practical, attack-tolerant communication infrastructure.
@@ -1351,11 +1381,11 @@ anonymous web browsing.
 \section{Conclusion}
 \label{sec-conclusion}
 
-We have presented a novel multipath routing algorithm for the butterfly
+We have presented a novel concurrent multipath routing algorithm for the butterfly
 topology,
-as well as a scheme for using this algorithm to achieve a high level of
-attack-tolerance in a communication network,
-even when no single path is entirely trusted.
+as well as a scheme for using this algorithm to construct a highly attack-tolerant
+virtual channel between any two nodes, even when no fully-trusted path exists
+between them.
 Under this scheme, the probability of an adversary causing an undetectable error
 decreases exponentially with the network's effective redundancy.
 The effective redundancy, in the case of the butterfly topology,
@@ -1363,13 +1393,13 @@ grows exponentially with the trust radius.
 Furthermore, a small increase in the number of messages sent can compensate
 for a large increase in the number of messages compromised by an adversary.
 We have also demonstrated how the assumption of partial trust
-transitivity can enable a formal analysis of the effects of network structure
-on attack-tolerance.
+transitivity can enable a quantitative analysis of the
+relationships between network structure, trust, and attack-tolerance.
 These results are directly applicable to systems in which the link
 structure can be imposed by the designer,
-and more generally, provide a formalism that can be used more to evaluate
+and more generally, provide a theoretical foudnation that can be used more to evaluate
 the role of network structure, trust transitivity, and effective redundancy
-on adversarial fault tolerance.
+on attack-tolerance.
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
