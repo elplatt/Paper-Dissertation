@@ -570,15 +570,15 @@ However, the assumption of infinitely transitive trust is unrealistic
 and does not allow for the analysis of the effects of network structure.
 
 An alternative assumption might be that each hop away from Alice in
-in the network,
+in the network
 reduces the probability that a node can resist compromise exponentially.
-Such a situation might occur because nodes more distant from Alice may be
+Such a situation could occur if nodes more distant from Alice are
 more favorably disposed to Alice's adversary, more likely to cooperate with that
 adversary, and less likely to take proactive security measures against that
 adversary.
 The above model can be further
 approximated by assuming that nodes up to some fixed number
-of hops cannot be compromised, and those beyond can.
+of hops cannot be compromised, and that those beyond can.
 This simplified version is still more realistic than infinite transitivity
 and will be convenient for proving our results.
 We now proceed to define it formally.
@@ -616,29 +616,15 @@ Mal can only cause faults in the set of nodes outside both of their trusted
 neighborhoods: $V \setminus \left(T_h(v) \cup T_h(w)\right)$.
 We refer to this set of nodes as the {\em untrusted region}.
 
-We can allow for more realistic transitivity assumptions and incorporate
-network structure into a trust model with one key insight:
-even if no single path between a sender and receiver is fully trusted,
-multiple copies of a message can be sent along different paths and compared
-by the receiver to detect and correct errors.
-However, in the presence of an attacker, there is only benefit in sending an
-additional message along a path if that path does not share untrusted
-single points of failure with any of the existing message paths
-(otherwise, the adversary can compromise both messages
-by causing a single fault).
-Following \cite{reiter_resilient_1998},
-we call paths that do not share any untrusted single points of failure
-{\em independent}.
-The maximum number of independent paths represents the effective redundancy that
-can be utilized by any redundancy-based fault tolerance scheme.
+\subsection{Effective Redundancy}
 
 We now propose a method for quantifying the effective redundancy of a network
 as a function of its structure and level of trust transitivity.
 For the purpose of analyzing adversarial fault tolerance,
-this method allows a communication network
-to be modeled as a set of virtual channels that directly
-connect each node pair,
-with each virtual channel providing some level of redundancy.
+this method allows us to model each pair of nodes
+in a complex communication network
+as being directly connected by a dedicated {\em virtual channel}
+that provides some level of redundancy.
 
 Having defined the assumptions of the partial trust model,
 we now quantify the {\em effective redundancy} between Alice and Bob

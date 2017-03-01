@@ -1,0 +1,98 @@
+We can allow for more realistic transitivity assumptions and incorporate
+network structure into a trust model with one key insight:
+even if no single path between a sender and receiver is fully trusted,
+multiple copies of a message can be sent along different paths and compared
+by the receiver to detect and correct errors.
+However, in the presence of an attacker, there is only benefit in sending an
+additional message along a path if that path does not share untrusted
+single points of failure with any of the existing message paths
+(otherwise, the adversary can compromise both messages
+by causing a single fault).
+Following \cite{reiter_resilient_1998},
+we call paths that do not share any untrusted single points of failure
+{\em independent}.
+The maximum number of independent paths represents the effective redundancy that
+can be utilized by any redundancy-based fault tolerance scheme.
+
+
+
+\subsection{Functional Properties}
+
+\begin{description}
+\item[Scalability:]
+For large-scale networks, it is important that the infrastructure allows
+for the network to grow while remaining functional.
+In practice, people, devices, and connections, have limited capabilities
+and these limitations need to be considered as part of the design of the
+infrastructure. 
+
+\item [Decentralization:]
+Systems having single points of failure are less tolerant against faults at
+those points.
+The existence of such points not only increases the likelihood that an attack
+will succeed,
+but also incentivizes attack by presenting effective targets.
+In order to minimize single points of failure,
+attack tolerant infrastructures must use {\em both} decentralized protocols and
+decentralized network structures.
+
+\item[Stabilizing asymmetry:]
+In the context of international conflict,
+{\em asymmetric conflicts} allow a
+less powerful party to have an advantage over a more powerful party
+\cite{mack_why_1975}.
+In asymmetric conflicts, the same level of resource expenditure yields different
+results for different parties;
+the attacker's resources are either more or less effective than the defender's.
+We call the latter case stabilizing asymmetry,
+because it reduces an attacker's power relative to their target.
+With this in mind, an attack-resistant infrastructure will benefit from a high
+level of stabilizing asymmetry.
+
+\end{description}
+\subsection{Structural Properties}
+
+We are specifically concerned with network structure-based approaches to
+fault tolerance.
+In networks, specific structural properties are required to achieve the
+functional properties described above.
+\begin{description}
+\item [Sparsity and low diameter:]
+To achieve scalability, networks must be {\em sparse} and have a
+{\em low diameter}.
+In practical settings, humans and devices have an upper limit on the number
+of connections they can maintain (e.g., Dunbar's number
+\cite{dunbar_neocortex_1992}).
+In sparse networks, the number of links grows slowly as the network grows in
+size, allowing the network to scale without exceeding the nodes' capacity for
+links.
+Similarly, a low diameter guarantees that as a network grows, a short path will
+still exist between any pair of nodes.
+While low diameter guarantees a path exists,
+paths are only useful if an efficient {\em routing} algorithm exists
+to find them.
+
+\item [Uniform centrality:]
+There are many ways to measure node centrality in networks
+\cite{freeman_centrality_1978}.
+The more uniform these measures are across nodes, the more decentralized
+a network is.
+Centrality is minimized in {\em vertex transitive} networks,
+for which an edge-preserving map
+always exists from any node to any other node.
+In other words, all nodes occupy structurally indistinguishable positions
+in the network.
+
+\item [Redundancy:]
+In a network, redundancy refers to the existence of multiple disjoint
+paths between nodes or components.
+Redundancy can help reduce single points of failure and decrease
+centralization.
+One measure of redundancy is given by the ratio of edges to nodes
+\cite{baran_distributed_1964}.
+A single point of failure occurs when a node holds a uniquely
+central position.
+When alternative paths are added to bypass central nodes,
+the network becomes more redundant.
+
+\end{description}
