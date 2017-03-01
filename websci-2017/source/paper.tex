@@ -384,7 +384,7 @@ and show that the probability of detecting adversarial faults
 approaches 1 exponentially with the number of paths;
 }
 \item{We prove that the number of independent paths between two nodes
-in a wraparound butterfly network with partial trust transitivity
+in a wrap-around butterfly network with partial trust transitivity
 increases exponentially with the trust radius;
 }
 \item{We present a scalable, efficient, and attack-tolerant concurrent
@@ -610,7 +610,7 @@ B_h(u) &=& \left\{ u^\prime \mid d(u,u^\prime) = h \right\}.
 \eeq
 The trust boundary $B_h$ plays an important role because these nodes are not
 trusted by $u$,
-but if compromised can entirely isolate $u$ from the rest of the network.
+and if compromised can entirely isolate $u$ from the rest of the network.
 These trust assumptions imply that when Alice sends a message to Bob,
 Mal can only cause faults in the set of nodes outside both of their trusted
 neighborhoods: $V \setminus \left(T_h(v) \cup T_h(w)\right)$.
@@ -618,16 +618,20 @@ We refer to this set of nodes as the {\em untrusted region}.
 
 \subsection{Effective Redundancy}
 
-We now propose a method for quantifying the effective redundancy of a network
-as a function of its structure and level of trust transitivity.
-For the purpose of analyzing adversarial fault tolerance,
-this method allows us to model each pair of nodes
-in a complex communication network
-as being directly connected by a dedicated {\em virtual channel}
-that provides some level of redundancy.
+Our goal is to achieve fault tolerance through redundancy.
+In the network setting, redundnacy is achieved using
+{\em independent paths} \cite{reiter_resilient_1998},
+which no common points of failure.
+Typically, it is assumed that paths must be disjoint in order to be
+independent.
+However, under the partial trust assumption, two non-disjoint paths
+can still be independent as long as their intersection contains only trusted
+nodes,
+greatly increasing the level of redundancy available.
+Under the partial trust assumption, the available redundancy thus depends on
+both the network structure and the level of trust.
 
-Having defined the assumptions of the partial trust model,
-we now quantify the {\em effective redundancy} between Alice and Bob
+We now quantify the {\em effective redundancy} between Alice and Bob
 when trust radius $h$ is assumed.
 This quantity, $\delta_{v,w,h}$ is exactly the max-flow/min-cut of
 the graph after Alice's and Bob's trusted neighborhoods have been
@@ -639,7 +643,7 @@ min-cut:
 \eeq
 Equality holds when there are no bottlenecks within the untrusted region,
 an indication that the network is decentralized.
-The redundancy of the entire graph can be characterized by the minimum over
+The efrective redundancy of the entire graph can be characterized by the minimum over
 all vertex pairs:
 \beq
 \delta_h(V) \equiv \min_{v,w \in V} \delta_{v,w,h}.
@@ -650,7 +654,7 @@ $\delta_h$ is a purely structural network property,
 and places an upper bound on the effectiveness of any
 redundancy-based fault tolerance scheme.
 The more quickly $\delta_h$ grows with $h$,
-the better a network is at creating redundancy from trust.
+the better a network is at leveraging trust transitivity to create redundancy.
 Thus, the scaling of $\delta_h$ can be used to quantify a network's ability
 to withstand targeted attacks,
 even when the exact trust radius $h$ is unknown.
@@ -682,8 +686,11 @@ Once we have determined a network's effective redundancy,
 we can apply redundancy-based fault tolerance techniques,
 by sending multiple copies of a message
 ({\em concurrent multipath routing}).
+Having found the effective redundancy between two nodes,
+we can simplify our model, replacing independent paths through the
+complex network with direct channels between the endpoints.
 We model our sender (Alice) and receiver (Bob) as
-communicating over a direct link with $\delta_h$ redundant channels.
+communicating over $\delta_h$ direct and redundant virtual channels.
 The partial trust model allows us to make this simplifying assumption
 for analyzing a fault tolerance scheme,
 but implementing such a scheme will require a method for constructing
@@ -693,21 +700,24 @@ For now, we concern ourselves with the question:
 given that the network provides $\delta_h$ redundant channels between
 Alice and Bob,
 what is the probability that an adversary (Mal) causes an undetectable
-error?
+error after inducing a fixed number of faults?
 
-Let us first consider the case when
+Let us first consider the scenario in which
 Alice sends a message copy over each available channel.
+We can also assume that each message includes the number of messages sent,
+the full list of channels used, etc.,
+making that information available to Bob.
 When Bob receives the messages, there are several possibilities.
 If some of the messages are missing
-(Alice can include the number of messages as part of the message)
 or if some of the messages disagree,
 Bob knows that some of the messages were either blocked or altered,
-and he has successfully detected an error.
-Bob has not accepted any compromised information,
-and can request retransmission, so no failure has occurred.
-If Bob receives all of the messages, and they all agree,
-he accepts the message.
-If the messages agree, there are two possible cases.
+and he has successfully tolerated the fault(s).
+Bob can then take any of several actions:
+1. request retransmission;
+2. end receipts so Alice knows which paths have been compromised;
+or 3. attempt error correction using majority voting.
+If instead, Bob finds that all the messages are present and agree,
+there are two possible cases.
 The first case is that Mal has not compromised any of the messages,
 and Bob has correctly accepted them, so no failure has occurred.
 The second case is that Mal has compromised {\em all} of the messages,
@@ -757,7 +767,9 @@ as a function of $k$ and $l$.
 Equation (\ref{eq:pf_approx}) shows that while $p_f$
 depends on the fractions of
 redundant paths actually utilized $\alpha$ and compromised $\beta$,
-it decreases exponentially with the effective redundancy $\delta_h$.
+it decreases exponentially with the effective redundancy $\delta_h$
+(which we will later see increases exponentially in $h$ in the
+butterfly topology).
 This result is significant because $\delta_h$
 depends only on the network structure
 and the strength of trust transitivity.
@@ -799,22 +811,22 @@ effective redundancy that increases exponentially with the trust radius,
 allowing a very high level of adversarial fault tolerance.
 
 The structure of the butterfly network is highly constrained,
-making it most suitable for applications where network structure can be
-designed or dictated.
+making it most suitable for applications where portions of the
+network structure can be designed or dictated.
 Examples of such networks include:
 overlay networks \cite{lua_survey_2005, korzun_structured_2013},
 formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}.
-For critical security applications in particular,
-the novel level of adversarial fault tolerance offered by this scheme
-is highly desirable,
-even if it requires new approaches to designing communication
-and trust networks.
+However, when attack-tolerance is desired,
+it will always require control over network structure in order to
+eliminate single points of failure.
+The regular structure of the butterfly is not a limitation of our approach,
+but rather a reflection of the inherent difficulty of attack-tolerance.
 Lastly, we note that the partial trust model and multipath fault tolerance
 schemes of the previous section do not rely on any particular network
 topology or routing algorithm,
-and are not necessarily limited to such applications.
+and our choice of the butterfly topology is only one of many possible choices.
 
 \subsection{Butterfly Network Topology}
 
@@ -854,13 +866,13 @@ The wrap-around butterfly network is known to have several of the properties
 we desire for scalable, decentralized communication networks:
 \begin{description}
 \item[Vertex-transitivity:]
-Because the wraparound butterfly is vertex transitive,
+Because the wrap-around butterfly is vertex transitive,
 it is maximally decentralized;
 \item[Small-diameter:]
 For any two nodes, the length of the shortest path between them is
 $O(\log N)$, where N is the number of nodes in the network;
 \item[Sparsity:]
-With a constant degree of 4, the wraparound butterfly is extremely sparse,
+With a constant degree of 4, the wrap-around butterfly is extremely sparse,
 and can scale indefinitely without node degree becoming a limitation;
 \item [Redundancy:]
 Multiple paths exist between any two nodes.
@@ -880,6 +892,8 @@ The node $(l,z)$ is shown as the bit string $z$ with a square around the
 $l$th bit.
 ``Down'' edges increment $l$, leaving $z$ unchanged,
 while ``down-right'' edges increment $l$ and invert the $l$th bit of $z$.
+In the wrap-around variant, the nodes with maximum $l$ have down and down-right
+edges to the nodes with $l=0$.
 \label{fig:butterfly}
 }
 \end{figure}
@@ -903,27 +917,36 @@ level until the destination node is reached.
 
 \subsection{Multipath Routing Algorithm}
 
-We now present a routing algorithm to construct multiple independent paths
-between two nodes in a butterfly network.
-Independence requires that routes between two nodes $v$ and $w$ have no nodes
-in common, unless those nodes are less than distance $h$ from either $v$ or $w$.
-Informally, the algorithm achieves this by using the first $h$ hops to
-reach as many distinct nodes as possible,
-then routing from each of those to a distinct intermediary node,
-and finally routing from the intermediary to the destination.
-By ensuring that the place-within-level differs for all paths
-(outside of the trusted neighborhoods of $v$ and $w$)
-the algorithm guaranatees independence.
+We now present a routing algorithm to construct $2^h$ independent paths
+between two nodes in a butterfly network,
+where $h$ is the trust radius under the partial trust model.
+Informally, the algorithm sends each message to a distinct node on Alice's
+trust boundary, then to a distinct intermediate node in the untrusted region,
+then to a distinct node on Bob's trust boundary, and finally to Bob.
+The intermediate nodes are in a sense "far" from each other and ensure that
+no two paths overlap in the untrusted region.
+Each path can be parameterized by a single integer $s$, which identifies
+the specific node on Alice's trust boundary
+(or equivalentely a node on Bob's trust boundary, or the untrusted intermdiate).
+
+The algorithm guarantees paths are independent by ensuring that
+(outside the trusted neighborhoods)
+they only include
+nodes that match the path parameter $s$ at certain indexes in their
+place-within-level.
+Since each path has a unique parameter $s$,
+its set of untrusted nodes is disjoint from all other paths.
 As with the unipath routing algorithm,
-each of the multiple paths proceed using down and down-right edges,
+each of the multiple paths proceed from a source $v$ to a destination $u$
+using down and down-right edges,
 cycling through levels one at a time.
 However, we cycle through the levels twice, once to route from $v$ to a
 particular path's intermediary node,
 and again to route from the intermediary to $w$.
-In the first cycle, path independence is guaranteed by ensuring that
-all paths differ in the first $h$ bits of the place-within-level.
-Similarly, in the second cycle,
-independence is guaranteed by ensuring that all paths differ in the
+In the first cycle (stages 1--4), path independence is guaranteed by ensuring that
+all nodes match the path parameter $s$ in the first $h$ bits of the place-within-level.
+Similarly, in the second cycle (stages 5--7),
+independence is guaranteed by ensuring that all paths match $s$ in the
 $h$ bits of the place-within-level preceding the destination index
 (see Figure \ref{fig:route-overview}).
 
@@ -1106,7 +1129,7 @@ and $w = (6, 0110111_2)$.
 }
 
 We now begin the formal specification of our multipath routing scheme for the
-wraparound butterfly network.
+wrap-around butterfly network.
 Utilizing vertex transitivity, we label the source node as
 $(l^{(0)}, z^{(0)}) = (0, 0)$ and denote the destination node as $w = (l_w, z_w)$,
 without loss of generality.
@@ -1200,13 +1223,12 @@ After this stage, $v^{(m + l_w)} = w$ and routing is complete.
 \end{description}
 
 \begin{theorem}
-Given an $m$-bit wraparound butterfly network ($m \geq 0$),
-and a trust radius $h \geq 1$,
-for all node pairs $(v, w)$,
-if there exists a node $u$ that belongs to
-two distinct routes $v^{(\cdot)}_s$ and $v^{(\cdot)}_{s^\prime}$
-($s \neq s^\prime$),
-it implies that $u \in T_h(v) \cup T_h(w)$.
+Given an $m$-bit wrap-around butterfly network ($m > 1$),
+and a radius $h$ ($1 \leq h \leq \left\lfloor \frac{m}{2} \right\rfloor$),
+for all node pairs $(v, w)$ such that $d(v,w) \geq 2h$,
+there exist $2^h$ paths $v_s$ ($0 \le s < 2^h$) from
+$v$ to $w$ such that
+$s \neq s^\prime \implies v_s \cap v_{s^\prime} \subset T_h(u) \cup T_h(v)$.
 \end{theorem}
 \begin{proof}
 Nodes from two paths can only coincide if their levels are the same.
@@ -1233,7 +1255,7 @@ eliminating the last possible collision.
 \end{proof}
 
 Thus, assuming the partial trust model with trust transitive
-for $h$ hops, we can construct $2^h$ paths on a wraparound butterfly topology
+for $h$ hops, we can construct $2^h$ paths on a wrap-around butterfly topology
 which do not intersect outside the trusted neighborhoods of the source and
 destination.
 Note that the node sequence $v_s^{(t)}$ can be calculated entirely
