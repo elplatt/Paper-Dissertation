@@ -137,14 +137,14 @@ they are potentially vulnerable to non-technological
 (i.e., coercive) attacks,
 suggesting the importance of a structural approach to attack-tolerance.
 We show how the assumption of partial trust transitivity,
-while more realistic than the assumption used by webs of trust,
+while more realistic than the assumption underlying webs of trust,
 can be used to quantify the effective redundancy of a network
 as a function of trust transitivity.
 We also prove that the effective redundancy of the wrap-around butterfly topology
 increases exponentially with trust transitivity and
 describe a novel concurrent multipath routing algorithm for constructing
 paths to utilize that redundancy.
-When network structure can be dictated
+When portions of network structure can be dictated
 our results can be used to create scalable,
 attack-tolerant infrastructures.
 More generally, our results provide a theoretical formalism for evaluating the effects
@@ -207,7 +207,7 @@ Decentralization}
 \epigraph{The Net interprets censorship as damage and routes around it.}{\textit{--John Gilmore} \cite{elmer-dewitt_first_1993}}
 
 Much of the world's infrastructure is networked: power grids,
-cellular networks, raods, and of course, the Internet.
+cellular networks, roads, and of course, the Internet.
 As with any critical infrastructure, the cost of failures can be
 immense, so methods for tolerating various kind of faults within networks are an
 important and ongoing area of research
@@ -253,13 +253,14 @@ their private SSL keys to the FBI \cite{poulsen_edward_2013}.
 Rather than complying,
 Lavabit ceased operations
 in order to protect their users from surveillance.
-While originally intended as surveillance,
-this action effectively became an act of censorship.
-In this case, the attack was again successful due to a highly centralized
+Once again, the attack was successful due to a highly centralized
 architecture:
 SSL keys under control of a single entity, in a single legal jurisdiction.
-It is also important to note that there was no technological failure,
-the attack was achieved through coercion.
+While originally intended as surveillance,
+this action effectively became an act of censorship.
+It is also important to note that while Lavabit's cryptography worked as intended,
+the attack was still successful because the system was
+vulnerable to non-technical coercion.
 So we see that such vulnerabilities are not limited to any one system or protocol,
 but result from centralized structure itself.
 
@@ -303,7 +304,7 @@ We assume that some nodes in the network may be compromised by an attacker
 We also assume that Mal is an adversary of Alice specifically and targets
 nodes strategically with the goal of interfering with Alice's communications
 (rather than disrupting the network as a whole).
-This assumption arises because scalable network architectures can be made
+This assumption applies to scalable network architectures that can be made
 large enough that an attacker must focus their resources in order to have
 a significant effect.
 Compromised nodes may behave incorrectly by blocking, altering,
@@ -363,7 +364,7 @@ For example, a single server might be replaced by a distributed network of serve
 each with different ownership, physical location, and legal jurisdiction,
 without placing any unrealistic constraints on the clients connecting to
 those servers.
-However, there may be ways to achieve improved attack-tolerance from architectures
+Additionally, there may be ways to achieve improved attack-tolerance from architectures
 more flexible than the butterfly, which is a potential area for future work.
 
 We begin by describing how fault tolerance techniques can be adapted and
@@ -402,7 +403,7 @@ Our main contributions are:
 \item{
 We propose a novel method for extending standard fault tolerance techniques to
 {\em adversarial} faults in {\em complex networks}.
-We do so by modelling redundant independent paths
+We do so by modeling redundant independent paths
 with partial trust transitivity as a single virtual channel,
 and show that the probability of detecting adversarial faults
 approaches 1 exponentially with the number of paths;
@@ -421,7 +422,7 @@ Section \ref{sec-ft} describes adversarial fault tolerance on
 structured networks.
 Section \ref{sec-butterfly} describes the concurrent multipath routing
 algorithm for the butterfly network topology
-Section \ref{sec-discussion} discusses the our results.
+Section \ref{sec-discussion} discusses the results.
 And Section \ref{sec-conclusion} concludes.
 
 \section{Background and Related Work}
@@ -457,9 +458,8 @@ to impersonate a target
 Other work has shown that identifying independent paths in arbitrary networks
 is NP-hard and provided approximation algorithms
 \cite{reiter_resilient_1998}.
-Our work complements these by introducing the partial trust assumption and
-explicitly quantifying its relationship to network structure and adversarial
-fault tolerance.
+Our work complements these by introducing the partial trust assumption
+extending the focus beyond authentication.
 When network topology can be controlled, we sidestep the NP-hard problem of finding
 independent paths on arbitrary networks by using the mathematical structure of
 the butterfly topology to construct provably independent paths.
@@ -549,11 +549,11 @@ Our proposed routing algorithm makes use of a
 Structured networks have been a popular tool in parallel processing
 architectures \cite{kshemkalyani_distributed_2008}.
 More recently, peer-to-peer systems based on distributed hash tables have used
-structured ``overlay'' networks to map table keys to local TCP/IP routes
+structured {\em overlay networks} to map table keys to local TCP/IP routes
 \cite{lua_survey_2005,korzun_structured_2013}.
 Such networks can be designed to have favorable structural and routing
 properties,
-which can be used to to guarantee attack-tolerance properties.
+which can be used to to improve attack-tolerance.
 
 \section{Trust Networks and Fault Tolerance}
 \label{sec-ft}
@@ -595,14 +595,14 @@ in the network
 reduces the probability that a node can resist compromise exponentially.
 Such a situation could occur if nodes more distant from Alice are
 more favorably disposed to Alice's adversary, more likely to cooperate with that
-adversary, and less likely to take proactive security measures against that
+adversary, or less likely to take proactive security measures against that
 adversary.
 The above model can be further
 approximated by assuming that nodes up to some fixed number
 of hops cannot be compromised, and that those beyond can.
 This simplified version is still more realistic than infinite transitivity
 and will be convenient for proving our results.
-We now proceed to define it formally.
+We now proceed to define our model formally.
 
 We define the {\em partial trust model} on
 an undirected graph $G = (V,E)$,
@@ -667,7 +667,7 @@ an indication that the network is decentralized.
 The efrective redundancy of the entire graph can be characterized by the minimum over
 all vertex pairs:
 \beq
-\delta_h(V) \equiv \min_{v,w \in V} \delta_{v,w,h}.
+\delta_h(G) \equiv \min_{v,w \in V} \delta_{v,w,h}.
 \eeq
 Thus, for any pair of nodes in the network, at least $\delta_h$ independent,
 redundant paths can be constructed between them.
@@ -754,14 +754,16 @@ In a more sophisticated multipath fault tolerance scheme,
 Alice randomly chooses $k \leq \delta_h$ channels and sends a copy of
 her message on each.
 We assume that Mal is capable of compromising $l \leq \delta_h$ channels.
-Having full knowledge of the network,
-Mal's best strategy is to identify a minimum node cut in the network
-and compromise nodes from that cut.
-With this strategy, each compromised node reduces effective redundancy by one,
-effectively compromising one of the virtual channels between Alice and Bob.
 Since Alice chooses channels randomly,
 all channels are equally likely to contain a message,
 so Mal can do no better than also choosing randomly.
+We can also return to the full network setting by noting that each of the
+$\delta_h$ independent paths in the network can serve as independent channels
+between Alice and Bob.
+Mal's best strategy is now to identify a minimum node cut in the network
+and randomly compromise nodes from that cut.
+With this strategy, each compromised node reduces effective redundancy by one,
+equivalent to compromising one of the channels between Alice and Bob.
 If $k > l$, at least one message will get through uncompromised and all
 errors are detectable.
 Otherwise, the probability of Mal producing an undetectable error is
@@ -794,14 +796,15 @@ butterfly topology).
 This result is significant because $\delta_h$
 depends only on the network structure
 and the strength of trust transitivity.
-Thus, the scheme can be effective, even when the number of copies
-sent $k$ is a small fraction of the effective redundancy.
+{\em Thus, the scheme can be effective, even when the number of copies
+sent $k$ is a small fraction of the effective redundancy}.
 In other words, this scheme exhibits a {\em stabilizing asymmetry}:
 senders can tolerate attacks from significantly more powerful
 adversaries,
 as long as the network structure provides large $\delta_h$.
 
-In order to derive the above results, we have assumed that Alice and all
+In order to derive the above results,
+we have assumed that Alice and all
 intermediary agents are able to identify specific,
 independent network paths that achieve the effective redundancy $\delta_h$.
 We now proceed to describe a routing algorithm for doing so in the special case
@@ -965,11 +968,11 @@ However, we cycle through the levels twice, once to route from $v$ to a
 particular path's intermediary node,
 and again to route from the intermediary to $w$.
 Each cycle is divided into stages,
-with different properties used to prove independence in different stages
+with different properties used to prove independence at each stage
 (see Figure \ref{fig:route-overview}).
-In the first cycle (stages 2--4), path independence is guaranteed by ensuring that
+In the first cycle (stages 1--4), path independence is guaranteed by ensuring that
 all nodes match the path parameter $s$ in the first $h$ bits of the place-within-level.
-Similarly, in the second cycle (stages 5--6),
+Similarly, in the second cycle (stages 5--7),
 independence is guaranteed by ensuring that all paths match $s$ in the
 $h$ bits of the place-within-level preceding the destination index.
 A full example is illustrated in Figure \ref{fig:routing}.
@@ -1320,16 +1323,16 @@ We have already discussed two such cases:
 Pakistan's inadvertant censorship of YouTube
 \cite{hunter_pakistan_2008}
 and the FBI's surveillance-turned-censorship of Lavabit
-\cite{poulsen_edward_2013}
+\cite{poulsen_edward_2013}.
 The reader may wonder how our methods could be employed in scenarios
 such as large-scale state-sponsored censorship.
 Censorship-resistant infrastructure often replaces central servers
 (e.g., the router in the 2008 YouTube incident) with multiple servers across
 the world, synchronized through consensus protocols.
-The {\em directory authorities} used by the Tor
-\cite{dingledine_tor:_2004} network are one example.
+The {\em directory authorities} used by the Tor project
+\cite{dingledine_tor:_2004} are one example.
 However, the size of such authority networks is often limited by the number of
-trust relationships (degree) each node can maintain, and the inherent insecurity of
+trusted relationships (degree) each node can maintain, and the inherent insecurity of
 extending transitive trust to an ever-larger network.
 Our work fills a much-needed gap by quantifying the connection between network-structure,
 trust transitivity,
@@ -1382,8 +1385,8 @@ In general, such groups would need to invest resources into vetting their neighb
 to establish trust, but there are scenarios in which the attack-tolerance
 requirement would justify that investment.
 It is also worth noting that because faulty paths can be identified in our scheme,
-it may at times be appropriate to assume mutual trust and revoke that relationship
-when it is violated.
+it may at times be appropriate to begin by assuming mutual trust and
+revoking that relationship if it is violated.
 Any entities dependent on the proper functioning of the network would have an incentive
 to resist attack in order to maintain their ability to participate.
 
