@@ -117,12 +117,12 @@ Daniel M. Romero \\
 \begin{abstract}
 Targeted attacks against network infrastructure are notoriously difficult
 to guard against.
-Much of the existing work on network fault-tolerance focuses on random faults and
-does not apply to adversarial faults (attacks).
 In the case of communication networks,
-targeted attacks can leave users vulnerable to
+such attacks can leave users vulnerable to
 censorship and surveillance,
 even when cryptography is used.
+Much of the existing work on network fault-tolerance focuses on random faults and
+does not apply to adversarial faults (attacks).
 Centralized networks have single points of failure by definition,
 leading to a growing popularity in decentralized architectures and protocols
 for greater fault-tolerance.
@@ -239,7 +239,7 @@ when a service provider in Pakistan advertised false routing information
 The action (known as a {\em black hole attack}) was intended to censor YouTube
 within Pakistan only, but resulted in a worldwide cascading failure.
 The action was initiated by government order in Pakistan,
-and spread beyond Pakistan when a single misconfigured router allowed the false
+and spread beyond Pakistan when a router misconfiguration allowed the false
 routing information to propagate globally.
 While the government order and router misconfiguration initiated the outage,
 it was the structure of the Internet's router network that allowed a fault in a
@@ -287,7 +287,7 @@ methods for analyzing structural vulnerabilities and for designing
 fault-tolerant networks are needed.
 This paper presents several contributions towards advancing those goals.
 While our motivation comes from the Internet router network and
-World Wide WEb,
+World Wide Web,
 our work is theoretical, focusing on abstract networks,
 and could potentially be applied to many different types of networks,
 whether made of physical wires, virtual tunnels,
@@ -303,6 +303,9 @@ We assume that some nodes in the network may be compromised by an attacker
 We also assume that Mal is an adversary of Alice specifically and targets
 nodes strategically with the goal of interfering with Alice's communications
 (rather than disrupting the network as a whole).
+This assumption arises because scalable network architectures can be made
+large enough that an attacker must focus their resources in order to have
+a significant effect.
 Compromised nodes may behave incorrectly by blocking, altering,
 or incorrectly routing messages.
 We assume that Mal has full knowledge of the network structure, but has
@@ -325,15 +328,20 @@ and refer to such paths as {\em partially trusted}.
 Under the above assumptions,
 we show how to evaluate the influence of network structure
 on attack-tolerance,
-how to constructed trusted channels from redundant partially trusted paths,
-and propose a method for achieving a high-level of attack-tolerance on
+how to use local trust and redundancy to achieve greater attack-tolerance
+when no single path is fully trusted,
+and propose a novel routing algorithm for constructing such paths on
 the butterfly network topology.
 The butterfly topology is popular in parallel processing
 \cite{kshemkalyani_distributed_2008} and
 peer-to-peer \cite{lua_survey_2005, korzun_structured_2013}
 applications, due to its regular structure, low degree, and high connectivity.
 
-The reader may wonder whether it is realistic or useful to assume control over
+It is important to note that the butterfly is a highly structured and constrained
+network topology,
+very different form those found in social networks and other
+self-organized networks.
+The reader may wonder whether it is realistic or useful to assume such control over
 the network structure.
 We have already seen that whenever a single point of failure exists in the network,
 there is a potential for an attacker to exploit it through coercion,
@@ -355,6 +363,8 @@ For example, a single server might be replaced by a distributed network of serve
 each with different ownership, physical location, and legal jurisdiction,
 without placing any unrealistic constraints on the clients connecting to
 those servers.
+However, there may be ways to achieve improved attack-tolerance from architectures
+more flexible than the butterfly, which is a potential area for future work.
 
 We begin by describing how fault tolerance techniques can be adapted and
 evaluated in a network setting with partial trust transitivity and
@@ -450,9 +460,9 @@ is NP-hard and provided approximation algorithms
 Our work complements these by introducing the partial trust assumption and
 explicitly quantifying its relationship to network structure and adversarial
 fault tolerance.
-As an alternative to the NP-hard task of finding independent paths on arbitrary
-networks, we provide a routing algorithm to efficiently construct independent
-paths on a the butterfly topology.
+When network topology can be controlled, we sidestep the NP-hard problem of finding
+independent paths on arbitrary networks by using the mathematical structure of
+the butterfly topology to construct provably independent paths.
 
 Many distributed consensus protocols (such as those used by cryptocurrencies)
 are designed to tolerate arbitrary or adversarial faults.
@@ -499,9 +509,6 @@ Unlike the above content-addressable networks, our proposal is purely network ba
 and does not require nodes to store data indefinitely.
 Our proposal also improves on the scalablity of Fiat and Saia's work,
 and does not rely on assumptions about existing social network structure.
-
-send redundant information
-over multiple paths when routing a message through a network,
 
 {\em Multipath routing} protocols identify multiple paths between
 source and destination
@@ -635,7 +642,7 @@ We refer to this set of nodes as the {\em untrusted region}.
 Our goal is to achieve fault tolerance through redundancy.
 In the network setting, redundnacy is achieved using
 {\em independent paths} \cite{reiter_resilient_1998},
-which no common points of failure.
+which have no common points of failure.
 Typically, it is assumed that paths must be disjoint in order to be
 independent.
 However, under the partial trust assumption, two non-disjoint paths
@@ -934,14 +941,14 @@ level until the destination node is reached.
 We now present a routing algorithm to construct $2^h$ independent paths
 between two nodes in a butterfly network,
 where $h$ is the trust radius under the partial trust model.
-Informally, the algorithm sends each message to a distinct node on Alice's
+Informally, Alice sends each message to a distinct node on her
 trust boundary, then to a distinct intermediate node in the untrusted region,
 then to a distinct node on Bob's trust boundary, and finally to Bob.
-The intermediate nodes are in a sense "far" from each other and ensure that
+The intermediate nodes are in a sense ``far'' from each other and ensure that
 no two paths overlap in the untrusted region.
 Each path can be parameterized by a single integer $s$, which identifies
 the specific node on Alice's trust boundary
-(or equivalentely a node on Bob's trust boundary, or the untrusted intermdiate).
+(or equivalentely the node on Bob's trust boundary, or the untrusted intermdiate).
 
 The algorithm guarantees paths are independent by ensuring that
 (outside the trusted neighborhoods)
@@ -957,12 +964,15 @@ cycling through levels one at a time.
 However, we cycle through the levels twice, once to route from $v$ to a
 particular path's intermediary node,
 and again to route from the intermediary to $w$.
-In the first cycle (stages 1--4), path independence is guaranteed by ensuring that
-all nodes match the path parameter $s$ in the first $h$ bits of the place-within-level.
-Similarly, in the second cycle (stages 5--7),
-independence is guaranteed by ensuring that all paths match $s$ in the
-$h$ bits of the place-within-level preceding the destination index
+Each cycle is divided into stages,
+with different properties used to prove independence in different stages
 (see Figure \ref{fig:route-overview}).
+In the first cycle (stages 2--4), path independence is guaranteed by ensuring that
+all nodes match the path parameter $s$ in the first $h$ bits of the place-within-level.
+Similarly, in the second cycle (stages 5--6),
+independence is guaranteed by ensuring that all paths match $s$ in the
+$h$ bits of the place-within-level preceding the destination index.
+A full example is illustrated in Figure \ref{fig:routing}.
 
 \afterpage{
 \begin{table}[h!]
@@ -1142,8 +1152,11 @@ and $w = (6, 0110111_2)$.
 \end{figure}
 }
 
+\subsubsection{Algorithm Specification}
+
 We now begin the formal specification of our multipath routing scheme for the
 wrap-around butterfly network.
+For convenience, the relevant variables are summarized in Table \ref{tab:routing}.
 Utilizing vertex transitivity, we label the source node as
 $(l^{(0)}, z^{(0)}) = (0, 0)$ and denote the destination node as $w = (l_w, z_w)$,
 without loss of generality.
@@ -1236,6 +1249,8 @@ After this stage, $v^{(m + l_w)} = w$ and routing is complete.
 }
 \end{description}
 
+\subsubsection{Proof of Path Independence}
+
 \begin{theorem}
 Given an $m$-bit wrap-around butterfly network ($m > 1$),
 and a radius $h$ ($1 \leq h \leq \left\lfloor \frac{m}{2} \right\rfloor$),
@@ -1312,7 +1327,7 @@ Censorship-resistant infrastructure often replaces central servers
 (e.g., the router in the 2008 YouTube incident) with multiple servers across
 the world, synchronized through consensus protocols.
 The {\em directory authorities} used by the Tor
-\cite{dingledine_tor_2004} network are one example.
+\cite{dingledine_tor:_2004} network are one example.
 However, the size of such authority networks is often limited by the number of
 trust relationships (degree) each node can maintain, and the inherent insecurity of
 extending transitive trust to an ever-larger network.
