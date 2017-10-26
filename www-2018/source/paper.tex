@@ -74,7 +74,6 @@
 
 
 \begin{abstract}
-
 It is desirable for critical large-scale communication networks
 such as the internet to be resilient against any types of disruption
 \cite{sterbenz_resilience_2010}.
@@ -84,66 +83,44 @@ to the detriment of free expression and free association
 \cite{}.
 Self-organized networks such as the internet's router network typically have
 heavy-tailed degree distributions
-/cite{barabasi_scale-free_2009},
-making them resilent against random faults,
+\cite{barabasi_scale-free_2009},
+making them resilient against random faults,
 but highly vulnerable to targeted attacks against high-centrality nodes
 \cite{albert_error_2000}.
 Cryptographic solutions fail to address the underlying topological problem,
 and remain vulnerable to man-in-the-middle attacks
 \cite{nayak_different_2010}
 and coercion
-\cite{gruel_caveat_2013}.
-
-
-
-1 Main result
+\cite{grewal_caveat_2013}.
+Coercion-resistant, topological approaches to attack tolerance are needed
+to address the current vulnerability of communications infrastructure to
+targeted censorship and surveillance.
 We present a novel concurrent multipath routing (CMR) algorithm for the wraparound
 butterfly network topology,
 as well as a highly attack-tolerant
-Structured Multipath Fault Tolerance (SMFT) architechture
-which incorporaes the butterfly CMR algorithm.
-
-2-3 Main result vs previous knowledge
-
-1-2 General context
-
-2-3 Broader perspective
-
-
-Targeted attacks against network infrastructure are notoriously difficult
-to guard against.
-In the case of communication networks,
-such attacks can leave users vulnerable to
-censorship and surveillance,
-even when cryptography is used.
-Much of the existing work on network fault-tolerance focuses on random faults and
-does not apply to adversarial faults (attacks).
-Centralized networks have single points of failure by definition,
-leading to a growing popularity in decentralized architectures and protocols
-for greater fault-tolerance.
-However, centralized network {\em structure} can arise even when {\em protocols} are
-decentralized.
-Despite their decentralized protocols,
-the Internet and World-Wide Web have
-been shown both theoretically and historically to be highly susceptible to
-attack, in part due to emergent structural centralization.
-When single points of failure exist,
-they are potentially vulnerable to non-technological
-(i.e., coercive) attacks,
-suggesting the importance of a structural approach to attack-tolerance.
-We show how the assumption of bounded trust transitivity,
-while more realistic than the assumption underlying webs of trust,
-can be used to quantify the effective redundancy of a network
-as a function of trust transitivity.
-We also prove that the effective redundancy of the wrap-around butterfly topology
-increases exponentially with trust transitivity and
-describe a novel concurrent multipath routing algorithm for constructing
-paths to utilize that redundancy.
-When portions of network structure can be dictated
-our results can be used to create scalable,
-attack-tolerant infrastructures.
-More generally, our results provide a theoretical formalism for evaluating the effects
-of network structure on adversarial fault-tolerance.
+Structured Multipath Fault Tolerance (SMFT) architecture
+which incorporates the butterfly CMR algorithm.
+Our architecture is the first theoretical demonstration of a
+coercion-resistant point-to-point communication architecture
+that does not require infinitely transitive trust.
+We also present for modeling attack-tolerance as a function of
+trust transitivity,
+and show how the internet's router network could be rewired for greater
+attack-tolerance.
+We identify a previously unexplored relationship between
+network topology, trust transitivity, and attack-tolerance,
+and provide a framework for further exploration of this relationship.
+Our results are the first we're aware of to demonstrate
+that large-scale communication networks can be
+designed to tolerate targeted attacks,
+including coercion and other non-technical attacks.
+Furthermore, if attack-tolerance requirements are strict enough to justify
+a high level of control over network topology, our results could be applied
+directly.
+More broadly, we hope that this work will serve as a starting point for the
+development of additional topology-based attack-tolerant
+communication architectures to guard
+against the dangers of censorship and surveillance.
 \end{abstract}
 
 %
