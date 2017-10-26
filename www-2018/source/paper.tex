@@ -8,6 +8,7 @@
 \usepackage{soul}
 \usepackage[framemethod=tikz]{mdframed}
 \usetikzlibrary{arrows,chains,decorations.pathreplacing}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
 
 \newcommand{\beq}{\begin{eqnarray}}
 \newcommand{\eeq}{\end{eqnarray}}
@@ -16,6 +17,8 @@
 \DeclareMathOperator{\wbf}{wBF}
 \newtheorem{theorem}{Theorem}
 
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
 
 % Copyright
 %\setcopyright{none}
@@ -48,27 +51,65 @@
     Towards Attack-Tolerant Networks:
     Concurrent Multipath Routing and the Butterfly Network}
 
-\author{Edward L. Platt}
-\affiliation{%
-  \institution{University of Michigan\\School of Information}
-  \city{Ann Arbor} 
-  \state{Michigan} 
-}
-\email{elplatt@umich.edu}
+%\author{Edward L. Platt}
+%\affiliation{%
+%  \institution{University of Michigan\\School of Information}
+%  \city{Ann Arbor} 
+%  \state{Michigan} 
+%}
+%\email{elplatt@umich.edu}
 
-\author{Daniel M. Romero}
-\affiliation{%
-  \institution{University of Michigan\\School of Information}
-  \city{Ann Arbor} 
-  \state{Michigan} 
-}
-\email{drom@umich.edu}
+%\author{Daniel M. Romero}
+%\affiliation{%
+%  \institution{University of Michigan\\School of Information}
+%  \city{Ann Arbor} 
+%  \state{Michigan} 
+%}
+%\email{drom@umich.edu}
+\author{Anonymized\\for\\blind review}
 
 % The default list of authors is too long for headers.
-\renewcommand{\shortauthors}{B. Trovato et al.}
+%\renewcommand{\shortauthors}{E.L. Platt and D.M. Romero.}
+\renewcommand{\shortauthors}{Anonymized for blind review}
 
 
 \begin{abstract}
+
+It is desirable for critical large-scale communication networks
+such as the internet to be resilient against any types of disruption
+\cite{sterbenz_resilience_2010}.
+Vulnerabilities in communication infrastructure can be used by
+state, corporate, and private actors to achieve censorship and surveillance,
+to the detriment of free expression and free association
+\cite{}.
+Self-organized networks such as the internet's router network typically have
+heavy-tailed degree distributions
+/cite{barabasi_scale-free_2009},
+making them resilent against random faults,
+but highly vulnerable to targeted attacks against high-centrality nodes
+\cite{albert_error_2000}.
+Cryptographic solutions fail to address the underlying topological problem,
+and remain vulnerable to man-in-the-middle attacks
+\cite{nayak_different_2010}
+and coercion
+\cite{gruel_caveat_2013}.
+
+
+
+1 Main result
+We present a novel concurrent multipath routing (CMR) algorithm for the wraparound
+butterfly network topology,
+as well as a highly attack-tolerant
+Structured Multipath Fault Tolerance (SMFT) architechture
+which incorporaes the butterfly CMR algorithm.
+
+2-3 Main result vs previous knowledge
+
+1-2 General context
+
+2-3 Broader perspective
+
+
 Targeted attacks against network infrastructure are notoriously difficult
 to guard against.
 In the case of communication networks,
@@ -90,7 +131,7 @@ When single points of failure exist,
 they are potentially vulnerable to non-technological
 (i.e., coercive) attacks,
 suggesting the importance of a structural approach to attack-tolerance.
-We show how the assumption of partial trust transitivity,
+We show how the assumption of bounded trust transitivity,
 while more realistic than the assumption underlying webs of trust,
 can be used to quantify the effective redundancy of a network
 as a function of trust transitivity.
@@ -150,6 +191,20 @@ Decentralization}
 \section{Introduction}
 
 \epigraph{The Net interprets censorship as damage and routes around it.}{\textit{--John Gilmore} \cite{elmer-dewitt_first_1993}}
+
+Is it possible for any large-scale communication network to resist targeted attacks?
+The internet was originally designed to withstand targeted (nuclear) attacks \cite{baran_distributed_1964},
+and the resilience of the internet has long been part of common wisdom \cite{elmer-dewitt_first_1993}.
+But 17 years after Albert et. al \cite{albert_error_2000}
+showed the internet's router network to be vulnerable to targeted attacks (vs. random faults),
+the fundamental problem remains unsolved.
+The ongoing vulnerability of the internet is evidenced by a long history of 
+censorship and surveillance incidents achieved by means of targeted attacks
+\cite{dainotti_analysis_2011}.
+In this paper, we present a theoretical infrastructure for networked communication,
+that tolerates not only random faults, but also targeted attacks.
+While not yet practical, our proposal is the first demonstration that
+attack-tolerant communication networks are even possible.
 
 Much of the world's infrastructure is networked: power grids,
 cellular networks, roads, and of course, the Internet.
@@ -268,8 +323,7 @@ number of hops.
 So only the beginning and end of a path between Alice and Bob is trusted
 against interference from Mal.
 We call this assumption
-{\em partial trust transitivity},
-and refer to such paths as {\em partially trusted}.
+{\em bounded trust transitivity}.
 
 Under the above assumptions,
 we show how to evaluate the influence of network structure
@@ -313,7 +367,7 @@ Additionally, there may be ways to achieve improved attack-tolerance from archit
 more flexible than the butterfly, which is a potential area for future work.
 
 We begin by describing how fault tolerance techniques can be adapted and
-evaluated in a network setting with partial trust transitivity and
+evaluated in a network setting with bounded trust transitivity and
 adversarial faults.
 Generally, faults in network paths can be correlated,
 preventing the application of standard fault tolerance techniques
@@ -349,13 +403,13 @@ Our main contributions are:
 We propose a novel method for extending standard fault tolerance techniques to
 {\em adversarial} faults in {\em complex networks}.
 We do so by modeling redundant independent paths
-with partial trust transitivity as a single virtual channel,
+with bounded trust transitivity as a single virtual channel,
 and show that the probability of detecting adversarial faults
 approaches 1 exponentially with the number of paths;
 }
-\item{We prove that the number of independent paths between two nodes
-in a wrap-around butterfly network with partial trust transitivity
-increases exponentially with the trust radius;
+\item{We prove that the number of $h$-internal vertex disjoint
+paths between two nodes in a wrap-around butterfly network
+increases exponentially with $h$;
 }
 \item{We present a scalable, efficient, and attack-tolerant concurrent
 multipath routing algorithm on the butterfly network topology.}
@@ -365,8 +419,9 @@ This paper is organized as follows.
 Section \ref{sec-related} reviews background and related work.
 Section \ref{sec-ft} describes adversarial fault tolerance on
 structured networks.
-Section \ref{sec-butterfly} describes the concurrent multipath routing
-algorithm for the butterfly network topology
+Section \ref{sec-butterfly} gives background on the butterfly network topology.
+Section \ref{sec-bf-routing} presents our concurrent multipath routing
+algorithm for the butterfly.
 Section \ref{sec-discussion} discusses the results.
 And Section \ref{sec-conclusion} concludes.
 
@@ -393,7 +448,7 @@ However, web of trust's assumption of infinite transitivity is unrealistic
 \cite{christianson_why_1997},
 and does not distinguish between paths of different lengths.
 Our work addresses both of these limitations by incorporating a more realistic
-assumption of partial transitivity.
+assumption of bounded trust transitivity.
 
 Previous work on incorporating network structure into
 trust models has focused on authentication
@@ -403,7 +458,7 @@ to impersonate a target
 Other work has shown that identifying independent paths in arbitrary networks
 is NP-hard and provided approximation algorithms
 \cite{reiter_resilient_1998}.
-Our work complements these by introducing the partial trust assumption
+Our work complements these by introducing the bounded trust transitivity assumption
 extending the focus beyond authentication.
 When network topology can be controlled, we sidestep the NP-hard problem of finding
 independent paths on arbitrary networks by using the mathematical structure of
@@ -500,6 +555,24 @@ Such networks can be designed to have favorable structural and routing
 properties,
 which can be used to to improve attack-tolerance.
 
+\begin{table*}[t!]
+\caption{Comparison of attack-tolerant network communication architectures.\label{tab:compare}}
+\begin{center}
+\begin{tabular}{l|ccccc}
+                              & Decentralized & Trust-based & Bounded-trust & Topological & Point-to-point \\
+\hline
+Public Key Infrastructure     &               & \cmark      & \cmark        &             & \cmark     \\
+Web of Trust                  & \cmark        & \cmark      &               &             & \cmark     \\
+Freenet                       & \cmark        & \cmark      & \cmark        &             &            \\
+Federated Byzantine Agreement & \cmark        & \cmark      & \cmark        &             & \cmark     \\
+Blockchain                    & \cmark        &             & \cmark        &             &            \\
+Fiat-Saia                     & \cmark        & \cmark      & \cmark        & \cmark      &            \\
+Structured Multipath FT       & \cmark        & \cmark      & \cmark        & \cmark      & \cmark     \\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
 \section{Trust Networks and Fault Tolerance}
 \label{sec-ft}
 
@@ -521,130 +594,6 @@ the system has still tolerated the fault because it has not accepted an error
 state.
 We are concerned in particular with {\em adversarial faults},
 which are chosen strategically to maximize the likelihood of a failure.
-
-\subsection{Partial Trust Model}
-
-A central question in large-scale, secure communication is this:
-how can two parties communicate reliably and securely
-when no direct trusted link exists between them?
-The commonly-used web of trust approach
-\cite{zimmermann_official_1995,ferguson_practical_2003}
-extends trust infinitely transitively:
-to friends of friends, and friends of friends of friends, and so on.
-However, the assumption of infinitely transitive trust is unrealistic
-\cite{christianson_why_1997},
-and does not allow for the analysis of the effects of network structure.
-
-An alternative assumption might be that each hop away from Alice in
-in the network
-reduces the probability that a node can resist compromise exponentially.
-Such a situation could occur if nodes more distant from Alice are
-more favorably disposed to Alice's adversary, more likely to cooperate with that
-adversary, or less likely to take proactive security measures against that
-adversary.
-The above model can be further
-approximated by assuming that nodes up to some fixed number
-of hops cannot be compromised, and that those beyond can.
-This simplified version is still more realistic than infinite transitivity
-and will be convenient for proving our results.
-We now proceed to define our model formally.
-
-We define the {\em partial trust model} on
-an undirected graph $G = (V,E)$,
-although the model can easily be extended to directed multigraphs.
-Vertices representing commiunicating agents,
-and with edges representing mutually trusted communication links.
-Let $v \in V$ be an arbitrary sender (Alice)
-and $w \in V$ be an arbitrary receiver (Bob).
-We assume the presence of an adversary (Mal) who knows the
-full structure of the network,
-and who can compromise a fixed number of nodes,
-gaining complete control of their behavior.
-We also assume that Mal is an adversary of Alice and/or Bob specifically,
-rather than the network as a whole.
-So Mal can compromise any node except for those trusted by Alice or Bob.
-We define a {\em trust radius} $h$ such that nodes $u$ and
-$u^\prime$ trust each other if their distance is less than $h$.
-For a given node $u$,
-we call the set of trusted nodes its
-{\em trusted neighborhood} $T_h(u)$,
-and all nodes at exactly distance $h$ the
-{\em trust boundary} $B_h(u)$:
-\beq
-T_h(u) &=& \left\{ u^\prime \mid d(u,u^\prime) < h \right\} \\
-B_h(u) &=& \left\{ u^\prime \mid d(u,u^\prime) = h \right\}.
-\eeq
-The trust boundary $B_h$ plays an important role because these nodes are not
-trusted by $u$,
-and if compromised can entirely isolate $u$ from the rest of the network.
-These trust assumptions imply that when Alice sends a message to Bob,
-Mal can only cause faults in the set of nodes outside both of their trusted
-neighborhoods: $V \setminus \left(T_h(v) \cup T_h(w)\right)$.
-We refer to this set of nodes as the {\em untrusted region}.
-
-\subsection{Effective Redundancy}
-
-Our goal is to achieve fault tolerance through redundancy.
-In the network setting, redundnacy is achieved using
-{\em independent paths} \cite{reiter_resilient_1998},
-which have no common points of failure.
-Typically, it is assumed that paths must be disjoint in order to be
-independent.
-However, under the partial trust assumption, two non-disjoint paths
-can still be independent as long as their intersection contains only trusted
-nodes,
-greatly increasing the level of redundancy available.
-Under the partial trust assumption, the available redundancy thus depends on
-both the network structure and the level of trust.
-
-We now quantify the {\em effective redundancy} between Alice and Bob
-when trust radius $h$ is assumed.
-This quantity, $\delta_{v,w,h}$ is exactly the max-flow/min-cut of
-the graph after Alice's and Bob's trusted neighborhoods have been
-collapsed into single source/sink vertices.
-Each trust boundary forms a cut of the network and places an upper bound on the
-min-cut:
-\beq
-\delta_{v,w,h} \leq \min\left( \mid B_h(v) \mid, \mid B_h(w) \mid \right).
-\eeq
-Equality holds when there are no bottlenecks within the untrusted region,
-an indication that the network is decentralized.
-The effective redundancy of the entire graph can be characterized by the minimum over
-all vertex pairs:
-\beq
-\delta_h(G) \equiv \min_{v,w \in V} \delta_{v,w,h}.
-\eeq
-Thus, for any pair of nodes in the network, at least $\delta_h$ independent,
-redundant paths can be constructed between them.
-$\delta_h$ is a purely structural network property,
-and places an upper bound on the effectiveness of any
-redundancy-based fault tolerance scheme.
-The more quickly $\delta_h$ grows with $h$,
-the better a network is at leveraging trust transitivity to create redundancy.
-Thus, the scaling of $\delta_h$ can be used to quantify a network's ability
-to withstand targeted attacks,
-even when the exact trust radius $h$ is unknown.
-
-\begin{figure}
-\centerline{\includegraphics[width=3in,height=2.08in]{fig-partial-trust}}
-\caption{
-Illustration of a trusted communication network and the network properties
-used by the {\em partial trust model}.
-Edges represent mutually trusted communication links.
-The sender (Alice, $v$) and receiver (Bob, $w$) trust all nodes
-less than the {\em trust radius} $h$ hops away.
-These nodes form their {\em trusted neighborhoods} $T_h(v)$ and $T_h(w)$.
-We assume that all faults occur in the remaining nodes: the
-{\em untrusted region}.
-The untrusted nodes in contact with the trusted neighborhoods for the
-{\em trust boundaries} $B_h(v)$ and $B_h(w)$,
-which (in the absence of central bottlenecks) determine the
-{\em effective redundancy} $\delta_h$ provided by the network.
-Alice and Bob can be modelled as connected by a direct link with
-at least $\delta_h$ redundant channels.
-}
-\label{fig:trust-source}
-\end{figure}
 
 \subsection{Multipath Fault Tolerance}
 
@@ -764,7 +713,131 @@ message copies and the number of adversarial faults.
 \label{fig:pfail}
 \end{figure}
 
-\section{Multipath Butterfly Routing}
+\subsection{Partial Trust Model}
+
+A central question in large-scale, secure communication is this:
+how can two parties communicate reliably and securely
+when no direct trusted link exists between them?
+The commonly-used web of trust approach
+\cite{zimmermann_official_1995,ferguson_practical_2003}
+extends trust infinitely transitively:
+to friends of friends, and friends of friends of friends, and so on.
+However, the assumption of infinitely transitive trust is unrealistic
+\cite{christianson_why_1997},
+and does not allow for the analysis of the effects of network structure.
+
+An alternative assumption might be that each hop away from Alice in
+in the network
+reduces the probability that a node can resist compromise exponentially.
+Such a situation could occur if nodes more distant from Alice are
+more favorably disposed to Alice's adversary, more likely to cooperate with that
+adversary, or less likely to take proactive security measures against that
+adversary.
+The above model can be further
+approximated by assuming that nodes up to some fixed number
+of hops cannot be compromised, and that those beyond can.
+This simplified version is still more realistic than infinite transitivity
+and will be convenient for proving our results.
+We now proceed to define our model formally.
+
+We define the {\em partial trust model} on
+an undirected graph $G = (V,E)$,
+although the model can easily be extended to directed multigraphs.
+Vertices representing commiunicating agents,
+and with edges representing mutually trusted communication links.
+Let $v \in V$ be an arbitrary sender (Alice)
+and $w \in V$ be an arbitrary receiver (Bob).
+We assume the presence of an adversary (Mal) who knows the
+full structure of the network,
+and who can compromise a fixed number of nodes,
+gaining complete control of their behavior.
+We also assume that Mal is an adversary of Alice and/or Bob specifically,
+rather than the network as a whole.
+So Mal can compromise any node except for those trusted by Alice or Bob.
+We define a {\em trust radius} $h$ such that nodes $u$ and
+$u^\prime$ trust each other if their distance is less than $h$.
+For a given node $u$,
+we call the set of trusted nodes its
+{\em trusted neighborhood} $T_h(u)$,
+and all nodes at exactly distance $h$ the
+{\em trust boundary} $B_h(u)$:
+\beq
+T_h(u) &=& \left\{ u^\prime \mid d(u,u^\prime) < h \right\} \\
+B_h(u) &=& \left\{ u^\prime \mid d(u,u^\prime) = h \right\}.
+\eeq
+The trust boundary $B_h$ plays an important role because these nodes are not
+trusted by $u$,
+and if compromised can entirely isolate $u$ from the rest of the network.
+These trust assumptions imply that when Alice sends a message to Bob,
+Mal can only cause faults in the set of nodes outside both of their trusted
+neighborhoods: $V \setminus \left(T_h(v) \cup T_h(w)\right)$.
+We refer to this set of nodes as the {\em untrusted region}.
+
+\subsection{Effective Redundancy}
+
+Our goal is to achieve fault tolerance through redundancy.
+In the network setting, redundnacy is achieved using
+{\em independent paths} \cite{reiter_resilient_1998},
+which have no common points of failure.
+Typically, it is assumed that paths must be disjoint in order to be
+independent.
+However, under the bounded trust transitivity assumption, two non-disjoint paths
+can still be independent as long as their intersection contains only trusted
+nodes,
+greatly increasing the level of redundancy available.
+Under the bounded trust transitivity assumption, the available redundancy thus depends on
+both the network structure and the level of trust.
+
+We now quantify the {\em effective redundancy} between Alice and Bob
+when trust radius $h$ is assumed.
+This quantity, $\delta_{v,w,h}$ is exactly the max-flow/min-cut of
+the graph after Alice's and Bob's trusted neighborhoods have been
+collapsed into single source/sink vertices.
+Each trust boundary forms a cut of the network and places an upper bound on the
+min-cut:
+\beq
+\delta_{v,w,h} \leq \min\left( \mid B_h(v) \mid, \mid B_h(w) \mid \right).
+\eeq
+Equality holds when there are no bottlenecks within the untrusted region,
+an indication that the network is decentralized.
+The effective redundancy of the entire graph can be characterized by the minimum over
+all vertex pairs:
+\beq
+\delta_h(G) \equiv \min_{v,w \in V} \delta_{v,w,h}.
+\eeq
+Thus, for any pair of nodes in the network, at least $\delta_h$ independent,
+redundant paths can be constructed between them.
+$\delta_h$ is a purely structural network property,
+and places an upper bound on the effectiveness of any
+redundancy-based fault tolerance scheme.
+The more quickly $\delta_h$ grows with $h$,
+the better a network is at leveraging trust transitivity to create redundancy.
+Thus, the scaling of $\delta_h$ can be used to quantify a network's ability
+to withstand targeted attacks,
+even when the exact trust radius $h$ is unknown.
+
+\begin{figure}
+\centerline{\includegraphics[width=3in,height=2.08in]{fig-partial-trust}}
+\caption{
+Illustration of a trusted communication network and the network properties
+used by the {\em partial trust model}.
+Edges represent mutually trusted communication links.
+The sender (Alice, $v$) and receiver (Bob, $w$) trust all nodes
+less than the {\em trust radius} $h$ hops away.
+These nodes form their {\em trusted neighborhoods} $T_h(v)$ and $T_h(w)$.
+We assume that all faults occur in the remaining nodes: the
+{\em untrusted region}.
+The untrusted nodes in contact with the trusted neighborhoods for the
+{\em trust boundaries} $B_h(v)$ and $B_h(w)$,
+which (in the absence of central bottlenecks) determine the
+{\em effective redundancy} $\delta_h$ provided by the network.
+Alice and Bob can be modelled as connected by a direct link with
+at least $\delta_h$ redundant channels.
+}
+\label{fig:trust-source}
+\end{figure}
+
+\section{The Butterfly Network Topology}
 \label{sec-butterfly}
 
 In previous sections, we showed that reliable communication across a network
@@ -883,6 +956,9 @@ After $m$ iterations of this, all levels have been visited
 and the place-within-level matches that of the destination.
 Simply following down (or up) edges will then increment (decrement) the
 level until the destination node is reached.
+
+\section{Multipath Butterfly Routing}
+\label{sec-bf-route}
 
 \subsection{Multipath Routing Algorithm}
 
@@ -1256,7 +1332,7 @@ structure and attack-tolerance.
 We have proposed a network-based scheme for {\em adversarial} fault tolerance on the
 butterfly topology,
 utilizing a novel concurrent multipath routing algorithm.
-We have also demonstrated how {\em partial trust transitivity},
+We have also demonstrated how {\em bounded trust transitivity},
 in addition to being more realistic than infinite transitivity,
 provides a theoretical foundation for
 quantitative analysis of the relationship between trust,
@@ -1361,7 +1437,7 @@ The effective redundancy, in the case of the butterfly topology,
 grows exponentially with the trust radius.
 Furthermore, a small increase in the number of messages sent can compensate
 for a large increase in the number of messages compromised by an adversary.
-We have also demonstrated how the assumption of partial trust
+We have also demonstrated how the assumption of bounded trust
 transitivity can enable a quantitative analysis of the
 relationships between network structure, trust, and attack-tolerance.
 These results are directly applicable to systems in which the link
@@ -1372,9 +1448,10 @@ on attack-tolerance.
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
-The authors would like to thank Tony Garnock-Jones, A. Frederick Dudley, and
-Nathaniel Bezanson for helpful conversations.
-This research was partly supported by the National Science Foundation under Grant No. IIS-1617820.
+Anonymized for blind review
+%The authors would like to thank Tony Garnock-Jones, A. Frederick Dudley, and
+%Nathaniel Bezanson for helpful conversations.
+%This research was partly supported by the National Science Foundation under Grant No. IIS-1617820.
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{paper} 
