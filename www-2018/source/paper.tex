@@ -262,7 +262,7 @@ we assume {\em bounded trust transitivity}.
 Under the above assumptions,
 we show how to evaluate the influence of network structure
 on attack-tolerance.
-We next present a structured multipath fault tolerance (SMFT) to extend
+We next present a structured multipath fault tolerance (SMFT) scheme to extend
 standard fault tolerance techniques to the case of adversarial faults in
 networks
 \cite{avizienis_basic_2004, von_neumann_probabilistic_1956}.
@@ -285,7 +285,7 @@ The reader may wonder whether it is realistic or useful to assume such control o
 the network structure.
 We have already seen that whenever a single point of failure exists in the network,
 there is a potential for an attacker to exploit it through coercion.
-So, {\em attack-tolerance cannot be achieved without the ability to influence
+So we claim that {\em attack-tolerance cannot be achieved without the ability to influence
 network structure}.
 Luckily, there are scenarios in which network topology can be dictated.
 Examples include overlay networks
@@ -309,20 +309,22 @@ Our main contributions are:
 We propose a novel structured multipath fault tolerance (SMFT) scheme
 for extending standard fault tolerance techniques to
 {\em adversarial} faults in {\em complex networks}.
-We do so by modeling redundant {\em independent paths}
-with {\em bounded trust transitivity} as a single virtual channel,
-and show that the probability of detecting adversarial faults
-approaches 1 exponentially with the number of paths;
+We do so by showing that the probability of detecting adversarial faults
+approaches 1 exponentially with the number of {\em independent paths},
+and that with $h$-degree {\em bounded trust transitivity},
+all $h$-internally vertex disjoint paths are independent.
 }
 \item{We prove that the number of $h$-internally vertex disjoint
 paths between two nodes in a wrap-around butterfly network
-increases exponentially with $h$,
-and thus that the number of independent paths in a network
-increases exponentially with the level of trust transitivity;
+is at least $2^h$,
+and present a scalable and efficient concurrent multipath routing (CMR) algorithm
+to find these paths,
+which can be combined with SMFT to achieve a high level of attack-tolerance.
 }
-\item{We present a scalable and efficient concurrent
-multipath routing (CMR) algorithm on the butterfly network topology,
-which can be combined with SMFT to achieve a high level of attack tolerance.}
+\item{We show that rewiring a snapshot of the internet's router network with
+edges from a butterfly network allows it to tolerate a higher number of failures
+without fragmenting, and increases the effective redundancy in the presence
+of a large number of adversarial faults.}
 \end{itemize}
 
 This paper is organized as follows.
@@ -331,7 +333,7 @@ Section \ref{sec-ft} describes adversarial fault tolerance on
 structured networks.
 Section \ref{sec-butterfly} gives background on the butterfly network topology.
 Section \ref{sec-bf-route} presents our concurrent multipath routing
-algorithm for the butterfly.
+algorithm for the butterfly network.
 Section \ref{sec-discussion} discusses the results.
 And Section \ref{sec-conclusion} concludes.
 
@@ -520,7 +522,7 @@ which are chosen strategically to maximize the likelihood of a failure.
 \subsection{Multipath Fault Tolerance}
 
 Standard fault tolerance methods use redundancy to detect and correct
-statistically indpendent faults.
+statistically independent faults.
 In complex networks however, faults can be correlated when,
 for example, two messages pass through the same faulty node.
 For now, let us assume our sender (Alice) and receiver (Bob) are connected
@@ -619,7 +621,7 @@ redundant channels and the number of adversarial faults.
 So far, we have assumed that Alice and Bob have access to some number
 $\delta$ of channels with statistically indpendent faults.
 However, in real communication architectures, direct links between all
-pairs of individuals not possible and messages must be routed through
+pairs of individuals are not possible and messages must be routed through
 a number of intermediate nodes.
 In an adversarial setting,
 the existence of intermediate nodes introduces two problems:
@@ -785,11 +787,9 @@ overlay networks \cite{lua_survey_2005, korzun_structured_2013},
 formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}.
-However, when attack-tolerance is desired,
-it will always require control over network structure in order to
-eliminate single points of failure.
-The regular structure of the butterfly is not a limitation of our approach,
-but rather a reflection of the inherent difficulty of attack-tolerance.
+More flexible architectures may be possible,
+but attack-tolerance will always require some level of influence over
+network structure in order to limit single points of failure.
 To address the case when the network cannot be fully controlled,
 we show how partially rewiring a snapshot of the internet's router
 network can greatly increase it's effective redundancy and
@@ -914,12 +914,15 @@ Even when a butterfly topology cannot be implemented perfectly,
 it can still increase the attack tolerance properties of a network.
 Here, we simulate targeted attacks against a snapshot of the internet's
 router network on January 2, 2000
-\cite{leskovec_graphs_2005}.
-However, we equate a subset of the nodes with the nodes of a 9-dimensional
-butterfly network and rewire a fraction of the edges to match the butterfly
-topology.
+\cite{leskovec_graphs_2005}, having 6493 nodes and 13914 edges.
 At each step of the simulation, betweenness centrality is recalculated and the
 most central node is removed.
+We also simulate attack on several rewired networks.
+We 1. generate edges corresponding to a 9-dimensional butterfly network between
+the 4608 highest-degree router nodes,
+2. choose a fraction $f$ of those edges at random,
+3. add those edges to the router network, and
+4. remove an equal number of the original edges at random.
 
 Our simulations show improved resistance to fragmentation and higher
 effective redundancy when even a fraction of edges have been rewired to
@@ -927,8 +930,8 @@ match the butterfly topology.
 While the original router network fragments when about 1\% of the nodes
 have been removed (Figure \ref{fig:diameter}),
 this number increases to 2\%
-with only 10% of the edges rewired to match the butterfly.
-With 90\% of the edges rewired,
+with only 10\% of the butterfly edges present.
+With 90\% of the butterfly edges present
 the network remains unfragmented beyond the failure of the 8\% most
 central nodes.
 The effective redundancy for varius values of trust transitivity $h$
@@ -937,9 +940,9 @@ The effective redundancy is calculated by collapsing nodes and edges within
 $h$ hops of source and destination into single nodes and finding the mincut
 between them,
 averaging over 150 source-destination pairs.
-For all but $h=0$,
-the original network has higher redundancy for a small fraction of
-node failures,
+For $h=0$, the rewired version has strictly higher redundancy.
+For $h>0$,
+the original network has higher redundancy when the number of failures is small,
 while the rewired network has higher redundancy beyond a crossover point.
 We interpret these results to suggest that even when a small number of
 highly central nodes have been removed from a heavy-tailed network,
@@ -954,7 +957,7 @@ at which point the rewired network offers higher effective redundancy.
 Simulation of targeted attacks against a snapshot of the internet's router
 network with a fraction of the edges rewired into a partial butterfly configuration.
 The original network fragments at about 1\%.
-With 90\% of the edges rewired,
+With 90\% of the butterfly edges present,
 the network remains unfragmented beyond the failure of the 8\% most
 central nodes.
 }
