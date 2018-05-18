@@ -102,9 +102,9 @@ non-technical attacks, without requiring infinitely transitive trust.
 To address cases where the network structure cannot be fully controlled,
 we demonstrate how a snapshot of the internet’s router network can be partially
 rewired for greater attack-tolerance.
-More broadly, we hope that this work will serve as a starting point for the
-development of additional topology-based attack-tolerant communication
-architectures to guard against the dangers of censorship and surveillance.
+%More broadly, we hope that this work will serve as a starting point for the
+%development of additional topology-based attack-tolerant communication
+%architectures to guard against the dangers of censorship and surveillance.
 \end{abstract}
 
 %
@@ -243,10 +243,8 @@ address the current vulnerability of communications infrastructure
 to censorship and surveillance.
 This paper presents several contributions towards advancing those goals.
 While our work is motivated by the network of internet routers,
-the results are theoretical,
-and can potentially be applied to many different types of networks,
-whether made of physical wires, virtual tunnels,
-or other types of links.
+the results are topological,
+and can potentially be applied to many different types of networks.
 
 We consider a setting in which a source node attempts to route a message
 to a target node, while an adversary attempts to block or intercept the message
@@ -400,8 +398,8 @@ two parties.
 Fiat and Saia described a scheme that combines the butterfly topology
 with expander graphs to create a highly censorship-resistant,
 content-addressable network \cite{fiat_censorship_2002},
-although this scheme does not scale well and is impractical due to a
-high level of data replication.
+although this scheme requires high levels of data replication and indefinite
+storage.
 Perhaps the most mature structural solution is the Freenet collaboration
 \cite{clarke_freenet:_2001}.
 Freenet uses secret sharing
@@ -423,7 +421,7 @@ and makes requirements about network topology explicit.
 source and destination
 in contrast to traditional {\em unipath} routing, which uses
 a single path.
-The special case of {\em concurrent} multipath routing uses mutliple paths
+The special case of {\em concurrent} multipath routing uses multiple paths
 simultaneously.
 Multipath routing has many applications, including reduced congestion,
 increased throughput, and more reliability
@@ -437,7 +435,7 @@ and some specifically protect against adversarial faults
 \cite{kohno_improvement_2012, khalil_unmask:_2010, lou_h-spread:_2006}.
 Most work on multipath routing has been motivated by applications related to
 wireless sensor networks (WSNs),
-and have thus focused on ad hoc, unstructured networks, often having a central
+and have thus focused on ad-hoc, unstructured networks, often having a central
 base station.
 The method of Liu et al.
 \cite{liu_secure_2012}
@@ -448,10 +446,6 @@ We have found very few examples of CMR applied to {\em adversarial}
 fault tolerance in the existing literature,
 and all have focused on ad-hoc wireless sensor networks, without attention
 to the role of network structure.
-The alogorithm we present for the butterfly topology complements existing work
-by addressing cases where links are not constrained by physical
-distance,
-and where network structure can be engineered for greater attack-tolerance.
 
 Our proposed routing algorithm makes use of a
 {\em structured network}, in which link structure is predetermined.
@@ -466,7 +460,7 @@ which can be used to to improve attack-tolerance.
 
 Our proposed architecture is differentiated from existing systems by several
 properties (Table \ref{tab:compare}).
-Decentralized architectures are more resistent to coercion
+Decentralized architectures are more resistant to coercion
 \cite{grewal_caveat_2013}
 and man-in-the-middle attacks \cite{nayak_different_2010}.
 Trust-based systems are more sustainable than proof-of-work.
@@ -526,7 +520,7 @@ statistically independent faults.
 In complex networks however, faults can be correlated when,
 for example, two messages pass through the same faulty node.
 For now, let us assume our sender (Alice) and receiver (Bob) are connected
-by $\delta$ direct channels, with indpendent errors.
+by $\delta$ direct channels, with independent errors.
 We will return to the question of constructing these channels in subsequent
 sections.
 For now, we concern ourselves with the question:
@@ -546,7 +540,7 @@ or if some of the messages disagree,
 Bob knows that some of the messages were either blocked or altered,
 and he has successfully tolerated the fault(s).
 Bob can then take any of several actions:
-1. request retransmission;
+1. request re-transmission;
 2. send receipts so Alice knows which paths have been compromised;
 or 3. attempt error correction using majority voting.
 If instead, Bob finds that all the messages are present and agree,
@@ -619,7 +613,7 @@ redundant channels and the number of adversarial faults.
 \subsection{Bounded Trust Model}
 
 So far, we have assumed that Alice and Bob have access to some number
-$\delta$ of channels with statistically indpendent faults.
+$\delta$ of channels with statistically independent faults.
 However, in real communication architectures, direct links between all
 pairs of individuals are not possible and messages must be routed through
 a number of intermediate nodes.
@@ -644,7 +638,7 @@ as it depends only on whether some path exists, not the number or quality of pat
 
 An alternative assumption might be that each hop away from Alice in
 in the network reduces the probability that a node can resist compromise
-by a multiplicatve constant.
+by a multiplicative constant.
 Such a situation could occur if nodes more distant from Alice are
 more favorably disposed to Alice's adversary, more likely to cooperate with that
 adversary, or less likely to take proactive security measures against that
@@ -658,7 +652,7 @@ We now proceed to define our model formally.
 We define the {\em bounded trust model} on
 an undirected graph $G = (V,E)$,
 although the model can easily be extended to directed multigraphs.
-Vertices representing commiunicating parties,
+Vertices representing communicating parties,
 with edges representing mutually trusted communication links.
 We define a {\em trust radius} $h$ such that nodes $v$ and
 $w$ trust each other if their distance is less than $h$.
@@ -681,7 +675,7 @@ We assume the presence of an adversary who knows the
 full structure of the network,
 and who can compromise a fixed number of nodes,
 gaining complete control of their behavior.
-We also assume that the adversary is specifically targeting communicaiton
+We also assume that the adversary is specifically targeting communication
 between $s$ and $t$ and
 can compromise any node except for those trusted by $s$ or $t$.
 Under these trust assumptions, adversarial faults can only occur
@@ -707,14 +701,14 @@ We define two paths with common endpoints
 to be {\em $h$-internally vertex disjoint}
 if all common vertices are less than distance $h$ from
 one of the endpoints.
-This condition holds if and only if two paths are indpendent
+This condition holds if and only if two paths are independent
 under the bounded trust model with radius $h$.
 
 When trust radius $h$ is assumed,
 the number of $h$-internally vertex disjoint paths between
 two nodes $s$ and $t$ represents the number of
 channels that can be constructed between them having
-statistically indpendent faults.
+statistically independent faults.
 We thus refer to this quantity as the 
 {\em effective redundancy} $\delta_{s,t,h}$.
 The effective redundancy can also be interpreted as the
@@ -763,7 +757,7 @@ as if they were directly connected by $\delta_h$ redundant channels.
 
 \subsection{Structured Multipath Fault Tolerance}
 
-Finding a maximal set of independent paths for an abitrary network is NP hard
+Finding a maximal set of independent paths for an arbitrary network is NP hard
 \cite{reiter_resilient_1998},
 posing a challenge for multipath fault tolerance.
 We propose side-stepping this problem by using structured networks,
@@ -776,7 +770,7 @@ network topology.
 \label{sec-butterfly}
 
 In order to implement structured multipath fault tolerance,
-we need a strucutred network topology with high effective redundancy.
+we need a structured network topology with high effective redundancy.
 In this paper, we apply SMFT to the butterfly network topology
 \cite{kshemkalyani_distributed_2008}.
 The structure of the butterfly network is highly constrained,
@@ -818,7 +812,7 @@ E_\rightarrow
 z \oplus 1_l \},
 \eeq
 where $\mathbb{Z}_m$ is the set of integers modulo $m$,
-$\oplus$ represents componentwise addition modulo 2,
+$\oplus$ represents component-wise addition modulo 2,
 and $1_l$ is a vector with a 1 in index $l$ and 0 elsewhere.
 Each node is associated with a level $l$ and an $m$-bit string $z$
 known as {\em the place-within-level}.
@@ -934,10 +928,10 @@ with only 10\% of the butterfly edges present.
 With 90\% of the butterfly edges present
 the network remains unfragmented beyond the failure of the 8\% most
 central nodes.
-The effective redundancy for varius values of trust transitivity $h$
+The effective redundancy for various values of trust transitivity $h$
 are shown in Figure \ref{fig:mincut}.
 The effective redundancy is calculated by collapsing nodes and edges within
-$h$ hops of source and destination into single nodes and finding the mincut
+$h$ hops of source and destination into single nodes and finding the min-cut
 between them,
 averaging over 150 source-destination pairs.
 For $h=0$, the rewired version has strictly higher redundancy.
@@ -977,7 +971,7 @@ The intermediate nodes are in a sense ``far'' from each other and ensure that
 no two paths overlap in the untrusted region.
 Each path can be parameterized by a single integer $s$, which identifies
 the specific node on Alice's trust boundary
-(or equivalentely the node on Bob's trust boundary, or the untrusted intermdiate).
+(or equivalently the node on Bob's trust boundary, or the untrusted intermediate).
 
 The algorithm guarantees paths are independent by ensuring that
 (outside the trusted neighborhoods)
@@ -1363,9 +1357,9 @@ which SMFT can help to ensure.
 In its current form, our work has several limitations.
 Most obviously, it requires complete control over the network structure.
 However, we have shown that even partially control over network structure can
-improve attack tolerance propeties.
+improve attack tolerance properties.
 Still a more flexible network structure is desirable.
-There is also the question of how to construct such a network without a centeral
+There is also the question of how to construct such a network without a central
 authority.
 This limitation may not be as severe as it seems,
 due to the nested structure of the butterfly network.
