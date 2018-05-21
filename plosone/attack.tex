@@ -405,9 +405,10 @@ We also assume that edges represent {\em direct trust},
 i.e., the belief that an adversary is unlikely to compromise a neighbor,
 as in the web of trust approach
 \cite{zimmermann_official_1995,richters_trust_2011}.
-The web of trust approach requires infinite trust transitivity in that
-for one node to trust another,
-at least one path of direct trusted edges must exist between them.
+The web of trust approach typically assumes infinite trust transitivity in that
+it is possible for one node to have some level of trust for another as long
+as they are connected by a path of directly trusted edges,
+regardless of the length of that path.
 The assumption of infinite transitivity is unrealistic
 \cite{christianson_why_1997},
 so we instead make a stricter assumption: {\em bounded trust transitivity},
