@@ -288,15 +288,22 @@ The internet was originally designed to withstand targeted (nuclear) attacks
 \cite{baran_distributed_1964},
 and the resilience of the internet has long been part of common wisdom
 \cite{elmer-dewitt_first_1993}.
-But 17 years after Albert et. al \cite{albert_error_2000}
-showed the internet's router network to be vulnerable to targeted attacks
-(vs. random faults), the fundamental problem remains unsolved.
+But 18 years after Albert et. al \cite{albert_error_2000}
+showed that the topology of the internet's router network
+makes it vulnerable to targeted attacks
+(vs. random faults), the fundamental problem of attack-tolerant network topology
+remains unsolved.
+Attack-tolerant topologies are desirable not only for the router network,
+but for any physical or virtual network where a compromised node puts
+communication at risk.
+For example, the network of verified keys in the public key infrastructure
+underlying secure http \cite{ellison_ten_2000},
+or the network of DNS nameservers.
 The ongoing vulnerability of the internet is evidenced by a long history of 
 censorship and surveillance incidents achieved by means of targeted attacks
 \cite{dainotti_analysis_2011}.
-In this paper, we present the first theoretical architecture
-for point-to-point networked communication,
-that tolerates not only random faults, but also targeted attacks,
+In this paper, we present the first theoretical network topology
+supporting attack-toloerant, point-to-point networked communication,
 without relying on infinitely transitive trust
 \cite{christianson_why_1997}.
 
@@ -311,6 +318,10 @@ often have important social implications.
 In particular, censorship and surveillance are often achieved
 by targeting central network locations and either blocking or capturing
 the information flowing through them.
+While cryptograpy can provide some protection against surveillance, it is
+vulnerable to {\em man-in-the-middle} attacks \cite{nayak_different_2010},
+and cannot overcome censorship when communication is blocked.
+In this paper, we instead consider a topological approach.
 The Internet's decentralized design was motivated
 by the need to withstand targeted attacks, such as nuclear strikes
 \cite{baran_distributed_1964}.
@@ -340,51 +351,69 @@ In 2008, YouTube suffered a worldwide outage for several hours
 when a service provider in Pakistan advertised false routing information
 \cite{hunter_pakistan_2008}.
 The action (known as a {\em black hole attack}) was intended to censor YouTube
-within Pakistan only, but resulted in a worldwide cascading failure.
-The action was initiated by government order in Pakistan,
-and spread beyond Pakistan when a router misconfiguration allowed the false
-routing information to propagate globally.
-While the government order and router misconfiguration initiated the outage,
-it was the structure of the Internet's router network that allowed a fault in a
-single router to propagate globally.
-And while the action was not an intentional attack against the global Internet,
+within Pakistan only, but resulted in a worldwide cascading failure
+when a router misconfiguration allowed the false routing information to
+propagate outside of Pakistan.
+This incident exemplifies the type of attack requiring a topological approach.
+First, the attack was {\em non-technological} (a government order),
+allowing the attacker to bypass any cryptographic or technology-based defenses.
+Second, the attack originated at a {\em single point of failure}
+(a misconfigured router).
+Third, the behavior of the compromised component (the router) cascaded
+through a {\em network} (the network of internet routers) because the correct
+behavior of other components depended on the correct behavior
+of the single point of failure.
+And while the action was not an intentional attack against the global internet,
 the ability of an attacker to succeed without even trying only highlights
 the internet's vulnerability to adversarial faults.
 
-In 2013, the Texas-based email provider Lavabit was ordered to disclose
+As another example, in 2013,
+the Texas-based email provider Lavabit was ordered to disclose
 their private SSL keys to the FBI \cite{poulsen_edward_2013}.
 Rather than complying,
 Lavabit ceased operations
 in order to protect their users from surveillance.
-Once again, the attack was successful due to a highly centralized
-architecture:
-SSL keys under control of a single entity, in a single legal jurisdiction.
+Once again, the attack was non-technical.
+And again, the attack was on a single point of failure:
+Lavabit's web server and that server's TLS/SSL keys.
+In this case, the affected network was the
+internet's public key infrastructure.
+With the private keys, an attacker would be able to intercept and
+surveil traffic because the issuing certificate authority (and any
+users trusting that authority) would incorrectly trust that they were
+communicating with Lavabit.
 While originally intended as surveillance,
 this action effectively became an act of censorship.
-It is also important to note that while Lavabit's cryptography worked as intended,
-the attack was still successful because the system was
-vulnerable to non-technical coercion.
 So we see that such vulnerabilities are not limited to any one system or protocol,
 but result from centralized structure itself.
 
-Coercion-resistant, topological approaches to attack tolerance are needed to
-address the current vulnerability of communications infrastructure
-to censorship and surveillance.
-This paper presents several contributions towards advancing those goals.
-While our work is motivated by the network of internet routers,
-the results are topological,
-and can potentially be applied to many different types of networks.
+This paper addresses the need for a theoretial understanding of network and
+redundancy-based approaches to attack tolerance.
+Our primary result is theoretical: an algorithm for constructing highly redundant
+paths in a particular network topology.
+While we motivate the need for such network topologies using examples such as
+the internet router network and webs of trust,
+we do not propoose that our algorithm as a pracitcal solution for any of these
+examples.
+Rather, our result is a demonstration that such topological approaches to
+attack-tolerance are theoretically possible.
 
 We consider a setting in which a source node attempts to route a message
 to a target node, while an adversary attempts to block or intercept the message
 by compromising a number of intermediate nodes.
-We also assume that the source and destination nodes trust their neighbors
-i.e., that the adversary is unable to compromise them,
+We also assume that edges represent {\em direct trust},
+i.e., the belief that an adversary is unlikely to compromise a neighbor,
 as in the web of trust approach
-\cite{zimmermann_official_1995,ferguson_practical_2003}.
-Unlike the web of trust approach, which assumes that trust is infinitely
-transitive,
-we assume {\em bounded trust transitivity}.
+\cite{zimmermann_official_1995,richters_trust_2011}.
+The web of trust approach requires infinite trust transitivity in that
+for one node to trust another,
+at least one path of direct trusted edges must exist between them.
+The assumption of infinite transitivity is unrealistic
+\cite{christianson_why_1997},
+so we instead make a stricter assumption: {\em bounded trust transitivity},
+that trust transitivity can only be extended over a finite number of edges.
+Even with this more restrictive assumption, we show how trust can be established
+between two nodes even when no path of directly trusted edges exists between them.
 
 Under the above assumptions,
 we show how to evaluate the influence of network structure
@@ -475,7 +504,7 @@ suffer from a number of vulnerabilities
 which stems largely from the single points of failure inherent to
 centralization.
 The well-known and widely-used {\em web of trust} approach
-\cite{zimmermann_official_1995,ferguson_practical_2003}
+\cite{zimmermann_official_1995,richters_trust_2011}
 is a decentralized alternative.
 In a web of trust,
 individuals choose who they trust initially.
@@ -757,7 +786,7 @@ structure and bounded trust transitivity.
 Trust-based approaches to secure communication assume that some parties
 cannot be compromised.
 One common approach, the web of trust
-\cite{zimmermann_official_1995,ferguson_practical_2003},
+\cite{zimmermann_official_1995,richters_trust_2011},
 extends trust infinitely transitively:
 Alice trusts her friends, as well as her friends' friends, and so on.
 However, the assumption of infinitely transitive trust is unrealistic
