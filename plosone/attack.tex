@@ -440,25 +440,36 @@ very different form those found in social networks and other
 self-organized networks.
 The reader may wonder whether it is realistic or useful to assume such control over
 the network structure.
-We have already seen that whenever a single point of failure exists in the network,
-there is a potential for an attacker to exploit it through coercion.
-So we claim that {\em attack-tolerance cannot be achieved without the ability to influence
+Regardless of implementation difficulty,
+we argue that {\em attack-tolerance cannot be achieved without the ability to influence
 network structure}.
-Luckily, there are scenarios in which network topology can be dictated.
-Examples include overlay networks
+Targeted attacks, by definition, target single points of failure.
+Attack tolerance can thus be achieved in two ways: 1. preventing failure at
+those points, or 2. preventing the existence of central points.
+Because individual points are always vulnerable to coercive, non-technological
+attacks, the former method is insufficient.
+We must instead rely on some control over topology to prevent the existence of
+single points of failure.
+The difficulty of achieving control over network topology can be mitigated by
+a number of approaches.
+Attack-tolerant networks might be sub-components of
+larger, less-constrained systems.
+For example, a single centralized server might be replaced by a distributed
+network of servers,
+each with different ownership, physical location, and legal jurisdiction,
+without placing any unrealistic constraints on the clients connecting to
+those servers.
+When attack tolerant topologies are nested (as in the case of the butterfly
+topology), multiple independent sub-components could be merged into larger
+ones over time.
+Real-world examples of structured neworks include: overlay networks
 \cite{lua_survey_2005, korzun_structured_2013},
 formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}.
 In general,
 {\em when the need for attack-tolerance is high enough to warrant investment
-in infrastructure, networks can be engineered and maintained as infrastructure}.
-It is also worth noting that attack-tolerant networks may be sub-components of
-larger, less-constrained systems.
-For example, a single server might be replaced by a distributed network of servers,
-each with different ownership, physical location, and legal jurisdiction,
-without placing any unrealistic constraints on the clients connecting to
-those servers.
+in infrastructure, topology can be engineered and maintained as infrastructure}.
 
 Our main contributions are:
 \begin{itemize}
@@ -466,10 +477,9 @@ Our main contributions are:
 We propose a novel structured multipath fault tolerance (SMFT) scheme
 for extending standard fault tolerance techniques to
 {\em adversarial} faults in {\em complex networks}.
-We do so by showing that the probability of detecting adversarial faults
-approaches 1 exponentially with the number of {\em independent paths},
-and that with $h$-degree {\em bounded trust transitivity},
-all $h$-internally vertex disjoint paths are independent.
+Assuming $h$-degree {\em bounded trust transitivity},
+We show that the probability of detecting adversarial faults
+$h$-internally vertex disjoint paths.
 }
 \item{We prove that the number of $h$-internally vertex disjoint
 paths between two nodes in a wrap-around butterfly network
@@ -478,8 +488,8 @@ and present a scalable and efficient concurrent multipath routing (CMR) algorith
 to find these paths,
 which can be combined with SMFT to achieve a high level of attack-tolerance.
 }
-\item{We show that rewiring a snapshot of the internet's router network with
-edges from a butterfly network allows it to tolerate a higher number of failures
+\item{We show that rewiring a the edges of the internet's router network to
+resemble a butterfly network allows it to tolerate a higher number of failures
 without fragmenting, and increases the effective redundancy in the presence
 of a large number of adversarial faults.}
 \end{itemize}
@@ -508,15 +518,14 @@ The well-known and widely-used {\em web of trust} approach
 \cite{zimmermann_official_1995,richters_trust_2011}
 is a decentralized alternative.
 In a web of trust,
-individuals choose who they trust initially.
-Trust is then extended to new individuals if they are vouched for by a
-currently-trusted individual.
+individuals can have {\em direct trust},
+as well as {\em indirect trust} for those trusted by someone directly trusted.
+Typically, this transitivity is extended to any number of hops,
+sometimes reducing trust by a multiplicative factor at each hop.
 Infinite trust transitivity is helpful for establishing a large group of
 trusted nodes, but unfortunately unrealistic
 \cite{christianson_why_1997}.
-Additionally, the web of trust approach
-does not distinguish between paths of different lengths.
-Our work addresses both of these limitations by requiring only
+Our work addresses this limitation by assuming only
 bounded trust transitivity.
 
 Previous work applying network topology to attack tolerance has
@@ -757,14 +766,17 @@ and the strength of trust transitivity.
 $k$ is a small fraction of the channels available}.
 In other words, this scheme exhibits a {\em stabilizing asymmetry:}
 senders can tolerate attacks from significantly more powerful
-adversaries,
-as long as the network provides large $\delta$.
+adversaries.
+Furthermore, this scheme requires only a small increase in network traffic
+as long as the network provides a large number of independent paths $\delta$.
 
 \begin{figure}[!h]
 \centerline{\includegraphics{fig-perror}}
 \caption{
 The probability of an undetectable error as a function of the number of
 redundant channels and the number of adversarial faults.
+A small increase in the number of utilized paths (network traffic)
+can compensate for a large increase in attacker power.
 }
 \label{fig:pfail}
 \end{figure}
