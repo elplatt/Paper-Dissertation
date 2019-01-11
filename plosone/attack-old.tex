@@ -173,7 +173,6 @@
 \usetikzlibrary{arrows,chains,decorations.pathreplacing}
 \usepackage{pifont} % http://ctan.org/pkg/pifont
 \usepackage{amsthm}
-\usepackage{float}
 
 %% Include all macros below
 
@@ -289,22 +288,15 @@ The internet was originally designed to withstand targeted (nuclear) attacks
 \cite{baran_distributed_1964},
 and the resilience of the internet has long been part of common wisdom
 \cite{elmer-dewitt_first_1993}.
-But 18 years after Albert et. al \cite{albert_error_2000}
-showed that the topology of the internet's router network
-makes it vulnerable to targeted attacks
-(vs. random faults), the fundamental problem of attack-tolerant network topology
-remains unsolved.
-Attack-tolerant topologies are desirable not only for the router network,
-but for any physical or virtual network where a compromised node puts
-communication at risk.
-For example, the network of verified keys in the public key infrastructure
-underlying secure http \cite{ellison_ten_2000},
-or the network of DNS nameservers.
+But 17 years after Albert et. al \cite{albert_error_2000}
+showed the internet's router network to be vulnerable to targeted attacks
+(vs. random faults), the fundamental problem remains unsolved.
 The ongoing vulnerability of the internet is evidenced by a long history of 
 censorship and surveillance incidents achieved by means of targeted attacks
 \cite{dainotti_analysis_2011}.
-In this paper, we present the first theoretical network topology
-supporting attack-toloerant, point-to-point networked communication,
+In this paper, we present the first theoretical architecture
+for point-to-point networked communication,
+that tolerates not only random faults, but also targeted attacks,
 without relying on infinitely transitive trust
 \cite{christianson_why_1997}.
 
@@ -319,10 +311,6 @@ often have important social implications.
 In particular, censorship and surveillance are often achieved
 by targeting central network locations and either blocking or capturing
 the information flowing through them.
-While cryptograpy can provide some protection against surveillance, it is
-vulnerable to {\em man-in-the-middle} attacks \cite{nayak_different_2010},
-and cannot overcome censorship when communication is blocked.
-In this paper, we instead consider a topological approach.
 The Internet's decentralized design was motivated
 by the need to withstand targeted attacks, such as nuclear strikes
 \cite{baran_distributed_1964}.
@@ -352,76 +340,51 @@ In 2008, YouTube suffered a worldwide outage for several hours
 when a service provider in Pakistan advertised false routing information
 \cite{hunter_pakistan_2008}.
 The action (known as a {\em black hole attack}) was intended to censor YouTube
-within Pakistan only, but resulted in a worldwide cascading failure
-when a router misconfiguration allowed the false routing information to
-propagate outside of Pakistan.
-This incident exemplifies the type of attack requiring a topological approach.
-First, the attack was {\em non-technological} (a government order),
-allowing the attacker to bypass any cryptographic or technology-based defenses.
-Second, the attack originated at a {\em single point of failure}
-(a misconfigured router).
-Third, the behavior of the compromised component (the router) cascaded
-through a {\em network} (the network of internet routers) because the correct
-behavior of other components depended on the correct behavior
-of the single point of failure.
-And while the action was not an intentional attack against the global internet,
+within Pakistan only, but resulted in a worldwide cascading failure.
+The action was initiated by government order in Pakistan,
+and spread beyond Pakistan when a router misconfiguration allowed the false
+routing information to propagate globally.
+While the government order and router misconfiguration initiated the outage,
+it was the structure of the Internet's router network that allowed a fault in a
+single router to propagate globally.
+And while the action was not an intentional attack against the global Internet,
 the ability of an attacker to succeed without even trying only highlights
 the internet's vulnerability to adversarial faults.
 
-As another example, in 2013,
-the Texas-based email provider Lavabit was ordered to disclose
+In 2013, the Texas-based email provider Lavabit was ordered to disclose
 their private SSL keys to the FBI \cite{poulsen_edward_2013}.
 Rather than complying,
 Lavabit ceased operations
 in order to protect their users from surveillance.
-Once again, the attack was non-technical.
-And again, the attack was on a single point of failure:
-Lavabit's web server and that server's TLS/SSL keys.
-In this case, the affected network was the
-internet's public key infrastructure.
-With the private keys, an attacker would be able to intercept and
-surveil traffic because the issuing certificate authority (and any
-users trusting that authority) would incorrectly trust that they were
-communicating with Lavabit.
+Once again, the attack was successful due to a highly centralized
+architecture:
+SSL keys under control of a single entity, in a single legal jurisdiction.
 While originally intended as surveillance,
 this action effectively became an act of censorship.
+It is also important to note that while Lavabit's cryptography worked as intended,
+the attack was still successful because the system was
+vulnerable to non-technical coercion.
 So we see that such vulnerabilities are not limited to any one system or protocol,
 but result from centralized structure itself.
 
-This paper addresses the need for a theoretial understanding of network and
-redundancy-based approaches to attack-tolerance.
-For the purpose of this paper, {\em attack-tolerance} refers to the ability of a pair of
-communicating nodes to detect,
-with high probability,
-when a message has been blocked or altered
-in the presence of adversarial faults.
-Our primary result is theoretical: an algorithm for constructing highly redundant
-paths in a particular network topology.
-While we motivate the need for such network topologies using examples such as
-the internet router network and webs of trust,
-we do not propose that our algorithm as a pracitcal solution for any of these
-examples.
-Rather, our result is a demonstration that such topological approaches to
-attack-tolerance are theoretically possible and suggest the importance
-of further theoretical and applied work.
+Coercion-resistant, topological approaches to attack tolerance are needed to
+address the current vulnerability of communications infrastructure
+to censorship and surveillance.
+This paper presents several contributions towards advancing those goals.
+While our work is motivated by the network of internet routers,
+the results are topological,
+and can potentially be applied to many different types of networks.
 
 We consider a setting in which a source node attempts to route a message
 to a target node, while an adversary attempts to block or intercept the message
 by compromising a number of intermediate nodes.
-We also assume that edges represent {\em direct trust},
-i.e., the belief that an adversary is unlikely to compromise a neighbor,
+We also assume that the source and destination nodes trust their neighbors
+i.e., that the adversary is unable to compromise them,
 as in the web of trust approach
-\cite{zimmermann_official_1995,richters_trust_2011}.
-The web of trust approach typically assumes infinite trust transitivity in that
-it is possible for one node to have some level of trust for another as long
-as they are connected by a path of directly trusted edges,
-regardless of the length of that path.
-The assumption of infinite transitivity is unrealistic
-\cite{christianson_why_1997},
-so we instead make a stricter assumption: {\em bounded trust transitivity},
-that trust transitivity can only be extended over a finite number of edges.
-Even with this more restrictive assumption, we show how trust can be established
-between two nodes even when no path of directly trusted edges exists between them.
+\cite{zimmermann_official_1995,ferguson_practical_2003}.
+Unlike the web of trust approach, which assumes that trust is infinitely
+transitive,
+we assume {\em bounded trust transitivity}.
 
 Under the above assumptions,
 we show how to evaluate the influence of network structure
@@ -447,36 +410,25 @@ very different form those found in social networks and other
 self-organized networks.
 The reader may wonder whether it is realistic or useful to assume such control over
 the network structure.
-Regardless of implementation difficulty,
-we argue that attack-tolerance cannot be achieved without the ability to influence
-network structure.
-Targeted attacks, by definition, target single points of failure.
-Attack tolerance can thus be achieved in two ways: 1. preventing failure at
-those points, or 2. preventing the existence of central points.
-Because individual points are always vulnerable to coercive, non-technological
-attacks, the former method is insufficient.
-We must instead rely on some control over topology to prevent the existence of
-single points of failure.
-The difficulty of achieving control over network topology can be mitigated by
-a number of approaches.
-Attack-tolerant networks might be sub-components of
-larger, less-constrained systems.
-For example, a single centralized server might be replaced by a distributed
-network of servers,
-each with different ownership, physical location, and legal jurisdiction,
-without placing any unrealistic constraints on the clients connecting to
-those servers.
-When attack tolerant topologies are nested (as in the case of the butterfly
-topology), multiple independent sub-components could be merged into larger
-ones over time.
-Real-world examples of structured neworks include: overlay networks
+We have already seen that whenever a single point of failure exists in the network,
+there is a potential for an attacker to exploit it through coercion.
+So we claim that {\em attack-tolerance cannot be achieved without the ability to influence
+network structure}.
+Luckily, there are scenarios in which network topology can be dictated.
+Examples include overlay networks
 \cite{lua_survey_2005, korzun_structured_2013},
 formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}.
 In general,
-when the need for attack-tolerance is high enough to warrant investment
-in infrastructure, topology can be engineered and maintained as infrastructure.
+{\em when the need for attack-tolerance is high enough to warrant investment
+in infrastructure, networks can be engineered and maintained as infrastructure}.
+It is also worth noting that attack-tolerant networks may be sub-components of
+larger, less-constrained systems.
+For example, a single server might be replaced by a distributed network of servers,
+each with different ownership, physical location, and legal jurisdiction,
+without placing any unrealistic constraints on the clients connecting to
+those servers.
 
 Our main contributions are:
 \begin{itemize}
@@ -484,19 +436,20 @@ Our main contributions are:
 We propose a novel structured multipath fault tolerance (SMFT) scheme
 for extending standard fault tolerance techniques to
 {\em adversarial} faults in {\em complex networks}.
-Assuming $h$-degree {\em bounded trust transitivity},
-We show that the probability of detecting adversarial faults
-$h$-internally vertex disjoint paths.
+We do so by showing that the probability of detecting adversarial faults
+approaches 1 exponentially with the number of {\em independent paths},
+and that with $h$-degree {\em bounded trust transitivity},
+all $h$-internally vertex disjoint paths are independent.
 }
 \item{We prove that the number of $h$-internally vertex disjoint
-paths between two nodes in a directed wrap-around butterfly network
-is exactly $2^h$,
+paths between two nodes in a wrap-around butterfly network
+is at least $2^h$,
 and present a scalable and efficient concurrent multipath routing (CMR) algorithm
 to find these paths,
 which can be combined with SMFT to achieve a high level of attack-tolerance.
 }
-\item{We show that rewiring a the edges of the internet's router network to
-resemble a butterfly network allows it to tolerate a higher number of failures
+\item{We show that rewiring a snapshot of the internet's router network with
+edges from a butterfly network allows it to tolerate a higher number of failures
 without fragmenting, and increases the effective redundancy in the presence
 of a large number of adversarial faults.}
 \end{itemize}
@@ -522,17 +475,18 @@ suffer from a number of vulnerabilities
 which stems largely from the single points of failure inherent to
 centralization.
 The well-known and widely-used {\em web of trust} approach
-\cite{zimmermann_official_1995,richters_trust_2011}
+\cite{zimmermann_official_1995,ferguson_practical_2003}
 is a decentralized alternative.
 In a web of trust,
-individuals can have {\em direct trust},
-as well as {\em indirect trust} for those trusted by someone directly trusted.
-Typically, this transitivity is extended to any number of hops,
-sometimes reducing trust by a multiplicative factor at each hop.
+individuals choose who they trust initially.
+Trust is then extended to new individuals if they are vouched for by a
+currently-trusted individual.
 Infinite trust transitivity is helpful for establishing a large group of
 trusted nodes, but unfortunately unrealistic
 \cite{christianson_why_1997}.
-Our work addresses this limitation by assuming only
+Additionally, the web of trust approach
+does not distinguish between paths of different lengths.
+Our work addresses both of these limitations by requiring only
 bounded trust transitivity.
 
 Previous work applying network topology to attack tolerance has
@@ -773,17 +727,14 @@ and the strength of trust transitivity.
 $k$ is a small fraction of the channels available}.
 In other words, this scheme exhibits a {\em stabilizing asymmetry:}
 senders can tolerate attacks from significantly more powerful
-adversaries.
-Furthermore, this scheme requires only a small increase in network traffic
-as long as the network provides a large number of independent paths $\delta$.
+adversaries,
+as long as the network provides large $\delta$.
 
-\begin{figure}[H]
-%\centerline{\includegraphics{fig-perror}}
+\begin{figure}[!h]
+\centerline{\includegraphics{fig-perror}}
 \caption{
 The probability of an undetectable error as a function of the number of
 redundant channels and the number of adversarial faults.
-A small increase in the number of utilized paths (network traffic)
-can compensate for a large increase in attacker power.
 }
 \label{fig:pfail}
 \end{figure}
@@ -806,23 +757,28 @@ structure and bounded trust transitivity.
 Trust-based approaches to secure communication assume that some parties
 cannot be compromised.
 One common approach, the web of trust
-\cite{zimmermann_official_1995,richters_trust_2011}.
-Alice has {\em direct trust} for some number of nodes.
-Alice has {\em indirect trust} for nodes separated by two or more hops of
-direct trust.
-Typically, this transitive trust is extended indefinitely,
-sometimes reduced by a multiplicative factor at each step.
+\cite{zimmermann_official_1995,ferguson_practical_2003},
+extends trust infinitely transitively:
+Alice trusts her friends, as well as her friends' friends, and so on.
 However, the assumption of infinitely transitive trust is unrealistic
 \cite{christianson_why_1997}.
 Furthermore, infinite trust transitivity obscures the importance of network structure,
 as it depends only on whether some path exists, not the number or quality of paths.
-We adopt a simpler, yet more realistic {\em bounded trust} assumption:
-that nodes up to some fixed number of hops cannot be compromised,
-and that those beyond can.
-This assumption will be convenient for proving our results,
-which we now proceed to define formally.
 
-We define the {\em bounded trust model} (Fig. \ref{fig:trust-source}) on
+An alternative assumption might be that each hop away from Alice in
+in the network reduces the probability that a node can resist compromise
+by a multiplicative constant.
+Such a situation could occur if nodes more distant from Alice are
+more favorably disposed to Alice's adversary, more likely to cooperate with that
+adversary, or less likely to take proactive security measures against that
+adversary.
+An even simpler version assumes that nodes up to some
+fixed number of hops cannot be compromised, and that those beyond can.
+This simplified version is still more realistic than infinite transitivity
+and will be convenient for proving our results.
+We now proceed to define our model formally.
+
+We define the {\em bounded trust model} on
 an undirected graph $G = (V,E)$,
 although the model can easily be extended to directed multigraphs.
 Vertices representing communicating parties,
@@ -841,28 +797,6 @@ B_h(v) &=& \left\{ w \mid d(v,w) = h \right\}.
 The trust boundary $B_h$ plays an important role because these nodes are not
 trusted by $u$,
 and if compromised can entirely isolate $v$ from the rest of the network.
-
-
-\begin{figure}[H]
-%\centerline{\includegraphics[width=4in,height=2.78in]{fig-partial-trust.pdf}}
-\caption{
-Illustration of a trusted communication network and the network properties
-used by the {\em bounded trust model}.
-Edges represent mutually trusted communication links.
-The sender (Alice, $s$) and receiver (Bob, $t$) trust all nodes
-less than the {\em trust radius} $h$ hops away.
-These nodes form their {\em trusted neighborhoods} $T_h(v)$ and $T_h(w)$.
-We assume that all faults occur in the remaining nodes: the
-{\em untrusted region}.
-The untrusted nodes in contact with the trusted neighborhoods for the
-{\em trust boundaries} $B_h(v)$ and $B_h(w)$,
-which (in the absence of central bottlenecks) determine the
-{\em effective redundancy} $\delta_h$ provided by the network.
-Alice and Bob can achieve the same level of attack-tolerance
-as if they were directly connected by $\delta_h$ redundant channels.
-}
-\label{fig:trust-source}
-\end{figure}
 
 Now let $s \in V$ be an arbitrary sender
 and $t \in V$ be an arbitrary receiver.
@@ -929,6 +863,27 @@ Thus, the scaling of $\delta_h$ can be used to quantify a network's ability
 to withstand targeted attacks,
 even when the exact trust radius $h$ is unknown.
 
+\begin{figure}
+\centerline{\includegraphics[width=4in,height=2.78in]{fig-partial-trust.pdf}}
+\caption{
+Illustration of a trusted communication network and the network properties
+used by the {\em bounded trust model}.
+Edges represent mutually trusted communication links.
+The sender (Alice, $s$) and receiver (Bob, $t$) trust all nodes
+less than the {\em trust radius} $h$ hops away.
+These nodes form their {\em trusted neighborhoods} $T_h(v)$ and $T_h(w)$.
+We assume that all faults occur in the remaining nodes: the
+{\em untrusted region}.
+The untrusted nodes in contact with the trusted neighborhoods for the
+{\em trust boundaries} $B_h(v)$ and $B_h(w)$,
+which (in the absence of central bottlenecks) determine the
+{\em effective redundancy} $\delta_h$ provided by the network.
+Alice and Bob can achieve the same level of attack-tolerance
+as if they were directly connected by $\delta_h$ redundant channels.
+}
+\label{fig:trust-source}
+\end{figure}
+
 \subsection*{Structured Multipath Fault Tolerance}
 
 Finding a maximal set of independent paths for an arbitrary network is NP hard
@@ -947,20 +902,21 @@ In order to implement structured multipath fault tolerance,
 we need a structured network topology with high effective redundancy.
 In this paper, we apply SMFT to the butterfly network topology
 \cite{kshemkalyani_distributed_2008}.
-The butterfly network is highly structured,
-making it most suitable for applications where portions of the network structure
-can be controlled or influenced.
-The butterfly network is also recursive, with larger versions composed out of
-multiple smaller versions,
-making it possible for independently organized
-attack-tolerant networks to merge into larger ones over time.
+The structure of the butterfly network is highly constrained,
+making it most suitable for applications where portions of the
+network structure can be designed or dictated.
+Examples of such networks include:
+overlay networks \cite{lua_survey_2005, korzun_structured_2013},
+formal organizations \cite{mohr_explaining_1982},
+government-regulated cellular networks \cite{walker_mass_2012},
+and call tree notification systems \cite{nickerson_thinking_2010}.
 More flexible architectures may be possible,
 but attack-tolerance will always require some level of influence over
 network structure in order to limit single points of failure.
 To address the case when the network cannot be fully controlled,
 we show how partially rewiring a snapshot of the internet's router
 network can greatly increase it's effective redundancy and
-attack-tolerance properties, without requiring additional edges.
+attack-tolerance properties.
 
 \subsection*{Butterfly Network Topology}
 
@@ -996,12 +952,12 @@ in a cycle of increasing level $l$.
 Down-right edges ($E_\rightarrow$) also link to a node of level $l + 1$,
 but one having the place-within-level equal to $z$ with the $l$th bit inverted.
 
-\begin{figure}[H]
+\begin{figure}[!h]
 \begin{center}
-%\includegraphics[height=3in]{fig-bf-route}
+\includegraphics[height=3in]{fig-bf-route}
 \end{center}
 \caption{
-A 3-dimensional wrap-around butterfly network.
+A 3-dimensional wraparound butterfly network.
 Note that the rightmost nodes are the same nodes as the leftmost,
 drawn twice for visual clarity.
 The highlighted nodes and edges show the path from node (0,000)
@@ -1012,7 +968,7 @@ to node (1,101).
 
 \begin{figure}[!h]
 \begin{center}
-%\includegraphics{fig-butterfly}
+\includegraphics{fig-butterfly}
 \end{center}
 \caption{
 Schematic illustration of the two types of edges in a directed butterfly
@@ -1035,8 +991,7 @@ Because the wrap-around butterfly is vertex transitive,
 it is maximally decentralized;
 \item[Small-diameter:]
 For any two nodes, the length of the shortest path between them is
-$O(\log N)$, where N is the number of nodes in the network
-(corresponding to low-latency in real-world terms);
+$O(\log N)$, where N is the number of nodes in the network;
 \item[Sparsity:]
 With a constant degree of 4, the wrap-around butterfly is extremely sparse,
 and can scale indefinitely without node degree becoming a limitation;
@@ -1074,8 +1029,6 @@ router network on January 2, 2000
 At each step of the simulation, betweenness centrality is recalculated and the
 most central node is removed.
 We also simulate attack on several rewired networks.
-The rewiring process alters the network structure to resemble a butterfly
-topology, without adding any additional edges.
 We 1. generate edges corresponding to a 9-dimensional butterfly network between
 the 4608 highest-degree router nodes,
 2. choose a fraction $f$ of those edges at random,
@@ -1109,24 +1062,21 @@ As larger hubs continue to be removed, the connectivity of the network
 decreases until the crossover point,
 at which point the rewired network offers higher effective redundancy.
 
-\begin{figure}[H]
-%\centerline{\includegraphics{fig-diameter}}
+\begin{figure}
+\centerline{\includegraphics{fig-diameter}}
 \caption{
 Simulation of targeted attacks against a snapshot of the internet's router
 network with a fraction of the edges rewired into a partial butterfly configuration.
-The original network fragments when the top 1\% of nodes are removed.
-With only 10\% of the butterfly edges present,
-this value doubles to 2\%.
-With 90\% of the edges rewired,
+The original network fragments at about 1\%.
+With 90\% of the butterfly edges present,
 the network remains unfragmented beyond the failure of the 8\% most
 central nodes.
-The rewiring scheme does not require adding any additional edges.
 }
 \label{fig:diameter}
 \end{figure}
 
-\begin{figure}[H]
-%\centerline{\includegraphics[width=5in,height=5in]{fig-mincut}}
+\begin{figure*}[h!]
+\centerline{\includegraphics[width=5in,height=5in]{fig-mincut}}
 \caption{
 Simulation of targeted attacks against a snapshot of the internet's router
 network with a fraction of the edges rewired into a partial butterfly configuration.
@@ -1135,7 +1085,7 @@ For $h>0$, the original network has higher effective redundancy up to a crossove
 after which the rewired network performs better.
 }
 \label{fig:mincut}
-\end{figure}
+\end{figure*}
 
 \section*{Multipath Butterfly Routing}
 \label{sec-bf-route}
@@ -1176,7 +1126,159 @@ independence is guaranteed by ensuring that all paths match $s$ in the
 $h$ bits of the place-within-level preceding the destination index.
 A full example is illustrated in Fig. \ref{fig:routing}.
 
-\begin{figure}[H]
+\begin{table}[h!]
+\caption{Butterfly Multipath Routing Variables\label{tab:routing}}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+NAME & VARIABLE \\\hline
+butterfly dimension & $m \in \mathbb{Z}_+$ \\\hline
+node level & $l \in \mathbb{Z} : 0 \leq l < m$ \\\hline
+node place within level & $z \in \mathbb{Z}_2^m$ \\\hline
+trust radius & $h \in \mathbb{Z} : 1 \leq h \leq \lfloor m/2 \rfloor$ \\\hline
+path index & $s \in \mathbb{Z}_2^h$ \\\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{figure}[h!]
+\begin{center}
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+                        ]
+\foreach \i in {0\ldots,{\ldots}0\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
+    \node[X] {\i};
+\draw[<->] ([yshift=1.5mm] A-1.north east) -- node[above=0.25mm] {$h$} ([yshift=1.5mm] A-1.north west);
+\draw[<->] ([yshift=1.5mm] A-2.north east) -- node[above=0.25mm] {$l_w - 2h$} ([yshift=1.5mm] A-2.north west);
+\draw[<->] ([yshift=1.5mm] A-3.north east) -- node[above=0.25mm] {$h$} ([yshift=1.5mm] A-3.north west);
+\draw[<->] ([yshift=1.5mm] A-4.north east) -- node[above=0.25mm] {$m - l_w$} ([yshift=1.5mm] A-4.north west);
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {\underline{Stage}} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick, fill=blue!20!white},
+                        ]
+\node[Y] {$s$};
+\foreach \i in {{\ldots}0\ldots,{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {1.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick, fill=blue!20!white},
+                        ]
+\foreach \i in {$s$}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {{\ldots}1\ldots};
+\foreach \i in {{\ldots}0\ldots,{\ldots}0}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {2.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick, fill=blue!20!white},
+                        ]
+\foreach \i in {$s$,{\ldots}1\ldots}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {$\tilde{s}$};
+\foreach \i in {{\ldots}0}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {3.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick, fill=blue!20!white},
+                        ]
+\foreach \i in {$s$,{\ldots}1\ldots,$\tilde{s}$}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {$z_{w,D}$};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {4.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick, fill=blue!20!white},
+                        ]
+\node[Y] {$z_{w,A}$};
+\foreach \i in {{\ldots}1\ldots,$\tilde{s}$,$z_{w,D}$}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {5.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick, fill=blue!20!white},
+                        ]
+\foreach \i in {$z_{w,A}$}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {$z_{w,B}$};
+\foreach \i in {$\tilde{s}$,$z_{w,D}$}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {6.} ( A-1.west);
+\end{tikzpicture}
+\\
+\begin{tikzpicture}[
+node distance=0pt,
+ start chain = A going right,
+    X/.style = {anchor=base, rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain},
+    Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=10ex, minimum height=3ex,
+                outer sep=0pt, on chain, thick, fill=blue!20!white},
+                        ]
+\foreach \i in {$z_{w,A}$,$z_{w,B}$}% <-- content of nodes
+    \node[X] {\i};
+\node[Y] {$z_{w,C}$};
+\foreach \i in {$z_{w,D}$}% <-- content of nodes
+    \node[X] {\i};
+\draw ( A-1.west) -- node[left=5ex,minimum width=10ex] {7.} ( A-1.west);
+\end{tikzpicture}
+\end{center}
 \caption{
 Progression of place-within-level $z$ as the multipath routing algorithm
 cycles through the levels of the butterfly network.
@@ -1184,9 +1286,9 @@ cycles through the levels of the butterfly network.
 }
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[!h]
 \begin{center}
-%\includegraphics{fig-routing}
+\includegraphics{fig-routing}
 \end{center}
 \caption{
 An example of one path as constructed by the proposed multipath
@@ -1196,20 +1298,6 @@ and $w = (6, 0110111_2)$.
 \label{fig:routing}
 }
 \end{figure}
-
-\begin{table}[h!]
-\caption{Butterfly Multipath Routing Variables\label{tab:routing}}
-\begin{center}
-\begin{tabular}{ll}
-Name & Variable \\\hline
-butterfly dimension & $m \in \mathbb{Z}_+$ \\
-node level & $l \in \mathbb{Z} : 0 \leq l < m$ \\
-node place within level & $z \in \mathbb{Z}_2^m$ \\
-trust radius & $h \in \mathbb{Z} : 1 \leq h \leq \lfloor m/2 \rfloor$ \\
-path index & $s \in \mathbb{Z}_2^h$ \\
-\end{tabular}
-\end{center}
-\end{table}
 
 \subsection*{Algorithm Specification}
 
@@ -1308,14 +1396,6 @@ After this stage, $v^{(m + l_w)} = w$ and routing is complete.
 }
 \end{description}
 
-\subsection*{Running Time}
-At each node, the choice of edge is made using $O(1)$ lookups of the endpoint
-values at index $t$ and possibly $O(1)$ lookups of the value at a particular index of $s$.
-For an $m$-dimensional butterfly network, the algorithm chooses edges at most $2m = O(m)$ times.
-In an $m$-dimensional butterfly, there are $N = m2^m$ nodes; $m = O(\log N)$.
-The total running time to calculate a single path is thus $O(k log N)$.
-Sending a message with redundancy $k$ thus requires $O(k \log N)$ time.
-
 \subsection*{Proof of Path Independence}
 
 \begin{theorem}
@@ -1359,10 +1439,9 @@ Note that the node sequence $v_s^{(t)}$ can be calculated entirely
 from the source $v$, destination $w$, and path parameter $s$,
 meaning that with this information nodes are able to determine which neighbor
 to route a given message copy to.
-Each node in a directed wrap-around butterfly network has an out-degree of 2,
-placing an upper bound of $2^h$ on the effective redundancy,
-which we have just shown the above algorithm achieves, so the bound is tight.
-Thus, decentralized, redundant, structured networks such as the
+Furthermore, the existence of $2^h$ paths places a lower bound on the
+effective redundancy $\delta_h$,
+showing that the decentralized, redundant, structured networks such as the
 butterfly can have a very low probability of failure when faced with
 adversarial faults, even from a very powerful attacker.
 
@@ -1375,9 +1454,8 @@ which are often achieved by coercive targeted attacks against central nodes.
 We have already discussed two such cases:
 Pakistan's inadvertant censorship of YouTube
 \cite{hunter_pakistan_2008}
-and the FBI's surveillance and censorship of Lavabit
+and the FBI's surveillance-turned-censorship of Lavabit
 \cite{poulsen_edward_2013}.
-
 The reader may wonder how our methods could be employed in scenarios
 such as large-scale state-sponsored censorship
 \cite{xu_internet_2011}.
@@ -1415,15 +1493,6 @@ This limitation may not be as severe as it seems,
 due to the nested structure of the butterfly network.
 We conjecture that smaller independently-formed networks could be
 merged into a single larger network without central coordination.
-When nodes and edges exist in geographic space (as in cables connecting internet
-routers) this scheme might require connections between very distant locations.
-Such connections are extremely expensive to construct and maintain,
-although many exist today in the form of redundant internet backbones and
-undersea cables. An alternative solution might involve satellite links,
-which connect distant geographic points much more easily.
-While turning our network theoretical results into practical applications
-will require considerable additional work, we believe that work is inevitably
-necessary in order to create attack-tolerant networks.
 
 In addition to addressing the above limitations,
 we see several potential directions for future work.
@@ -1453,11 +1522,10 @@ the probability of an adversary causing an undetectable error
 decreases exponentially with the network's effective redundancy.
 The effective redundancy, in the case of the butterfly topology,
 grows exponentially with the radius of trust transitivity.
-Furthermore, a small increase in the number of messages sent
-(traffic volume) can compensate
+Furthermore, a small increase in the number of messages sent can compensate
 for a large increase in the number of messages compromised by an adversary.
-These results require some control over the structure of a network,
-or some portion of the network.
+These results are directly applicable to systems in which the link
+structure can be imposed by the designer.
 Even when network structure cannot be perfectly controlled,
 we have shown that partially rewiring a snapshot of the internet's router network
 can greatly increase its attack-tolerance properties.
@@ -1469,7 +1537,8 @@ including censorship and surveillance.
 \section*{Acknowledgments}
 The authors would like to thank Tony Garnock-Jones, A. Frederick Dudley, and
 Nathaniel Bezanson for helpful conversations.
-The authors would also like to thank the reviewers for their helpful comments.
+This research was partly supported by the National Science Foundation under
+Grant No. IIS-1617820.
 
 \nolinenumbers
 
@@ -1571,10 +1640,10 @@ Zimmermann PR.
 \newblock The official {PGP} user's guide.
 \newblock MIT press; 1995.
 
-\bibitem{richters_trust_2011}
-Richters O, Peixoto TP.
-\newblock Trust transitivity in social networks.
-\newblock PloS one. 2011;6(4):e18384.
+\bibitem{ferguson_practical_2003}
+Ferguson N, Schneier B.
+\newblock Practical cryptography.
+\newblock New York: Wiley; 2003.
 
 \bibitem{avizienis_basic_2004}
 Avizienis A, Laprie JC, Randell B, Landwehr C.

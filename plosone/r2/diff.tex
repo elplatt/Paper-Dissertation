@@ -1,4 +1,7 @@
 % Template for PLoS
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL r1/NetFT-plosone-r1.tex   Sun Jan  6 10:58:37 2019
+%DIF ADD r2/Manuscript.tex         Thu Jan 10 11:24:49 2019
 % Version 3.5 March 2018
 %
 % % % % % % % % % % % % % % % % % % % % % %
@@ -173,7 +176,9 @@
 \usetikzlibrary{arrows,chains,decorations.pathreplacing}
 \usepackage{pifont} % http://ctan.org/pkg/pifont
 \usepackage{amsthm}
-\usepackage{float}
+%DIF 176a176
+\usepackage{float} %DIF > 
+%DIF -------
 
 %% Include all macros below
 
@@ -192,6 +197,31 @@
 
 %% END MACROS SECTION
 
+
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFaddtex}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdeltex}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF HYPERREF PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{\texorpdfstring{\DIFaddtex{#1}}{#1}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{\texorpdfstring{\DIFdeltex{#1}}{}} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
 
 \begin{document}
 \vspace*{0.2in}
@@ -389,13 +419,14 @@ So we see that such vulnerabilities are not limited to any one system or protoco
 but result from centralized structure itself.
 
 This paper addresses the need for a theoretial understanding of network and
-redundancy-based approaches to attack-tolerance.
-For the purpose of this paper, {\em attack-tolerance} refers to the ability of a pair of
+redundancy-based approaches to \DIFdelbegin \DIFdel{attack tolerance.
+}\DIFdelend \DIFaddbegin \DIFadd{attack-tolerance.
+For the purpose of this paper, }{\em \DIFadd{attack-tolerance}} \DIFadd{refers to the ability of a pair of
 communicating nodes to detect,
 with high probability,
 when a message has been blocked or altered
 in the presence of adversarial faults.
-Our primary result is theoretical: an algorithm for constructing highly redundant
+}\DIFaddend Our primary result is theoretical: an algorithm for constructing highly redundant
 paths in a particular network topology.
 While we motivate the need for such network topologies using examples such as
 the internet router network and webs of trust,
@@ -448,8 +479,10 @@ self-organized networks.
 The reader may wonder whether it is realistic or useful to assume such control over
 the network structure.
 Regardless of implementation difficulty,
-we argue that attack-tolerance cannot be achieved without the ability to influence
-network structure.
+we argue that \DIFdelbegin %DIFDELCMD < {\em %%%
+\DIFdelend attack-tolerance cannot be achieved without the ability to influence
+network structure\DIFdelbegin %DIFDELCMD < }%%%
+\DIFdelend .
 Targeted attacks, by definition, target single points of failure.
 Attack tolerance can thus be achieved in two ways: 1. preventing failure at
 those points, or 2. preventing the existence of central points.
@@ -475,11 +508,13 @@ formal organizations \cite{mohr_explaining_1982},
 government-regulated cellular networks \cite{walker_mass_2012},
 and call tree notification systems \cite{nickerson_thinking_2010}.
 In general,
-when the need for attack-tolerance is high enough to warrant investment
-in infrastructure, topology can be engineered and maintained as infrastructure.
+\DIFdelbegin %DIFDELCMD < {\em %%%
+\DIFdelend when the need for attack-tolerance is high enough to warrant investment
+in infrastructure, topology can be engineered and maintained as infrastructure\DIFdelbegin %DIFDELCMD < }%%%
+\DIFdelend .
 
 Our main contributions are:
-\begin{itemize}
+ \begin{itemize} 
 \item{
 We propose a novel structured multipath fault tolerance (SMFT) scheme
 for extending standard fault tolerance techniques to
@@ -488,18 +523,26 @@ Assuming $h$-degree {\em bounded trust transitivity},
 We show that the probability of detecting adversarial faults
 $h$-internally vertex disjoint paths.
 }
-\item{We prove that the number of $h$-internally vertex disjoint
+\DIFdelbegin %DIFDELCMD < \item{We prove that the number of $h$-internally vertex disjoint
+%DIFDELCMD < paths between two nodes in a wrap-around butterfly network
+%DIFDELCMD < is at least $2^h$,
+%DIFDELCMD < and present a scalable and efficient concurrent multipath routing (CMR) algorithm
+%DIFDELCMD < to find these paths,
+%DIFDELCMD < which can be combined with SMFT to achieve a high level of attack-tolerance.
+%DIFDELCMD < }
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \item{We prove that the number of $h$-internally vertex disjoint
 paths between two nodes in a directed wrap-around butterfly network
 is exactly $2^h$,
 and present a scalable and efficient concurrent multipath routing (CMR) algorithm
 to find these paths,
 which can be combined with SMFT to achieve a high level of attack-tolerance.
 }
-\item{We show that rewiring a the edges of the internet's router network to
+\DIFaddend \item{We show that rewiring a the edges of the internet's router network to
 resemble a butterfly network allows it to tolerate a higher number of failures
 without fragmenting, and increases the effective redundancy in the presence
 of a large number of adversarial faults.}
-\end{itemize}
+ \end{itemize} 
 
 This paper is organized as follows.
 Section \ref{sec-related} reviews background and related work.
@@ -777,8 +820,10 @@ adversaries.
 Furthermore, this scheme requires only a small increase in network traffic
 as long as the network provides a large number of independent paths $\delta$.
 
-\begin{figure}[H]
-%\centerline{\includegraphics{fig-perror}}
+\DIFdelbegin %DIFDELCMD < \begin{figure}[!h]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[H]
+\DIFaddendFL %\centerline{\includegraphics{fig-perror}}
 \caption{
 The probability of an undetectable error as a function of the number of
 redundant channels and the number of adversarial faults.
@@ -822,7 +867,7 @@ and that those beyond can.
 This assumption will be convenient for proving our results,
 which we now proceed to define formally.
 
-We define the {\em bounded trust model} (Fig. \ref{fig:trust-source}) on
+We define the {\em bounded trust model} \DIFaddbegin \DIFadd{(Fig. \ref{fig:trust-source}) }\DIFaddend on
 an undirected graph $G = (V,E)$,
 although the model can easily be extended to directed multigraphs.
 Vertices representing communicating parties,
@@ -843,28 +888,28 @@ trusted by $u$,
 and if compromised can entirely isolate $v$ from the rest of the network.
 
 
-\begin{figure}[H]
-%\centerline{\includegraphics[width=4in,height=2.78in]{fig-partial-trust.pdf}}
+\DIFaddbegin \begin{figure}[H]
+%DIF > \centerline{\includegraphics[width=4in,height=2.78in]{fig-partial-trust.pdf}}
 \caption{
-Illustration of a trusted communication network and the network properties
-used by the {\em bounded trust model}.
+\DIFaddFL{Illustration of a trusted communication network and the network properties
+used by the }{\em \DIFaddFL{bounded trust model}}\DIFaddFL{.
 Edges represent mutually trusted communication links.
 The sender (Alice, $s$) and receiver (Bob, $t$) trust all nodes
-less than the {\em trust radius} $h$ hops away.
-These nodes form their {\em trusted neighborhoods} $T_h(v)$ and $T_h(w)$.
+less than the }{\em \DIFaddFL{trust radius}} \DIFaddFL{$h$ hops away.
+These nodes form their }{\em \DIFaddFL{trusted neighborhoods}} \DIFaddFL{$T_h(v)$ and $T_h(w)$.
 We assume that all faults occur in the remaining nodes: the
-{\em untrusted region}.
+}{\em \DIFaddFL{untrusted region}}\DIFaddFL{.
 The untrusted nodes in contact with the trusted neighborhoods for the
-{\em trust boundaries} $B_h(v)$ and $B_h(w)$,
+}{\em \DIFaddFL{trust boundaries}} \DIFaddFL{$B_h(v)$ and $B_h(w)$,
 which (in the absence of central bottlenecks) determine the
-{\em effective redundancy} $\delta_h$ provided by the network.
+}{\em \DIFaddFL{effective redundancy}} \DIFaddFL{$\delta_h$ provided by the network.
 Alice and Bob can achieve the same level of attack-tolerance
 as if they were directly connected by $\delta_h$ redundant channels.
-}
+}}
 \label{fig:trust-source}
 \end{figure}
 
-Now let $s \in V$ be an arbitrary sender
+\DIFaddend Now let $s \in V$ be an arbitrary sender
 and $t \in V$ be an arbitrary receiver.
 We assume the presence of an adversary who knows the
 full structure of the network,
@@ -929,7 +974,46 @@ Thus, the scaling of $\delta_h$ can be used to quantify a network's ability
 to withstand targeted attacks,
 even when the exact trust radius $h$ is unknown.
 
-\subsection*{Structured Multipath Fault Tolerance}
+\DIFdelbegin %DIFDELCMD < \begin{figure}
+%DIFDELCMD < %%%
+%DIF < \centerline{\includegraphics[width=4in,height=2.78in]{fig-partial-trust.pdf}}
+%DIFDELCMD < \caption{%
+{%DIFAUXCMD
+\DIFdelFL{Illustration of a trusted communication network and the network properties
+used by the }%DIFDELCMD < {\em %%%
+\DIFdelFL{bounded trust model}%DIFDELCMD < }%%%
+\DIFdelFL{.
+Edges represent mutually trusted communication links.
+The sender (Alice, $s$) and receiver (Bob, $t$) trust all nodes
+less than the }%DIFDELCMD < {\em %%%
+\DIFdelFL{trust radius}%DIFDELCMD < } %%%
+\DIFdelFL{$h$ hops away.
+These nodes form their }%DIFDELCMD < {\em %%%
+\DIFdelFL{trusted neighborhoods}%DIFDELCMD < } %%%
+\DIFdelFL{$T_h(v)$ and $T_h(w)$.
+We assume that all faults occur in the remaining nodes: the
+}%DIFDELCMD < {\em %%%
+\DIFdelFL{untrusted region}%DIFDELCMD < }%%%
+\DIFdelFL{.
+The untrusted nodes in contact with the trusted neighborhoods for the
+}%DIFDELCMD < {\em %%%
+\DIFdelFL{trust boundaries}%DIFDELCMD < } %%%
+\DIFdelFL{$B_h(v)$ and $B_h(w)$,
+which (in the absence of central bottlenecks) determine the
+}%DIFDELCMD < {\em %%%
+\DIFdelFL{effective redundancy}%DIFDELCMD < } %%%
+\DIFdelFL{$\delta_h$ provided by the network.
+Alice and Bob can achieve the same level of attack-tolerance
+as if they were directly connected by $\delta_h$ redundant channels.
+}}
+%DIFAUXCMD
+%DIFDELCMD < %DIFDELCMD < \label{fig:trust-source}%%%
+
+%DIFDELCMD < \end{figure}
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdelend \subsection*{Structured Multipath Fault Tolerance}
 
 Finding a maximal set of independent paths for an arbitrary network is NP hard
 \cite{reiter_resilient_1998},
@@ -996,12 +1080,14 @@ in a cycle of increasing level $l$.
 Down-right edges ($E_\rightarrow$) also link to a node of level $l + 1$,
 but one having the place-within-level equal to $z$ with the $l$th bit inverted.
 
-\begin{figure}[H]
-\begin{center}
+\DIFdelbegin %DIFDELCMD < \begin{figure}[!h]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[H]
+\DIFaddendFL \begin{center}
 %\includegraphics[height=3in]{fig-bf-route}
 \end{center}
 \caption{
-A 3-dimensional wrap-around butterfly network.
+A 3-dimensional \DIFdelbeginFL \DIFdelFL{wraparound }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{wrap-around }\DIFaddendFL butterfly network.
 Note that the rightmost nodes are the same nodes as the leftmost,
 drawn twice for visual clarity.
 The highlighted nodes and edges show the path from node (0,000)
@@ -1029,7 +1115,7 @@ edges to the nodes with $l=0$.
 
 The wrap-around butterfly network is known to have several of the properties
 we desire for scalable, decentralized communication networks:
-\begin{description}
+ \begin{description} 
 \item[Vertex-transitivity:]
 Because the wrap-around butterfly is vertex transitive,
 it is maximally decentralized;
@@ -1045,7 +1131,7 @@ Multiple paths exist between any two nodes.
 Specifically, we will prove below that the number of
 $h$-internally vertex disjoint paths between two
 nodes increases exponentially with $h$.
-\end{description}
+ \end{description} 
 
 The structure of the butterfly network lends itself to a well-known
 (unipath) routing algorithm (Fig. \ref{fig:bf-route}),
@@ -1109,8 +1195,10 @@ As larger hubs continue to be removed, the connectivity of the network
 decreases until the crossover point,
 at which point the rewired network offers higher effective redundancy.
 
-\begin{figure}[H]
-%\centerline{\includegraphics{fig-diameter}}
+\DIFdelbegin %DIFDELCMD < \begin{figure}
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[H]
+\DIFaddendFL %\centerline{\includegraphics{fig-diameter}}
 \caption{
 Simulation of targeted attacks against a snapshot of the internet's router
 network with a fraction of the edges rewired into a partial butterfly configuration.
@@ -1125,8 +1213,10 @@ The rewiring scheme does not require adding any additional edges.
 \label{fig:diameter}
 \end{figure}
 
-\begin{figure}[H]
-%\centerline{\includegraphics[width=5in,height=5in]{fig-mincut}}
+\DIFdelbegin %DIFDELCMD < \begin{figure*}[h!]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[H]
+\DIFaddendFL %\centerline{\includegraphics[width=5in,height=5in]{fig-mincut}}
 \caption{
 Simulation of targeted attacks against a snapshot of the internet's router
 network with a fraction of the edges rewired into a partial butterfly configuration.
@@ -1135,7 +1225,10 @@ For $h>0$, the original network has higher effective redundancy up to a crossove
 after which the rewired network performs better.
 }
 \label{fig:mincut}
-\end{figure}
+\DIFdelbeginFL %DIFDELCMD < \end{figure*}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \end{figure}
+\DIFaddend 
 
 \section*{Multipath Butterfly Routing}
 \label{sec-bf-route}
@@ -1176,28 +1269,28 @@ independence is guaranteed by ensuring that all paths match $s$ in the
 $h$ bits of the place-within-level preceding the destination index.
 A full example is illustrated in Fig. \ref{fig:routing}.
 
-\begin{figure}[H]
+\DIFaddbegin \begin{figure}[H]
 \caption{
-Progression of place-within-level $z$ as the multipath routing algorithm
+\DIFaddFL{Progression of place-within-level $z$ as the multipath routing algorithm
 cycles through the levels of the butterfly network.
-\label{fig:route-overview}
+}\label{fig:route-overview}
 }
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-%\includegraphics{fig-routing}
+%DIF > \includegraphics{fig-routing}
 \end{center}
 \caption{
-An example of one path as constructed by the proposed multipath
+\DIFaddFL{An example of one path as constructed by the proposed multipath
 routing algorithm.
 The path is shown for $s = 10_2$
 and $w = (6, 0110111_2)$.
-\label{fig:routing}
+}\label{fig:routing}
 }
 \end{figure}
 
-\begin{table}[h!]
+\DIFaddend \begin{table}[h!]
 \caption{Butterfly Multipath Routing Variables\label{tab:routing}}
 \begin{center}
 \begin{tabular}{ll}
@@ -1211,7 +1304,42 @@ path index & $s \in \mathbb{Z}_2^h$ \\
 \end{center}
 \end{table}
 
-\subsection*{Algorithm Specification}
+\DIFdelbegin %DIFDELCMD < \begin{figure}[h!]
+%DIFDELCMD < %%%
+%DIFDELCMD < \caption{%
+{%DIFAUXCMD
+\DIFdelFL{Progression of place-within-level $z$ as the multipath routing algorithm
+cycles through the levels of the butterfly network.
+}%DIFDELCMD < %DIFDELCMD < \label{fig:route-overview}%%%
+
+%DIFDELCMD < %%%
+}
+%DIFAUXCMD
+%DIFDELCMD < \end{figure}
+%DIFDELCMD < 
+
+%DIFDELCMD < \begin{figure}[!h]
+%DIFDELCMD < \begin{center}
+%DIFDELCMD < %%%
+%DIF < \includegraphics{fig-routing}
+%DIFDELCMD < \end{center}
+%DIFDELCMD < %%%
+%DIFDELCMD < \caption{%
+{%DIFAUXCMD
+\DIFdelFL{An example of one path as constructed by the proposed multipath
+routing algorithm.
+The path is shown for $s = 10_2$
+and $w = (6, 0110111_2)$.
+}%DIFDELCMD < %DIFDELCMD < \label{fig:routing}%%%
+
+%DIFDELCMD < %%%
+}
+%DIFAUXCMD
+%DIFDELCMD < \end{figure}
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdelend \subsection*{Algorithm Specification}
 
 We now begin the formal specification of our multipath routing scheme for the
 wrap-around butterfly network.
@@ -1254,7 +1382,7 @@ so we let $l = t$ (mod $m$).
 and that $z^{(t+1)}$ is equal to $z^{(t)}$ with or without the bit in index
 $l^{(t)}$ inverted, depending on whether the down or down-right edge was
 taken at step $t$.
-\begin{description}
+ \begin{description} 
 \item[Stage 1: ($0 \leq t < h$)]{
 Down or down-right edges
 are chosen such that the $t$th bit of $z^{(t+1)}$ is equal to the $t$th bit
@@ -1306,15 +1434,17 @@ All nodes in this stage are within $h$ hops of $w$ and thus in its trusted
 neighborhood.
 After this stage, $v^{(m + l_w)} = w$ and routing is complete.
 }
-\end{description}
+ \end{description} 
 
-\subsection*{Running Time}
-At each node, the choice of edge is made using $O(1)$ lookups of the endpoint
+\DIFaddbegin \subsection*{\DIFadd{Running Time}}
+\DIFadd{At each node, the choice of edge is made using $O(1)$ lookups of the endpoint
 values at index $t$ and possibly $O(1)$ lookups of the value at a particular index of $s$.
 For an $m$-dimensional butterfly network, the algorithm chooses edges at most $2m = O(m)$ times.
 In an $m$-dimensional butterfly, there are $N = m2^m$ nodes; $m = O(\log N)$.
 The total running time to calculate a single path is thus $O(k log N)$.
 Sending a message with redundancy $k$ thus requires $O(k \log N)$ time.
+}
+\DIFaddend
 
 \subsection*{Proof of Path Independence}
 
@@ -1359,10 +1489,12 @@ Note that the node sequence $v_s^{(t)}$ can be calculated entirely
 from the source $v$, destination $w$, and path parameter $s$,
 meaning that with this information nodes are able to determine which neighbor
 to route a given message copy to.
-Each node in a directed wrap-around butterfly network has an out-degree of 2,
-placing an upper bound of $2^h$ on the effective redundancy,
+\DIFdelbegin \DIFdel{Furthermore,
+the existence }\DIFdelend \DIFaddbegin \DIFadd{Each node in a directed wrap-around butterfly network has an out-degree }\DIFaddend of \DIFaddbegin \DIFadd{2,
+placing an upper bound of }\DIFaddend $2^h$ \DIFdelbegin \DIFdel{paths places a lower bound }\DIFdelend on the effective redundancy\DIFdelbegin \DIFdel{$\delta_h$,
+showing that the }\DIFdelend \DIFaddbegin \DIFadd{,
 which we have just shown the above algorithm achieves, so the bound is tight.
-Thus, decentralized, redundant, structured networks such as the
+Thus, }\DIFaddend decentralized, redundant, structured networks such as the
 butterfly can have a very low probability of failure when faced with
 adversarial faults, even from a very powerful attacker.
 
@@ -1469,7 +1601,8 @@ including censorship and surveillance.
 \section*{Acknowledgments}
 The authors would like to thank Tony Garnock-Jones, A. Frederick Dudley, and
 Nathaniel Bezanson for helpful conversations.
-The authors would also like to thank the reviewers for their helpful comments.
+\DIFdelbegin \DIFdel{This research was partly supported by the National Science Foundation under
+Grant No. IIS-1617820}\DIFdelend \DIFaddbegin \DIFadd{The authors would also like to thank the reviewers for their helpful comments}\DIFaddend .
 
 \nolinenumbers
 
