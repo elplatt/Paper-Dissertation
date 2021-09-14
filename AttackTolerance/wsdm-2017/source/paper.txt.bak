@@ -1,0 +1,1362 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+arrows,chains,decorations.pathreplacing
+
+
+
+
+wBF
+theoremTheorem
+
+
+
+
+acmcopyright
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+WSDM '17February 6--10, 2017, Cambridge, UK, USA
+
+15.00
+
+
+
+
+
+
+
+
+Attack-Tolerant Networks: A Structural, Multipath Approach
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Anonymized Authors
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Networks with single points of failure are particularly susceptible to
+adversarial faults, in which an attacker targets nodes strategically.
+In communication networks, these types of attacks leave users vulnerable to
+censorship and targeted surveillance.
+Centralized networks have single points of failure by definition,
+leading to a growing popularity in decentralized architectures and protocols.
+However, centralized network structure can arise even when protocols are
+decentralized.
+While based on decentralized protocols, the Internet and World-Wide Web have
+been shown both theoretically and historically to be highly susceptible to
+adversarial faults, in part due to emergent, structural centralization.
+Existing network trust models, such as webs of trust, fail to adequately address
+network structure. We develop a partial trust model that incorporates network
+structure and which makes weaker, more realistic transitivity assumptions than
+webs of trust. We show that the partial trust model, when combined with
+concurrent multipath routing, allows standard fault tolerance techniques to be
+applied to communication across complex networks. We also provide a specific
+routing algorithm for implementing this scheme on the butterfly network
+topology.
+When network topology can be dictated, these results can be used to create
+scalable, attack-tolerant infrastructures. More generally, our results provide
+a formalism for evaluating the effects of network structure on adversarial
+fault tolerance.
+
+
+
+
+
+
+
+
+
+<ccs2012>
+<concept>
+<concept_id>10002978.10002986</concept_id>
+<concept_desc>Security and privacy Formal methods and theory of security</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10003033.10003034</concept_id>
+<concept_desc>Networks Network architectures</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10010940.10010971.10010972.10010540</concept_id>
+<concept_desc>Software and its engineering Peer-to-peer architectures</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
+ 
+
+[500]Security and privacy Formal methods and theory of security
+[500]Networks Network architectures
+[500]Software and its engineering Peer-to-peer architectures
+
+
+
+
+
+
+
+
+
+
+
+
+
+networks; decentralization; fault tolerance; routing; multipath routing; adversarial faults; information security
+
+Introduction
+
+Large-scale communication networks, exemplified by the Internet,
+have become ubiquitous, and are now crucial infrastructure for
+individuals, communities, and organizations around the world.
+As with any critical infrastructure, the cost of a failure can be
+immense, so methods for tolerating various kind of faults are an
+important and ongoing area of research
+.
+In fact, the decentralized design of the Internet was intended to protect
+against targeted attacks, such as nuclear strikes
+.
+Such targeted attacks are formally described as adversarial faults
+and are some of the most difficult to protect against.
+Both theoretical results and recent events (described below)
+have demonstrated that
+the Internet is surprisingly vulnerable to adversarial faults.
+Decentralization remains a promising approach to building resilient networks,
+but further work is needed to understand the relationship between
+decentralized network structure and adversairal fault tolerance.
+
+Analysis of the Internet's router network has shown that while it is remarkably
+resilient against random faults,
+it is highly susceptible to adversarial faults .
+These results have been attributed to the scale-free structure of the Internet's
+router network
+.
+In scale-free networks and other networks with heavy-tail degree distributions,
+random failures are highly likely to pick low-degree nodes, thus having
+little effect,
+while adversarial faults target the small number of high-degree nodes,
+thus removing a large number of edges with each fault.
+So while the protocols of the Internet are decentralized,
+the network structure is somewhat centralized. 
+In other words, the protocols of the Internet do not require
+centralization, but centralization may still emerge from the socio-technical
+processes that create its network structure.
+
+The Internet's vulnerability to censorship and other targeted attacks
+has been confirmed by the success of several such attacks.
+For example, in 2008, YouTube suffered a worldwide outage for several hours
+when a service provider in Pakistan advertised false routing information
+.
+The action (known as a black hole attack) was intended to censor YouTube
+within Pakistan only, but resulted in a worldwide cascading failure.
+Such vulnerabilities are not limited to any one system or protocol,
+but result from the network structure itself.
+With strong theoretical and historical evidence that network structure
+can create vulnerabilities,
+methods for analyzing structural vulnerabilities and for designing
+fault tolerant networks are needed.
+This paper presents several contributions towards advancing those goals.
+
+We consider a setting in which a source node (Alice)
+in a network attempts to route a message
+to a target node (Bob) by forwarding it through the links of the network.
+We assume that some nodes in the network may be compromised by an attacker
+(Mal).
+We assume that Mal has full knowledge of the network structure, but has
+limited resources and thus can only compromise a fixed number of nodes.
+Compromised nodes may behave incorrectly by blocking the message,
+changing the message content, or routing the message incorrectly.
+In order to evaluate network-based techniques for mitigating such attacks,
+we develop a partial trust model,
+similar to the commonly used web of trust approach
+,
+but making weaker (more realistic) assumptions of trust transitivity,
+and incorporating network structure.
+The partial trust model can be used to design and analyze communication
+schemes that tolerate adversarial faults,
+even when no single path through the network is fully trusted.
+
+Using the partial trust model, we are able to model the nodes in complex
+networks as being directly linked to each other by a number of
+redundant channels.
+This models enables the application of standard error detection techniques
+,
+which rely on independent errors.
+While adversarial faults along a single path are correlated,
+faults in independent paths are not.
+Thus fault tolerance techniques can be applied,
+even in the presence of adversarial errors,
+when messages are sent in parallel,
+a technique known as concurrent multipath routing
+.
+The receiver can then use the redundant messages to detect and/or correct
+errors.
+Using the partial trust model, we formally evaluate the 
+effects of network structure on attack-resistance and show that the probability
+of undetected errors decreases exponentially with the number of
+independent paths between source and destination,
+even when no individual path is entirely trusted.
+
+Our specific multipath fault tolerance scheme relies on the existence
+and discoverability of multiple redundant paths between the source and
+the destination.
+Implementation thus requires a routing algorithm.
+While not a requirement, this technique is well-suited for
+structured networks,
+in which links between nodes are constrained to a particular architecture.
+
+In particular, we provide a novel concurrent multipath routing algorithm
+on the butterfly network topology and use the partial trust model to prove
+a high level of adversarial fault tolerance.
+The butterfly topology is popular in parallel processing
+ and
+peer-to-peer 
+applications, due to its regular structure and high connectivity.
+While the ability to control network topology is only achievable in some
+applications, those applications are nonetheless significant,
+e.g. overlay networks ,
+formal organizations ,
+government-regulated cellular networks ,
+and call tree notification systems .
+
+Our main contributions are:
+
+We develop a decentralized partial trust model,
+which makes weaker transitivity assumptions than web-of-trust models,
+and makes it possible to analyze the effect of network structure on
+adversarial fault tolerance;
+We show that the partial trust model enables standard fault
+tolerance techniques to be applied to adversarial faults in
+complex communication networks.
+We find that the probability of detecting adversarial faults
+approaches 1 exponentially as the number of independent paths between
+sender and receiver increases;
+We present a scalable, efficient, and attack-tolerant concurrent
+multipath routing algorithm on the butterfly network topology.
+
+
+This paper is organized as follows.
+Section 2. reviews background and related work.
+Section 3. discusses the desired properties of attack-tolerant network
+infrastructure.
+Section 4. describes the partial trust model.
+Section 5. describes a general technique for multipath fault tolerance on
+structured networks.
+Section 6. describes a routing algorithm for multipath fault tolerance
+on the butterfly network topology.
+Section 7. discusses the our results.
+And Section 8. concludes.
+
+Background and Related Work
+
+Many distributed consensus protocols (such as those used by crypto-currencies)
+are designed to provide tolerance against arbitrary or adversarial faults.
+Byzantine agreement protocols
+
+provide tolerance against arbitrary faults (including attacks) under
+some circumstances, but are limited to small networks due to poor scalability.
+Proof-of-work 
+and proof-of-stake 
+provide better scalability,
+but are wasteful of computational and energy resources.
+Federated Byzantine Agreement (FBA) 
+is scalable, allows for flexible trust,
+and optimal fault tolerance for a given network (under its assumptions).
+However, FBA does not provide a method for evaluating the
+fault tolerance properties of different network structures
+or calculating how the failure probability for a particular network.
+The mutlipath fault tolerance scheme we propose is the
+first example we're aware of that allows adversarial fault tolerance
+to be quantified as a function of network structure.
+
+Most existing adversarial fault tolerance schemes focus on end-to-end,
+protocol-based, cryptographic solutions
+.
+A fully decentralized architecture must be decentalized both in protocol and
+in network structure.
+There are however, a few notable fault tolerance schemes
+that focus on network structure.
+Fiat and Saia described a scheme that combines the butterfly topology
+with expander graphs to create a highly censorship-resistant content-addressable
+network ,
+although this scheme exhibits poor scaling due to a very high level of data
+replication.
+Perhaps the most mature structural solution is the Freenet collaboration
+.
+Freenet uses secret sharing
+
+and small-world routing
+
+to create a content-addressable network with a high level of both
+confidentiality and censorship resistance.
+Freenet guarantees that data is stored redundantly,
+but still allows for centralized network structure and thus single points
+of failure as data travels from its origin to the redundant storage locations.
+
+Multipath routing protocols send redundant information
+over multiple paths when routing a message through a network,
+in contrsast to traditional unipath routing, which uses
+a single path.
+Multipath routing can have many benefits, including reduced congestion,
+increased throughput, and more reliability
+.
+Many of these routing protocols offer increased confidentiality
+.
+Some approaches utilize redundant paths as backups for increased
+fault tolerance
+,
+and some specificially protect against adversarial faults
+.
+Most work on multipath routing has been motivated by applications related to
+wireless sensor networks (WSNs),
+and have thus focused on ad-hoc, unstructured networks, often having a central
+base station.
+The partial trust model presented in this paper provides a more general
+way to evaluate the effect of network structure on adversarial fault tolerance.
+The method of Liu et al.
+
+routes multiple messages first to random peers and then
+to their final destination.
+The butterfly routing algorithm we present takes a conceptually similar
+approach,
+routing from the source to several intermediaries, and then to the destination.
+
+Our proposed routing algorithm makes use of a
+structured network, in which link structure is predetermined.
+Such networks can be designed to have favorable structural and routing
+properties,
+at the expense of complicating the addition or removal of nodes.
+Structured networks have been a popular tool in parallel processing
+architectures .
+More recently, peer-to-peer systems based on distributed hash tables have used
+structured ``overlay'' networks to map table keys to local TCP/IP routes
+.
+
+Attack-Tolerant Infrastructure
+
+In this section, we describe the functional properties required of an
+attack-tolerant network,
+which serve as guiding principles in later sections.
+We pay special attention to a property we call
+stabilizing asymmetry.
+
+Functional Properties
+
+
+[Scalability:]
+For large scale networks it is important that the infrastructure allows
+for the network to grow while remaining functional.
+In practice, people, devices, and connections, have limited capabilities
+and these limitations need to be considered as part of the design of the
+infrastructure. 
+
+[Decentralization:]
+Systems having single points of failure are less tolerant against faults at
+those points.
+The existence of such points not only increases the likelihood that an attack
+will succeed,
+but also incentivises attack by presenting effective targets.
+In order to minimize single points of failure,
+attack tolerant infrastructures must use decentralized protocols and
+decentralized network structures.
+
+[Stabilizing asymmetry:]
+In the context of international conflict,
+asymetric conflicts are a special case that makes it possible for the
+less powerful party to have an advantage over the more powerful party
+.
+In asymmetric conflicts, the same level of resource expenditure yields different
+results for different parties;
+the attacker's resources are either more or less effective than the defender's.
+We call the latter case stabilizing asymmetry,
+because it lowers the incentive to attack.
+With this in mind, an attack-resistant infrastructure will benefit from a high
+level of stabilizing asymmetry.
+
+
+Structural Properties
+
+We are specifically concerned with network structure-based approaches to
+fault tolerance.
+In networks, specific structural properties are required to achieve the
+functional properties described above.
+
+[Sparsity and low diameter:]
+To achieve scalability, networks must be sparse and have a
+low diameter.
+In practical settings, humans and devices have an upper limit on the number
+of connections they can maintain (e.g., Dunbar's number
+).
+In sparse networks, the number of links grows slowly as the network grows in
+size, allowing the network to scale without exceeding the nodes' capacity for
+links.
+Similarly, low-diameter guarantees that as a network grows, a short path will
+still exist between any pair of nodes.
+While low diameter guarantees a path exists,
+paths are only useful if an efficient routing algorithm exists
+to find them.
+
+[Uniform centrality:]
+There are many ways to measure node centrality in networks
+.
+The more uniform these measures are across nodes, the more decentralized
+a network is.
+Centrality is minimized in vertex transitive networks,
+for which an edge-preserving map
+always exists from any node to any other node.
+In other words, all nodes occupy structurally indistinguishable positions
+in the network.
+
+[Redundancy:]
+In a network, redundancy refers to the existence of multiple non-overlapping
+paths between nodes or components.
+Redundancy can help reduce single points of failure and decrease
+centralization.
+One measure of redundancy is given by the ratio of edges to nodes
+.
+A single point of failure occurs when a node holds a uniquely
+central position.
+When alterative paths are added to bypass central nodes,
+the network becomes more redundant.
+
+
+
+Trust and Fault Tolerance
+
+The requirement that networks remain sparse has important implications for
+resilience.
+As such networks grow, the number of nodes will exceed the number of links
+any single node can support.
+As a result, some pairs of nodes are only connected indirectly,
+through at least one intermediary node.
+These intermediary nodes are targets for potential attacks,
+making network paths potentially unreliable.
+
+Within the field of fault tolerance,
+many techniques have been developed for building reliable systems
+out of unreliable components
+.
+We will make use of standard fault tolerance terminology, summarized here.
+A fault occurs when one component
+of a system behaves incorrectly (e.g., a routing node blocking or
+altering a message).
+The result of that fault (e.g., a recipient receiving conflicting messages)
+is an error state.
+If the error is undetected or corrected to the wrong value, the system is
+said to have experienced a failure (e.g., an altered message is
+accepted as authentic).
+We are concerned in particular with adversarial faults,
+which (as opposed to random faults)
+are chosen strategically to maximize the liklihood of a failure.
+
+In communication networks, 
+the threat model is as follows: Alice sends a message to
+Bob via one or more intermediaries,
+but some intermediaries may block, change, or re-route the message.
+The ability to tolerate these types of adversarial attacks depends on
+Alice and Bob's ability to either find a path they trust,
+or to communicate successfully across untrusted paths.
+
+Both centralized and decentralized approaches are commonly used to create
+trust infrastructures.
+Centralized approaches such as public key infrastructure (PKI)
+suffer from a number of vulnerabilities
+,
+which stem largely from the single points of failure inherent to
+centralization.
+
+The well-known and widely-used web of trust model
+
+is a decentralized alternative.
+In a web of trust,
+individuals choose who they trust initially.
+Trust is then extended to new individuals if they are vouched for by a
+currently-trusted individual,
+making it possible to extend their web of trust to a large
+number of nodes.
+However, the web of trust approach assumes that trust can be extended
+transitively,
+which is unrealistic
+.
+The web of trust model also fails to account for the structure
+of the trust network:
+trusted nodes are all trusted equally,
+regardless of how many nodes trust them.
+Similarly, while the process of building a web of trust is decentralized,
+the emergent structure of the trust network itself might be centralized.
+In order to analyze the influence of network structure on adversarial
+fault tolerance,
+a different trust model is needed.
+
+Partial Trust Model
+
+We can allow for more realistic transitivity assumptions and incorporate
+network structure into a trust model with one key insight:
+even if no single path between a sender and receiver is fully trusted,
+multiple copies of a message can be sent along different paths and compared
+by the reciever to detect and correct errors.
+However, in the presence of an attacker, there is only benefit in sending an
+additional message along a path if that path does not share untrusted
+single points of failure with any of the existing message paths
+(otherwise, the adversary can compromise both messages
+by causing a single fault).
+We call paths that do not share any untrusted single points of failure
+independent.
+The maximum number of independent paths represents the effective redundancy that
+can be utilized by any redundancy-based fault tolerance scheme.
+We now propose a method for quantifying the effective redundancy of a network
+as a function of its structure and level of trust transitivity.
+For the purpose of analyzing adversarial fault tolerance,
+this method allows a communication network
+to be modeled as a set of virtual links that directly
+connect each node pair,
+with each virtual link providing some level of redundancy.
+
+We now specify the partial trust model.
+We assume an undirected graph ,
+although the model can easily be extended to directed multigraphs.
+Vertices representing agents,
+and with edges representing mutually trusted communication links.
+Let  be an arbitrary sender (Alice)
+and  be an arbitrary receiver (Bob).
+We assume the presence of an adversary (Mal) who knows the
+full structure of the network,
+and who can compromise a fixed number of agents,
+gaining complete control of their behavior,
+as long as those agents are not trusted by either Alice or Bob.
+We define a trust radius  and that nodes  and
+ trust each other if their distance is less than .
+For a given node ,
+we call the set of trusted nodes its
+trusted neighborhood ,
+and all nodes at exactly distance  the
+trust boundary :
+
+T_h(u) &=&  u d(u,u^) < h  
+
+B_h(u) &=&  u d(u,u^) = h .
+
+The trust boundary  plays an important role because these nodes are not
+trusted by ,
+but if compromised can entirely isolate  from the rest of the network.
+These trust assumptions imply that when Alice sends a message to Bob,
+Mal can only cause faults in the set of nodes outside both of their trusted
+neighborhoods: .
+We refer to this set of nodes as the untrusted region.
+
+Having defined the assumptions of the partial trust model,
+we now quantify the effective redundancy between Alice and Bob
+when trust radius  is assumed.
+This quantity,  is exactly the max-flow/min-cut of
+the graph after Alice's and Bob's trusted neighborhoods have been
+collapsed into single source/sink vertices.
+Each trust boundary forms a cut of the network and places an upper bound on the
+min-cut:
+
+_v,w,h ( B_h(v) , B_h(w) ).
+
+Equality holds when there are no bottlenecks within the untrusted region,
+an indication that the network is decentralized.
+The redundancy of the entire graph can be characterized by the minimum over
+all vertex pairs:
+
+_h(V) _v,w V _v,w,h.
+
+Thus, for any pair of nodes in the network, at least  independent,
+redundant paths can be contstructed between them.
+While  is a purely structural property of the graph and
+may have additional applications,
+we are interested in this quantity because
+it places an upper bound on the effectiveness of any
+redundancy-based fault tolerance scheme.
+As a function of ,  describes a network's ability to create
+redundancy from trust.
+Combined with a routing algorithm that tells nodes how to forward
+messages to guarantee they take independent paths,
+this redudnacy can be used to achieve fault tolerance.
+For attack-tolerant networks,
+it is thus desirable for  to increase quickly as a function of .
+Furthermore, by applying the partial trust model,
+an adversarial fault tolerance scheme can treat each pair of nodes as being
+directly connected by a virtual link with least  redundant
+channels.
+We will now describe such a scheme and evaluate its fault tolerance properties.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Multipath Fault Tolerance
+
+Once we have determined a network's effective redundancy,
+we can apply redundancy-based fault tolerance techniques,
+by sending multiple copies of a message
+(concurrent multipath routing).
+We model our sender (Alice) and receiver (Bob) as
+communicating over a direct link with  redundant channels.
+The partial trust model allows us to make this simplifying assumption
+for analyzing a fault tolerance scheme,
+but implementing such a scheme will require a method for constructing
+specific network paths.
+We will return to the question of constructing paths in the next section.
+For now, we concern ourselves with the question:
+given that the newtowrk provides  redundant channels between
+Alice and Bob,
+what is the probability that an adversary (Mal) causes an undetectable
+error?
+
+Let us first assume that Alice sends a message copy over each available
+channel.
+When Bob recieves the messages, there are several possibilities.
+If some of the messages are missing
+(Alice can include the number of messages as part of the message)
+or if some of the messages disagree,
+Bob knows that some of the messages were either blocked or altered,
+and he has successfully detected an error.
+Bob has not accepted any compromised information,
+and can request retransmission, so no failure has occurred.
+If Bob receives all of the messages, and they all agree,
+he accepts the message.
+If the messages agree, there are two possible cases.
+The first case is that Mal has not compromised any of the messages,
+and Bob has correctly accepted them, so no failure has occurred.
+The second case is that Mal has compromised all of the messages,
+so Bob has accepted an erroneous message and a failure has occurred.
+In the present scenario,
+whether this occurs depends only on whether Mal has the resources to
+compromise all of the channels.
+In a more realistic, and more interesting, scenario,
+both Alice and Mal have limited resources and are not able to use or
+compromise all available channels.
+
+In a more sophisticated multipath fault tolerance scheme,
+Alice randomly chooses  channels and sends a copy of
+her message on each.
+We assume that Mal is capable of compromising  channels.
+Having full knowledge of the network,
+Mal's best strategy is to identify a minimum node cut in the network
+and compromise nodes from that cut.
+With this strategy, each compromised node reduces effective redundancy by one,
+effectively compromising one of the virtual channels between Alice and Bob.
+Since Alice chooses channels randomly,
+all channels are equally likely to contain a message,
+so Mal can do no better than also chosing randomly.
+If , at least one message will get through uncompromised and all
+errors are detectable.
+Otherwise, the probability of Mal producing an undetectable error is
+the probability that all of Alice's chosen channels are compromised:
+
+
+p_f &=& l!(_h-k)!_h!(l-k)!.
+
+Letting  and , then applying Stirling's
+approximation gives:
+
+
+
+
+
+
+
+
+
+
+
+Figure  shows the value of 
+as a function of  and .
+Equation () shows that while 
+depends on the fractions of
+redundant paths actually utilized  and compromised ,
+it decreases exponentially with the effective redundancy .
+This result is significant because 
+depends only on the network structure
+and the strength of trust transitivity,
+not on the amount of resources available to the sender or the adversary.
+In other words, this scheme exhibits a stabilizing asymmetry,
+senders can tolerate attacks from significantly more powerful
+adversaries, as long as the network structure provides large .
+By putting attackers at a disadvantage, attacks are not only tolerated
+but also disincentivized,
+further decreasing the likelihood of a successful attack.
+
+In order to derive the above results, we have assumed that Alice and all
+intermediary agents are able to identify specific,
+independent network paths that achieve the effective redundancy .
+We now proceed to describe a routing algorithm for doing so in the special case
+of the butterfly network topology.
+
+
+
+
+
+
+
+
+
+
+Multipath Butterfly Routing
+
+In previous sections, we showed that reliable communication across a network
+can be achieved even when any single message path might be compromised by
+an adversary,
+provided the network has sufficient redundancy,
+and provided the sender and intermediaries know how to route message
+copies along independent paths.
+In this section, we address the both requirements by proposing a novel routing
+algorithm for constructing independent paths on the butterfly network topology.
+This architecture and routing algorithm achieve an
+effective redundancy that increases exponentially with the trust radius,
+allowing a very high level of adversarial fault tolerance.
+
+The structure of the butterfly network is highly constrained,
+making it most suitable for applications where network structure can be
+designed or dictated.
+Examples of such networks include:
+overlay networks ,
+formal organizations ,
+government-regulated cellular networks ,
+and call tree notification systems .
+For critical security applications in particular,
+the novel level of adversarial fault-tolerance offered by this scheme
+is highly desirable,
+even if it requires new approaches to designing communication
+and trust networks.
+Lastly, we note that the partial trust model and multipath fault tolerance
+schemes of the previous section do not rely on any particular network
+topology or routing algorithm,
+and are not necessarily limited to such applications.
+
+Butterfly Network Topology
+
+We choose the butterfly topology
+
+because of several desirable properties (described below)
+and because its strucutre allows for relatively straightforward
+design and analysis of routing algorithms.
+While several variations on the butterfly network exist,
+we utilize the wrap-around butterfly.
+We denote the -dimensional, directed wrap-around butterfly as a
+graph :
+
+(m) &=& (V, E_E_) 
+
+V &=& Z_m Z_2^m 
+
+E_
+&=&
+((l,z),(l+1  (mod  m),z)  
+
+E_
+&=&
+(l,z),(l+1  (mod  m),
+z 1_l ,
+
+where  is the set of integers modulo ,
+ represents copmonent-wise addition modulo 2,
+and  is a vector with a 1 in index  and 0 elsewhere.
+Each node is associated with a level  and an -bit string 
+known as the place-within-level.
+There are two types of edges (shown in Figure ).
+Down edges () connect nodes sharing the same  value
+in a cycle of increasing level .
+Down-right edges () also link to a node of level ,
+but one having the place-within-level equal to  with the th bit inverted.
+
+The wrap-around butterfly network is known to have several of the properties
+we desire for scalable, decentralized communication networks:
+
+[Vertex-transitivity:]
+Because the wraparound butterfly is vertex transitive,
+it is maximally decentralized;
+[Small-diameter:]
+For any two nodes, the length of the shortest path between them is
+, where N is the number of nodes in the network;
+[Sparsity:]
+With a constant degree of 4, the wraparound butterfly is extremely sparse,
+and can scale indefnitely without node degree becoming a limitation;
+[Redundancy:]
+Multiple paths exist between any two nodes.
+Specifically, we will prove below that the number of independent paths between two
+nodes increases exponentially with the trust
+radius .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The structure of the butterfly network lends itself to a well-known
+(unipath) routing algorithm,
+which we later extend to the multipath case.
+The unipath algorithm first follows a down or down-right edge at every step,
+increasing the level  by 1 and cycling through the
+indeces of the place-within-level.
+If the current node's place-within-level matches the destination node's at
+index ,
+a down edge is chosen and the place-within-level does not change.
+Otherwise, a down-right edge is chosen and the th component of the
+place-within-level is flipped,
+after which it matches the destination.
+After  interations of this, all levels have been visited
+and the place-within-level matches that of the destination.
+Simply following down (or up) edges will then increment (decrement) the
+level until the destination node is reached.
+
+Multipath Routing Algorithm
+
+We now present a routing algorithm to construct multiple independent paths
+between two nodes in a butterfly network.
+Independence requires that routes between two nodes  and  have no nodes
+in common, unless those nodes are less than distance  from either  or .
+Informally, the algorithm achieves this by using the first  hops to
+reach as many distinct nodes as possible,
+then routing from each of those to a distinct intermediary node,
+and finally routing from the intermediary to the destination.
+By ensuring that the place-within-level differs for all paths
+(outside of the trusted neighborhoods of  and )
+the algorithm guarnatees independence.
+As with the unipath routing algorithm,
+each of the multiple paths proceed using down and down-right edges,
+cycling through levels one at a time.
+However, we cycle through the levels twice, once to route from  to a
+particular path's intermediary node,
+and again to route from the intermediary to .
+In the first cycle, path independence is guaranteed by ensuring that
+all paths differ in the first  bits of the place-within-level.
+Similarly, in the second cycle,
+independence is guaranteed by ensuring that all paths differ in the
+ bits of the place-within-level preceeding the destination index
+(see Figure ).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+We now begin the formal specification of our multipath routing scheme for the
+wraparound butterfly network.
+Utilizing vertex transitivity, we label the source node as
+ and denote the destination node as ,
+without loss of generality.
+
+Let  be an -bit binary string with  denoting the bit at index .
+There are  such strings.
+Let  be the node at position 
+in the path parameterized by .
+For convenience,
+we will omit the subscript  when it is obvious from context.
+We define three distinct partitions of -bit binary strings.
+Let  () be the set of -bit
+strings in which the bits at
+all indeces  match (do not all match) those of .
+Note that  is trivially all -bit strings if .
+Let  () be the set of -bit strings with the lowest 
+bits all matching (not all matching) the bits of .
+Let  () be the set of -bit strings with the  bits
+preceeding index  all matching (not all matching) the bits of ,
+where  is a cyclic permutation of :
+
+s_i &=& s_(i + l_w)  mod  h.
+
+We will make use of the fact that:
+
+s s^&&
+S_s S_s^ = R_s R_s^ = .
+
+
+Routes are contructed in 7 stages.
+The network topology dictates that  (mod ),
+so we let  (mod ).
+and that  is equal to  with or without the bit in index
+ inverted, depending on whether the down or down-right edge was
+taken at step .
+
+[Stage 1: ()]
+Down or down-right edges
+are chosen such that the th bit of  is equal to the th bit
+of .
+Throughout Stage 1, all nodes are within the sender's trusted neighborhood.
+Throughout Stage 1, .
+At the end of Stage 1, , and  will remain so until the level cycles to  at .
+
+[Stage 2: ()]
+Edges are chosen to make the th bit of
+ the inverse of the th bit of .
+Note that this stage does not occur when .
+If this stage occurs, then  until these
+levels are reached again in stage 6.
+
+[Stage 3: ()]
+The bits of  are chosen to match ,
+such that after the stage is complete, .
+
+[Stage 4: ()]
+Paths are chosen such that the th bit of  matches that of the
+destination node .
+This stage will not occur if .
+
+[Stage 5: ()]
+There are two cases.
+If ,
+then there is no overlap between the indeces defining  and .
+In this case, the first  bits of  are set to
+match .
+Otherwise there is some overlap between the indeces defining  and
+.
+In this case, the each of the first  bits of  is either kept the
+same if , or set to the corresponding bit of 
+otherwise.
+In this stage and after,  is no longer guaranteed to be in .
+However,  remains in  during and after this stage.
+
+[Stage 6: ()]
+In this stage, edges are chosen to set the bits of  to their
+corresponding value in .
+ throughout this stage,
+but not afterwards.
+
+[Stage 7: ()] 
+The  bits of 
+preceeding index  are set to match .
+All nodes in this stage are within  hops of  and thus in its trusted
+neighborhood.
+After this stage,  and routing is complete.
+
+
+
+
+Given an -bit wraparound () butterfly network,
+and a trust radius ,
+for all node pairs ,
+if there exists a node  that belongs to
+two distinct routes  and 
+(),
+it implies that .
+
+
+Nodes from two paths can only coincide if their levels are the same.
+Nodes which share a level must either be in the same stage, or 4 stages
+apart.
+Let (,) denote a pair of sub-paths corresponding to stage  of
+one path and stage  of another.
+Excluding paths that intersect in their trusted neighborhoods, (1,1) and (7,7),
+we have reduced the list of possible intersections to the following cases:
+(2,2), (3,3), (4,4), (5,5), (6,6), (1,5), (2,6), and (3,7).
+Nodes in stages 2--4 belong to  so cannot overlap with any stage 2--4
+nodes from another path, eliminating (2,2), (3,3), and (4,4).
+Similarly, nodes in stages 4--6 belong to a unique ,
+eliminating (5,5) and (6,6).
+Nodes in stage 1 belong to  while those in stage 5 belong in
+its complement, eliminating (1,5).
+Similarly, for all  in stage 2,  is equal to ,
+while in stage 6,  is the inverse, eliminating (2,6)
+This leaves only (3,7), a collision which can occur only for only one path
+(with  matching the first  bits of ), and which enters the trusted
+neighborhood in stage 3.
+For this single path, we can proceed directly from stage 2 to stage 7,
+eliminating the last possible collision.
+
+
+Thus, assuming the partial trust model with trust transitive
+for  hops, we can construct  paths on a wraparound butterfly topology
+which do not intersect outside the trusted neighborhoods of the source and
+destination.
+Note that the node sequence  can be calculated entirely
+from the source , destination , and path parameter ,
+meaning that with this informaiton nodes are able to determine which neighbor
+to route a given message copy to.
+Furthermore, the existence of  paths places a lower bound on the
+effective redundancy ,
+showing that the decentralized, redundant, structured networks such as the
+butterfly can have a very low probability of failure when faced with
+adverarial faults, even from a very powerful attacker.
+
+Discussion
+
+While decentralized protocols have received much attention for their potential
+fault tolerance applications,
+a better understanding of how network structure contributes to fault tolerance
+is necessary.
+We have proposed a number of contributions towards this understanding:
+a partial trust model for quantifying the effective redundancy
+of a network,
+a multipath fault tolerance scheme for using that redundancy to detect
+errors,
+and a concurrent multipath routing algorithm enabling this scheme to
+be implemented on the butterfly network.
+
+Fault-tolerant network infrastructures have many direct applications.
+Areas such as cryptocurrency
+,
+secure multiparty computation
+,
+and wireless sensor networks
+
+have immediate need for scalable, fault-tolerant infrastructures.
+Many Internet services (e.g., email, social networks, cloud storage)
+are still highly centralized and vulnearble to technical and
+non-technical (i.e. coercive) attacks.
+Fault tolerance using both decentralized protocols and
+decentralized network structures
+is one approach to securing these important
+services and making networked communication safer.
+
+We have also focused specifically on adversarial faults that block or
+change messages (e.g., censorship).
+We have not specifically addressed confidentiality:
+how to keep those messages private.
+Existing cryptographic techniques for confidentiality are relatively
+mature compared to those for tolerating censorship.
+In fact, an attacker might use targeted attacks to achieve censorship
+as a fallback when surveillance isn't feasible.
+However, the technqiues presented in this paper
+are entirely compatible with, and in some cases could enhance, existing
+confidentiality techniques.
+For example, the well-known man-in-the-middle attack exploits a privileged
+network position to attack otherwise secure cryptography,
+suggesting that structural approaches can complement cryptographic ones.
+
+Our multipath fault tolerance scheme can be applied to any network
+that has both sufficient redundancy and a routing algorithm
+that maps local links to independent network paths.
+These requirements make the approach well-suited for structured networks,
+in which link structure can be dictated,
+such as the butterfy.
+While the ability to control network topology is only achievable in some
+applications, those applications are nonetheless significant
+(e.g. overlay networks ,
+formal organizations ,
+government-regulated cellular networks ,
+and call tree notification systems ).
+Furthermore, when high levels of adversarial fault tolerance are required,
+new socio-technical systems might choose to incorporate such networks.
+For example,
+a coallition of groups supporting free expression could use our results
+to construct a censorship-resistant communication network
+by cultivating the necessary trust relationships.
+In the general case,
+while the partial trust model can be applied to unstructured networks,
+additional work is needed to identify how to ensure redundancy and
+identify independent paths in unstructured networks.
+
+Conclusion
+
+We have developed a partial trust model which enables a formal analysis
+of the effect of network structure and trust transitivity on
+redundancy.
+We have also proposed a multipath fault tolerance scheme
+for using this redundancy to achieve adversarial
+fault tolerance.
+Under this scheme, the probability of an adversary causing an undetectable error
+decreases exponentially with the network's effective redundancy.
+Furthermore, a small increase in the number of messages sent can compensate
+for a large increase in the number of messages compromised by an adversary.
+This stabilizing asymetry puts attackers at a disadvantage,
+disincentivizing attack.
+We also presented a novel multipath routing algorithm allowing multipath fault
+tolerance to be used on the butterfly topology,
+and proved that the effective redundancy of the butterfly network increases
+exponentially with the trust radius.
+These results are directly applicable to architectures in which the link
+structure can be imposed by the architect,
+and more generally, provide a formalism that can be used more to evaluate
+the role of network structure, trust transitivity, and effective redundancy
+on adversarial fault tolerance.
+
+
+Acknowledgments
+Anonymized for blind review.
+
+
+
+
+
+abbrv
+  
+
+
+
+
+
+
+
+
+
