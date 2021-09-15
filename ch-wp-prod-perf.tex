@@ -1,93 +1,3 @@
-\def\year{2018}\relax
-\documentclass[letterpaper,twocolumn,10pt]{article}
-\usepackage{times}
-\usepackage{helvet}
-\usepackage{courier}
-\usepackage{url}
-\usepackage{graphicx}
-\frenchspacing
-\setlength{\pdfpagewidth}{8.5in}
-\setlength{\pdfpageheight}{11in}
-\pdfinfo{
-/Title (Network Structure, Efficiency, and Performance in WikiProjects)
-/Author (Edward L. Platt, Daniel M. Romero)}
-\setcounter{secnumdepth}{0}
-
-% Document-specific packages
-\usepackage{epigraph}
-\usepackage[normal]{threeparttable}
-\usepackage{graphicx}
-\usepackage{bbding}
-\usepackage{natbib}
-\usepackage[letterpaper,left=0.75in,right=0.75in,top=0.75in,bottom=1.25in]{geometry}
-\usepackage{titlesec}
-
-% Document-specific definitions
-\newcommand{\beq}{\begin{eqnarray}}
-\newcommand{\eeq}{\end{eqnarray}}
-\newcommand{\+}{\phantom{-}}
-
-\setlength{\columnsep}{0.375in}
-\titleformat*{\section}{\large\bfseries}
-\titleformat*{\subsection}{\normalsize\bfseries}
-\titleformat*{\subsubsection}{\normalsize\bfseries}
-\titleformat*{\paragraph}{\normalsize\bfseries}
-\titleformat*{\subparagraph}{\normalsize\bfseries}
-\titlespacing\section{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
-\titlespacing\subsection{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
-
-\linespread{1.0}
-
-\begin{document}
-\title{Network Structure, Efficiency, and Performance in WikiProjects}
-\author{
-Edward L. Platt \\
-University of Michigan\\
-elplatt@umich.edu
-\and
-Daniel M. Romero\\
-University of Michigan\\
-drom@umich.edu
-}
-\date{}
-\maketitle
-
-
-\begin{abstract}
-\small
-The internet has enabled collaborations at a scale never before possible,
-but the best practices for organizing such large collaborations are still not clear.
-Wikipedia is a visible and successful example of such a collaboration which might offer
-insight into what makes large-scale, decentralized collaborations successful.
-We analyze the relationship between the structural properties of WikiProject coeditor networks
-and the performance and efficiency of those projects.
-We confirm the existence of an overall performance-efficiency trade-off,
-while observing that some projects are higher than others in both performance
-and efficiency,
-suggesting the existence factors correlating positively with both.
-Namely, we find an association between low-degree coeditor networks
-and both high performance and high efficiency.
-We also confirm results seen in previous numerical and small-scale lab studies:
-higher performance with less skewed node distributions,
-and higher performance with shorter path lengths.
-We use agent-based models to explore possible mechanisms for
-degree-dependent performance and efficiency.
-We present a novel local-majority learning strategy designed to satisfy properties
-of real-world collaborations.
-The local-majority strategy as well as a localized conformity-based strategy
-both show degree-dependent performance and efficiency,
-but in opposite directions,
-suggesting that these factors depend on both network structure and learning strategy.
-Our results suggest 
-possible benefits to decentralized collaborations made of smaller,
-more tightly-knit teams,
-and that these benefits may be modulated by the particular learning strategies
-in use.
-\end{abstract}
-
-\maketitle
-
-\section{Introduction}
 \epigraph
 {The problem with Wikipedia is that it only works in practice. In theory, it's a total disaster.}
 {---Gareth Owen \cite{elsharbaty_editing_2016} }
@@ -341,7 +251,7 @@ The majority of WikiProjects rarely use the A class quality assessment.
 
 \begin{figure}[t!]
 \begin{center}
-\includegraphics[width=3in]{fig-knitting.png}
+\includegraphics[width=3in]{fig/WPProdPerf/fig-knitting.png}
 \caption{
 From Wikipedia {\em Knitting} talk page.
 Two WikiProjects have assessed the article as B-class quality.
@@ -545,7 +455,7 @@ so we exclude the 183 largest projects from the analysis.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=2.5in,height=2.5in]{fig-eff-perf-hist.pdf}
+\includegraphics[width=2.5in,height=2.5in]{fig/WPProdPerf/fig-eff-perf-hist.pdf}
 \caption{
 Histograms of WikiProject efficiency and performance.
 Both measures are highly right-skewed, but form unimodal distributions
@@ -578,7 +488,7 @@ bottlenecks and are thus highly decentralized.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=2.5in,height=1.67in]{fig-perf-eff.pdf}
+\includegraphics[width=2.5in,height=1.67in]{fig/WPProdPerf/fig-perf-eff.pdf}
 \caption{
 WikiProject performance is anticorrelated with B-level efficiency,
 with Pearson r of -0.12.
@@ -592,7 +502,7 @@ some are higher than others in both performance and efficiency.
 
 %\begin{figure}
 %\centering
-%\includegraphics[width=2.33in,height=2.33in]{fig-degree-mincut.pdf}
+%\includegraphics[width=2.33in,height=2.33in]{fig/WPProdPerf/fig-degree-mincut.pdf}
 %\caption{
 %Min-cut of WikiProject coeditor networks vs. their mean degree.
 %\label{fig:degree-mincut}
@@ -899,7 +809,7 @@ on degree than on path length.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=3in,height=1.5in]{fig-val-iter.pdf}
+\includegraphics[width=3in,height=1.5in]{fig/WPProdPerf/fig-val-iter.pdf}
 \caption{
 Mean agent solution value over time, averaged over 100 trials.
 Strategies are defined in Table \ref{tab:strat}.
@@ -955,8 +865,8 @@ Degree regression coefficients for simulations.
 \end{table}
 
 \begin{figure*}
-\includegraphics[width=6.67in,height=1.33in]{fig-deg-eff.pdf}
-\includegraphics[width=6.67in,height=1.33in]{fig-deg-perf.pdf}
+\includegraphics[width=6.67in,height=1.33in]{fig/WPProdPerf/fig-deg-eff.pdf}
+\includegraphics[width=6.67in,height=1.33in]{fig/WPProdPerf/fig-deg-perf.pdf}
 \caption{
 Efficiency and Performance of social learning strategies vs. mean network degree.
 Each point represents a single trial of 300 iterations.
@@ -1109,19 +1019,4 @@ Our results suggest that the success of large-scale collaborations may be aided
 by greater decentralization,
 consensus or conformity-based decision-making,
 and more tightly-knit collaborations between smaller teams.
-
-\section{Acknowledgments}
-%Anonymized for blind review.
-Thanks to
-Ceren Budak, Scott E. Page, Yan Chen, Tanya Rosenblat,
-anonymous reviewers,
-and the attendees of the May 25, 2017 MIT Center for Civic Media lab meeting
-and the Berkman-Klein Center Cooperation Working Group for helpful feedback;
-and to Danielle Livneh and Karthik Ramanathan for help collecting the data.
-This research was partly supported by the National Science Foundation under Grant No. IIS-1617820.
-
-\bibliographystyle{plain}
-\bibliography{wp-eff-perf}
-
-\end{document}
 

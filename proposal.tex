@@ -1,0 +1,123 @@
+\documentclass{report}
+
+\usepackage{apacite}
+\usepackage{bbding}
+\usepackage{courier}
+\usepackage{epigraph}
+\usepackage{graphicx}
+\usepackage{helvet}
+\usepackage[normal]{threeparttable}
+\usepackage{natbib}
+\usepackage{times}
+\usepackage{titlesec}
+\usepackage{url}
+
+\newcommand{\beq}{\begin{eqnarray}}
+\newcommand{\eeq}{\end{eqnarray}}
+\newcommand{\+}{\phantom{-}}
+
+\author{Edward L. Platt}
+\title{Network Deliberation: The role of network structure in large-scale, internet-enabled, participatory decision-making}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+As groups grow in size, they gain access to additional resources,
+creating opportunities for collective intelligence and collective action.
+However, at very large scales, group decision-making becomes prohibitively slow and difficult
+to coordinate.
+Traditional solutions include representative decision-making and/or a shift from deliberation
+to voting.
+Both approaches sacrifice desirable properties.
+Representative decision-making loses the potential benefits of collective intelligence and
+introduces hierarchies that may place the interests of specific individuals ahead of the
+interests of the group.
+Voting sacrifices generativity: allowing a choice between predefined options,
+without allowing for improvement to those options.
+Arrow’s impossibility theorem also fundamentally limits the fairness of voting.
+This project proposes Networked Deliberation as a potential means of large-scale decision-making.
+In Networked Deliberation, members of a large group are repeatedly partitioned into small
+deliberative pods.
+Overlap between pods at different stages enables group-wide diffusion of information and
+preferences.
+Different methods for assigning members to pods result in different network topologies.
+In partnership with large community groups, this project will use a web-based platform to
+evaluate Network Deliberation.
+For a variety of network topologies, the speed and quality of preference convergence will be
+evaluated using quantitative information from ranked-choice polls throughout the process.
+Deliberator satisfaction and experience will also be evaluated using qualitative analysis of
+deliberative text and surveys.
+This work seeks to improve the ability of very large groups to quickly develop a consensus,
+enabling a more effective use of shared resources to achieve common goals.
+\end{abstract}
+
+\tableofcontents
+
+\chapter{Introduction}
+\include{ch-intro.tex}
+
+\chapter{Network structure, productivity, and performance in WikiProjects}
+\include{ch-wp-prod-perf.tex}
+
+\chapter{Small interlocking groups improve mass deliberation in the presence
+of strong social influence}
+
+\chapter{Experimental evaluation of Network Deliberaiton}
+
+\chapter*{Acknowledgements}
+Thanks to Daniel M. Romero.
+
+
+Scott E. Page,
+Tawanna Dillahunt,
+Ceren Budak,
+for their time, guidance, and helpful feedback.
+
+Jane Im,
+
+Danielle Livneh,
+Karthik Ramanathan
+for help collecting WikiProjects data.
+
+Yan Chen,
+Tanya Rosenblat,
+
+Grant Schoenbeck,
+Kentaro Toyama,
+Charles R. Severance
+
+Veronica Falandino
+
+Jeffrey W. Lockhart,
+Danaja Maldeniya,
+Lia Bozarth,
+Christopher Quarles,
+Chanda Phelan,
+Padma Chirumamilla,
+Earnest Wheeler,
+Sam Carton,
+Elliott Brannon,
+Tawfiq Ammari,
+2015 UMSI PhD chohort
+Jean Hardy,
+Cindy Lin,
+
+the attendees of the May 25, 2017 MIT Center for Civic Media lab meeting
+the Berkman-Klein Center Cooperation Working Group
+the 2019 CSCW Workshop on Team and Group Diversity
+for helpful feedback;
+
+This research was partly supported by
+the National Science Foundation under Grant No. IIS-1617820.
+
+Andy Brosius,
+Persephone Hernandez-Vogt,
+
+
+\nocite{*}
+\bibliographystyle{apacite}
+\bibliography{prelim}
+
+\end{document}
