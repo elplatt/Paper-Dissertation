@@ -31,8 +31,15 @@ Deliberation can be modeled as a form of collective problem-solving and social l
 Following existing models of collective problem-solving \cite{lazer_network_2007, barkoczi_social_2016, gomez_clustering_2019}, our model comprises: 1. a collective task, 2. a network, and 3. a learning strategy.
 Agents maintain a candidate solution to the task and iteratively apply their learning strategy to the available information, yielding an updated candidate.
 
+\subsection{Overview}
+
 As their collective task, agents seek an optimal point on a rugged fitness landscape.
-This landscape is generated using the tuneably-rugged NK model \cite{kauffman_towards_1987, weinberger_local_1991} (see Methods for more details). In this case, task solutions take the form of binary strings.
+This landscape is generated using the NK model \cite{kauffman_towards_1987, weinberger_local_1991} (see Appendix \ref{apx-nk}).
+The NK model is a ``tuanbly rugged'' objective function parameterized by two variables:
+the number of bits in the input string ($N$),
+and the number bits used to compute each contribution to the objective function ($K+1$).
+These parameters can be used to tune problem size and complexity, respectively.
+The resulting objective function maps $N$-bit strings to real numbers in $[0,1]$.
 
 To model network deliberation, we construct interlocking networks in stages. At each stage, agents are partitioned into small {\em pods} and connected to all other agents in the same pod.
 Our choice of pod size is informed by real-world The upper limit of effective small group size has been estimated variously as five \cite{freeman_tyranny_1972}, five--eight\cite{lohman_designing_2000}, and eight \cite{miflin_small_2004}.
@@ -51,37 +58,224 @@ We consider three social learning strategies.
 The {\em best-neighbor} strategy is the naive greedy strategy: agents simply adopt the neighboring solution with the highest value. This strategy requires that agents have the ability to compare the quality of two arbitrary solutions, a strong assumption representing either skilled agents, or a simple task.
 The {\em conform} strategy is pure social influence. Agents adopt the most common solution among their neighbors.
 This strategy requires no knowledge of solution quality, modeling contexts where agents are unable to compare solution quality, or where agents choose not to, as in social loafing \cite{karau_social_1993}.
-We also introduce the {\em confident-neighbor} strategy, a variant of best-neighbor in which agents announce when they have the best solution in their neighborhood. This variant makes weaker assumptions about agent ability (see Methods for more detail) but is equivalent to best-neighbor when network deliberation is used.
+We also introduce the {\em confident-neighbor} strategy, a variant of best-neighbor in which agents announce when they have the best solution in their neighborhood. This variant makes weaker assumptions about agent ability but is equivalent to best-neighbor when network deliberation is used.
 This strategy allows us to compare low-social influence and high-social influence strategies under equivalent assumptions of agent ability.
 
 Between each stage of social learning, agents may perform individual learning. Following existing literature \cite{lazer_network_2007, barkoczi_social_2016}, we model individual learning by mutating a single bit of an agent's solution, and keeping it if the mutation improves solution quality.
-A complete learning strategy must also specify how social and individual learning are integrated. Existing literature \cite{lazer_network_2007, barkoczi_social_2016} applies individual learning only when social learning fails to produce an improved solution. We refer to this method as {\em fallback} individual learning. Fallback can be also be interpreted as a model of social loafing \cite{karau_social_1993}. For completeness, we include analysis for a second method in which agents first perform social and individual learning in {\em parallel} and then choose the better of the two learning outputs (See Methods for more detail).
+A complete learning strategy must also specify how social and individual learning are integrated. Existing literature \cite{lazer_network_2007, barkoczi_social_2016} applies individual learning only when social learning fails to produce an improved solution. We refer to this method as {\em fallback} individual learning. Fallback can be also be interpreted as a model of social loafing \cite{karau_social_1993}. For completeness, we include analysis for a second method in which agents first perform social and individual learning in {\em parallel} and then choose the better of the two learning outputs.
 
-In deliberation, individuals update their beliefs and preferences through interaction with other participants, making it a form of social learning. We thus simulate deliberation using a model of social learning closely resembling those of other authors \cite{
-lazer_network_2007,
-mason_propagation_2008,
-barkoczi_social_2016,
-gomez_clustering_2019}.
-We model communication between agents using a time-dependent network $(V,E_t)$. The vertices $V$ represent agents. The edges $E_t$ allow agents to exchange information with their immediate neighbors at time $t$.
-Agents collaborate to complete a collective task.
-Specifically, agents seek to identify a bit string $s$ that maximizes an objective function $Q(s)$ generated using the NK model \cite{kauffman_towards_1987, weinberger_local_1991}.
-The NK model is a ``tuanbly rugged'' objective function parameterized by two variables: the number of bits in the input string (N), and the number of other bits each bit interacts with (K).
-These parameters can be used to tune problem size and complexity, respectively. The resulting objective function maps N-bit strings to real numbers in $[0,1]$. The resulting values can be exponentiated to modify the skewness of the solution value distribution. A full description of our model can be found in the Supplementary Information.
-In keeping with other authors \cite{lazer_network_2007, barkoczi_social_2016}, we use N=15, K=6, and an exponent of 8 throughout this paper. In keeping with convention, we normalize fitness values to the global maximum.
-In our simulations each agent maintains exactly one preferred solution (initially random). The simulation proceeds iteratively, with agents updating their preferred solution once per iteration based on observation of their neighbors' solutions. Throughout this paper, we simulate 300 iterations to ensure convergence. We present results for 1000 randomly generated NK model objectives, with each network/strategy combination simulated once per objective function.
+\subsection{Agent-Based Model}
+
+We use an agent-based simualation to model deliberation between individuals.
+We model communication between agents using a time-dependent network $(V,E_t)$.
+The vertices $V$ correspond to the agents (individuals).
+The edges $E_t$ allow agents to exchange information with their immediate neighbors at time $t$.
+Over the course of the simulation, agents seek to maximize some objective function $Q(s)$.
+We use binary strings of length $d$ as our solution space: $s \in \mathbb{Z}^d$.
+We generate the objective function $Q(s)$ using the NK model \cite{kauffman_towards_1987, weinberger_local_1991} (see Appendix \ref{apx-nk}).
+
+The simulation begins at time $t=0$ by generating a set of initial solutions $s_{v,0}$ for the agents.
+These are generated randomly, with each possible solution having equal probability.
+The simulation proceeds iteratively.
+At time $t$ each agent applies one of several {\em learning strategies}, to determine its preferred solution at time $t+1$.
+Learning strategies can rely on the agent's own solution, the solutions of its neighbors, and potentially additional information shared by its neighbors.
+Learning strategies may also incorporate information about the objective function, modeling an agents' ability to evaluate the quality of solutions.
+To allow for ties, learning strategies produce a set of solutions rather than a single solution.
+In our simulations, we choose winners at random in the case of a tie.
+We present results for 1000 randomly generated NK model objectives.
+with each network/strategy combination simulated once per objective function.
+In keeping with other authors \cite{barkoczi_social_2016, lazer_network_2007} we use $N=15$ and $K=6$.
+We allow each simulation to proceed for 300 iterations, which we have found sufficient to guarantee convergence with our chosen parameters.
 
 \subsection{Networks}
 
 We carry out simulations for four different network topologies. In addition to the well-known preferential-attachment \cite{barabasi_emergence_1999} and small-world \cite{watts_collective_1998} networks, we construct two types of networks to model network deliberation.
-Both types exhibit interlocking structure and satisfy Property \ref{prop:mixing} (proof in Supplementary Information).
+Both types exhibit interlocking structure and satisfy Property \ref{prop:mixing}.
 These two network deliberation conditions differ in how agents are assigned to pods and in the structural efficiency of the resulting network.
 At each iteration, existing edges are replaced with cliques corresponding to the pods. An edge is created between two agents if and only if they share a pod.
-For {\em random-pod} assignment, agents are assigned to pods at random.
-This assignment method produces short geodesic paths and efficient network structure (see Supplementary Information).
-For {\em long-path} assignment, agents are first assigned an integer label. At each stage, a new prime integer is chosen and agents are divided into classes based on the remainder of their label modulo the prime.
-Each class is then divided into size-M pods by selecting the lowest M labels, then the next-lowest M, and so on.
-The prime residue classes guarantee interlocking structure, while the grouping of similar labels prevents the creation of long-distance ``shortcut'' edges, producing an inefficient network (see Supplementary Information).
+In {\em random-pod} assignment, agents are assigned to pods at random.
+This assignment method produces short geodesic paths and efficient network structure.
+In {\em long-path} assignment, agents are assigned using an algorithm which guarantees interlocking structure while preventing the creation of long-distance ``shortcut'' edges, producing a structurally inefficient network.
 All networks are constructed with 100 vertices/agents and a mean degree of 4 (pod size of 5).
+
+\subsection{Conventional Deliberation}
+We model the communication network structure of conventional deliberation using two static networks: small-world networks \cite{watts_collective_1998}, and preferential attachment networks \cite{barabasi_emergence_1999}. In typical deliberative settings, from deliberative assemblies to online forum threads, the contributions of any member are potentially visible to all other members.
+The network of {\em potential} communication can be modelled by a complete graph.
+However, a complete graph may not be the best model for the {\em actual} communication that takes place in such a network. In a real-world deliberation, some participants are more influential than others \cite{goel_structure_2012, shaw_laboratories_2014}, and many communications can be missed or ignored by any particular participant.
+
+Human social networks often exhibit large clustering, and short path lengths.
+To model such dynamics, we use Watts-Strogatz small-world networks  \cite{watts_collective_1998}.
+These networks model, for example, when participants interact mostly with their strong ties, but occasionally with a weak tie. Social networks have also been found to exhibit skewed degree distributions with long tails \cite{barabasi_emergence_1999}.
+We model these networks using the Barabási-Albert preferential attachment model.
+These networks model settings where a small number of individuals produce a disproportionate share of the communication due to factors such as social capital, expertise, or confidence.
+
+\subsection{Network Deliberation: Interlock Networks}
+Both of our network deliberation conditions use networks built from interlocking pods.
+These pods are small complete graphs of roughly equal size.
+At any given time, each agent can communicate with all other agents in exactly one pod.
+Periodically, all agents are simultaneously reassigned to new pods.
+These reassignments create an interlocking structure, allowing information to flow through the entire group.
+This structure can be represented as a time-dependent or directed network.
+The properties of an interlock network depend on the particular method for assigning agents to pods.
+Crucially, interlocking structure is created when agents are placed with others they have not yet interacted with.
+We thus require that pod assignment schemes satisfy the mixing property (Property \ref{prop:mixing}).
+
+\subsubsection{Random-Pod Assignment}
+The {\em random-pod} assignment method (Algorithm \ref{alg:random}) simply assigns agents to groups at random. Pseudocode for this method is shown in Algorithm \ref{alg:random}.
+
+\begin{algorithm}
+\SetAlgoLined
+\DontPrintSemicolon
+\SetKwFunction{removeRandom}{removeRandom}
+\SetKwFunction{insert}{insert}
+\SetKwFunction{emp}{empty}
+\SetKw{algnot}{not}
+\KwData{A vertex list $V$, the pod size $M \in \mathbb{Z}$.}
+\KwResult{A partition of the vertices.}
+    $N \longleftarrow \lceil \frac{|V|}{M} \rceil$ \;
+    $P \longleftarrow$ List of $N$ empty sets \;
+    \For{$i \in 1, \ldots, M$}{
+        \ForEach{$s \in P$}{
+            \If{\algnot $V.\emp()$}{
+                $v \longleftarrow V.\removeRandom()$ \;
+                $s.\insert(v)$ \;
+            }
+        }
+    }
+    \Return{$P$}
+\caption{Random-Pod Assignment}
+\label{alg:random}
+\end{algorithm}
+
+\begin{claim}
+Random-pod assignment satisfies Property \ref{prop:mixing}.
+\end{claim}
+
+\begin{proof}
+Let $v$ be a vertex of graph $G=(V,E_t)$ with a set of $M$ neighbors at stage $t$ denoted $N_t(v)$.
+The probability that the $k$th neighbor chosen at time $t^\prime \neq t$ belongs to $N_t(v)$, given that the first $k - 1$ did not, is:
+\begin{align*}
+p_\text{repeat}(k)
+&= \frac{M - 1}{|V| - k} \\
+&\leq \frac{M - 1}{|V| - M}.
+\end{align*}
+The probability that none of the $M-1$ neighbors chosen at time $t^\prime$ belong to $N(v)$ thus satisfies:
+\begin{align*}
+p_\text{mixed}
+&\geq
+\left( 1 - \frac{M - 1}{|V| - M} \right)^{M-1} \\
+\lim_{|V|\rightarrow\infty} p_\text{mixed}
+&= 1
+&\qedhere
+\end{align*}
+\end{proof}
+
+Random pod assignment also creates structurally efficient networks with short geodesic distances, as shown in Figure \ref{fig:broadcast}.
+There has been evidence both for
+\cite{lazer_network_2007, derex_partial_2016, mason_propagation_2008, barkoczi_social_2016}
+and against
+\cite{mason_collaborative_2012, barkoczi_social_2016}
+the effectiveness of structurally efficient networks in social learning.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=3.33in]{fig/NetDelibABM/fig-broadcast.eps}
+    \caption{Mean time necessary for a signal broadcast from one node to reach the entire network. We use mean broadcast time as a measure of geodesic length for time-varying networks.}
+    \label{fig:broadcast}
+\end{figure}
+
+
+\subsubsection{Long-Path Pod Assignment}
+
+To study the effects of path length, we require an alternative pod assignment method that produces long paths.
+However, we must still retain Property \ref{prop:mixing} such that it is rare for two agents to repeatedly share the same pod.
+This property ensures the creation of many new edges at each stage, which is difficult--but not impossible--to reconcile with long average path length.
+We now present a {\em long-path} pod assignment method, which meets both of the above goals.
+
+We begin with a high-level overview.
+Agents are assigned an integer position on a 1-dimensional circular lattice.
+By preferring short-distance links on this lattice, we maintain long path lengths.
+We also partition agents according to the remainder of their position, modulo some prime, i.e., their residue class.
+By limiting links to agents in the same residue class, and using a unique prime at each stage, we ensure that it is rare for multiple agents to share a pod twice in a row.
+Specifically, for stages using primes $p$ and $q$, two agents will share a pod for both stages when their positions are equal modulo $pq$. Pseudocode for long-path assignment is shown in Algorithm \ref{alg:long}.
+
+\begin{algorithm}
+\SetAlgoLined
+\DontPrintSemicolon
+\SetKw{algnot}{not}
+\SetKwFunction{removeRandom}{removeRandom}
+\SetKwFunction{moduli}{moduli}
+\SetKwFunction{append}{append}
+\SetKwFunction{enqueue}{enqueue}
+\SetKwFunction{dequeue}{dequeue}
+\SetKwFunction{concat}{concatenate}
+\KwData{A vertex list $V$, the pod size $M \in \mathbb{Z}$, the stage $t \geq 0 \in \mathbb{Z}$, a list of co-prime integers $\moduli$.}
+\KwResult{A partition of the vertices.}
+    $N \longleftarrow \lceil \frac{|V|}{M} \rceil$ \;
+    $P \longleftarrow$ List of $N$ empty sets \;
+    \eIf{$t = 0$}{
+        // Place all vertices in same residue class \;
+        $p \longleftarrow 1$ \;
+    }{
+        // Choose integer to define residue class \;
+        $p \longleftarrow \moduli[t]$ \;
+    }
+    // Assign vertices to residue classes \;
+    $R \longleftarrow$ List of $p$ empty queues \;     
+    \For{$z \in 0, \ldots, |V|-1$}{
+        $R[z \bmod p].\enqueue(V[z])$ \;
+    }
+    // Divide each residue class into pods \;
+    $P \longleftarrow $ Empty list of lists. \;
+    \For{$r \in R$}{
+        $N_r \longleftarrow \lceil \frac{|r|}{M} \rceil$ \;
+        $P_r \longleftarrow$ List of $N_r$ empty lists \;
+        \For{$i \in 1, \ldots, M$}{
+            \For {$j \in 0, \ldots, N_r - 1$}{
+                \If{ \algnot $r.\emp()$}{
+                    $v \leftarrow r.\dequeue()$ \;
+                    $P_r[j].\append(v)$ \;
+                }
+            }
+        }
+        $P.\concat(P_r)$
+    }
+    \Return{$P$}
+\caption{Long-Path Assignment}
+\label{alg:long}
+\end{algorithm}
+
+
+\begin{claim}
+When the pod size $M$ is less than the modulus $p_t$ for all stages $t$, long-path pod assignment satisfies Property \ref{prop:mixing}.
+\end{claim}
+
+\begin{proof}
+Let $p$ and $q$ be co-prime integers used as moduli for stages $t$ and $t^\prime$ respectively.
+Let $z(x)$ denote the integer position of vertex $x$.
+Let $v$ be a vertex, and let us assume vertex $w$ belongs to the same pod as $v$ at both time $t$ and $t^\prime$.
+This assumption implies:
+\begin{align*}
+    z(v) &\equiv z(w) \pmod{p} \\
+    z(v) &\equiv z(w) \pmod{q} \\
+    \implies z(v) - z(w) &\equiv 0 \pmod{p} \\
+    &\equiv 0 \pmod{q} \\
+    &= npq & \text{for some integer n}.
+\end{align*}
+By the definition of the long-path algorithm:
+\begin{align*}
+    |z(v)-z(w)| & \leq (M - 1)p \\
+    \implies |n|pq & \leq (M - 1)p \\
+    |n|q & \leq (M - 1).
+\end{align*}
+By assumption, $q \geq M$, so the above can only be satisfied by $n=0$,
+which in turn implies $v=w$. \qedhere
+\end{proof}
+
+To see that the long-path procedure produces long geodesics, note that the pods of size $M$ connect nodes at most $(M - 1)p_i$ apart in position, preventing the creation of any shortcut edges, as long as $p_i$ is small compared to $|V|$.
+Numerical simulations confirm that the long-path algorithm produces geodesics larger than random pod assignment (Figure \ref{fig:broadcast}).
+The number of agents may not be an exact multiple of $M$, so the final pods may be truncated. However, the network will be a sub-graph of a network that does have a multiple of $M$ nodes, so the structure will not be fundamentally changed, and these edge effects should become negligible as the number of agents increases.
+
 
 \subsection{Learning Strategies}
 We simulate three learning strategies. Each strategy combines an individual strategy and a social strategy. The individual strategy is the same for all conditions. Agents chose a random bit of their current solution and invert that bit. If the resulting solution is an improvement, it is kept, otherwise the original is kept.
@@ -95,13 +289,14 @@ The {\em conform} strategy also follows previous authors \cite{barkoczi_social_2
 The {\em confident-neighbor} strategy is a novel variant of best-neighbor. To apply this strategy, agents search the solutions of all immediate neighbors to determine if any are superior to their own. If no superior solutions are found, the agent is {\em confident}. The confident agent maintains its original solution and broadcasts that solution to all neighbors. Alternatively, if superior solutions are found, the agent waits for broadcasts from confident neighbors. Agents may receive zero, one, or many such broadcasts. If no broadcasts are received, the agent maintains its original solution. If one or more broadcasts are received, one of them is chosen at random and that solution is adopted. It is worth noting that this strategy is equivalent to best-neighbor when the network is composed of one or more cliques, as in network deliberation.
 
 \subsection{Statistical Methods}
-All comparisons are made using two-tailed paired t-tests. Pairs of observations correspond to the same instance of the NK-model objective function. Significance values have been corrected for multiple comparisons using the Bonferroni correction. A full table of t-values and corrected p-values is available in the Supplemental Information.
+All comparisons are made using two-tailed paired t-tests. Pairs of observations correspond to the same instance of the NK-model objective function.
+Significance values have been corrected for multiple comparisons using the Bonferroni correction.
 
 \section{Results}
 
 Here we present the results of 1000 runs of an agent-based model of deliberation.
-In each run, an NK model is generated (N=15, K=6) and the model is run for 300
-iterations for each network/strategy combination (see Methods for more details).
+In each run, an NK model is generated (N=15, K=6) and the model is simulated for 300
+iterations for each network/strategy combination.
 The results of these simulations are shown in Figure \ref{fig:results}.
 
 We find that network deliberation identifies higher quality solutions than
@@ -168,7 +363,7 @@ However, we note an interesting deviation: under the conform strategy, long-path
 
 \subsection{Confident-Neighbor Strategy}
 
-In general, the best-neighbor strategy requires strong assumptions about agents' ability to evaluate solutions. In the special case of network deliberation, the assumptions can be weakened by applying a variant of the strategy, which has not been previously studied. The variant, which we call {\em confident-neighbor}, is equivalent to best-neighbor for network deliberation, but not in general (see Methods for more detail). Confident-neighbor thus provides a comparison between network deliberation and conventional single-group deliberation under weaker informational assumptions than best-neighbor. Surprisingly, the weaker assumptions of confident-neighbor lead to higher performance on the preferential attachment network, and similar performance on the-small world network (within our statistical resolution). Figure \ref{fig:results-confident} shows histograms of the quality difference between confident-neighbor and best-neighbor for both conventional networks. In the majority of cases, both strategies find comparable solutions. However, we find that when these strategies do find different solutions, those found by confident-neighbor are more often better, at least for the preferential-attachment network.
+In general, the best-neighbor strategy requires strong assumptions about agents' ability to evaluate solutions. In the special case of network deliberation, the assumptions can be weakened by applying a variant of the strategy, which has not been previously studied. The variant, which we call {\em confident-neighbor}, is equivalent to best-neighbor for network deliberation, but not in general. Confident-neighbor thus provides a comparison between network deliberation and conventional single-group deliberation under weaker informational assumptions than best-neighbor. Surprisingly, the weaker assumptions of confident-neighbor lead to higher performance on the preferential attachment network, and similar performance on the-small world network (within our statistical resolution). Figure \ref{fig:results-confident} shows histograms of the quality difference between confident-neighbor and best-neighbor for both conventional networks. In the majority of cases, both strategies find comparable solutions. However, we find that when these strategies do find different solutions, those found by confident-neighbor are more often better, at least for the preferential-attachment network.
 
 \begin{figure}
     \label{fig:results-confident}
@@ -197,7 +392,7 @@ How does network deliberation improve collaborative output? In part, the high pe
 In order to distinguish between the effects of social influence and individual ability, we have introduced the confident-neighbor strategy, which (unlike best-neighbor) assumes the same agent capabilities as the conform strategy (in a critical learning setting).
 While not central to our study of network deliberation, our findings regarding the 
 confident-neighbor strategy have important implications for the study of social learning in general. 
-Our findings show that just as reducing network efficiency can improve solution quality by raising diversity, reducing the available information can improve the performance of greedy learning strategies. Our investigation of confident-neighbor stems from a careful formal analysis of the information required by each strategy (See Methods). The surprisingly high performance of confident-neighbor shows the importance of isolating social influence from agent ability.
+Our findings show that just as reducing network efficiency can improve solution quality by raising diversity, reducing the available information can improve the performance of greedy learning strategies. Our investigation of confident-neighbor stems from a careful formal analysis of the information required by each strategy. The surprisingly high performance of confident-neighbor shows the importance of isolating social influence from agent ability.
 
 Our work is limited by a number of assumptions, which require further investigation to achieve greater generalizability. We assume a static objective function, while real-world objectives can change with changing external conditions as well as changing individual preferences. We also assume a homogeneous strategy across all agents, which raises questions of how different strategies interact within the same collaboration. We have also assumed that agents are truthful and do not form coalitions outside of the existing network, both assumptions which can be violated in real-world settings.
 We have also assumed that agents have access to the full solution string, and that agents incorporate all bits of the string into their quality estimates. Extremely complex real-world tasks might be better-modeled by a collection of sub-tasks, with agents having access to only a subset of the solution string.

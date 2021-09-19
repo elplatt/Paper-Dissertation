@@ -1,9 +1,11 @@
 \documentclass{report}
 
+\usepackage[ruled,vlined]{algorithm2e}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{apacite}
+\usepackage[toc,page]{appendix}
 \usepackage{bbding}
 \usepackage{courier}
 \usepackage{epigraph}
@@ -40,16 +42,16 @@
 \maketitle
 
 \begin{abstract}
-\include{abstract.tex}
+%\include{abstract.tex}
 \end{abstract}
 
 \tableofcontents
 
 \chapter{Introduction}
-\include{ch-intro.tex}
+%\include{ch-intro.tex}
 
 \chapter{Network structure, productivity, and performance in WikiProjects}
-\include{ch-wp-prod-perf.tex}
+%include{ch-wp-prod-perf.tex}
 
 \chapter{Small interlocking groups improve mass deliberation in the presence
 of strong social influence}
@@ -61,7 +63,10 @@ of strong social influence}
 %\include{acknoledgements.tex}
 
 
-
+\begin{appendices}
+\chapter{The NK-Model}
+\label{apx-nk}
+\end{appendices}
 
 \nocite{*}
 \bibliographystyle{apacite}
