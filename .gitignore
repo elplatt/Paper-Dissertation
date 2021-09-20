@@ -4,5 +4,6 @@
 *.toc
 *.bbl
 *.blg
+*eps-converted-to.pdf
 proposal.pdf
 
