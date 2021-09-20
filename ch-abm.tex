@@ -278,15 +278,147 @@ The number of agents may not be an exact multiple of $M$, so the final pods may 
 
 
 \subsection{Learning Strategies}
-We simulate three learning strategies. Each strategy combines an individual strategy and a social strategy. The individual strategy is the same for all conditions. Agents chose a random bit of their current solution and invert that bit. If the resulting solution is an improvement, it is kept, otherwise the original is kept.
-We simulate two methods of combining individual and social strategies. In the {\em fallback} condition, individual learning is only applied when social learning fails to improve the solution.
-In the {\em parallel} condition, individual and social strategies are applied to the original solution in parallel and the better of the two is chosen. In all cases, a final check is performed, following \cite{barkoczi_social_2016}: new solutions are only accepted if they improve on the original solution. Descriptions of the social learning strategies follow (formal definitions can be found in the Supplementary Information).
+The choice of network structure defines which agents can exchange information, but not how those agents act on the information received. An agent's actions based on available information are determined by that agent's {\em learning strategy}. Learning strategies can be divided into {\em individual learning strategies} which use only information directly observable by the agent, and {\em social learning strategies} which use information communicated by neighboring agents.
+Generally, a learning strategy may incorporate both social and individual components.
+In this paper, we consider three separate strategies: {\em best-neighbor}, {\em confident-neighbor}, and {\em conform}.
+Each is combined with the same mutation-based individual learning strategy.
 
-The {\em best-neighbor} strategy closely follows that used by other authors \cite{lazer_network_2007, barkoczi_social_2016}. To apply this strategy, an agent searches the solutions of all immediate neighbors, and chooses the solution maximizing the payoff. In the event of a tie, one of the maximal solutions is chosen at random, with probability proportional to the number of neighbors exhibiting that solution.
+To understand why real-world deliberators might choose different strategies,
+it is necessary to realize that the social learning strategies available to an
+individual depend on that individual's ability to evaluate the quality of candidate solutions.
+Individuals with less information about solution quality, must rely
+more heavily on the recommendations and influence of their peers.
+We formalize an agent's ability to evaluate the quality of a candidate solution
+as its {\em capabilities}, which we now explore in further detail.
 
-The {\em conform} strategy also follows previous authors \cite{barkoczi_social_2016}. To apply this strategy, agents search the solutions of all immediate neighbors, counting the number of times each unique solution appears. The solution with the highest count is adopted. In the event of a tie, the original solution is maintained.
+\subsubsection{Agent Capabilities}
+\label{sec:capability}
+In human social learning, the ability of individuals to evaluate the quality of a solution can vary with factors such as expertise and task type. When comparing learning strategies, it will be helpful to classify them according to the capabilities they require of agents. We formalize these capabilities as oracle functions, which accept one or more task solutions as input and reveal whether the supplied state(s) satisfy some particular property.
 
-The {\em confident-neighbor} strategy is a novel variant of best-neighbor. To apply this strategy, agents search the solutions of all immediate neighbors to determine if any are superior to their own. If no superior solutions are found, the agent is {\em confident}. The confident agent maintains its original solution and broadcasts that solution to all neighbors. Alternatively, if superior solutions are found, the agent waits for broadcasts from confident neighbors. Agents may receive zero, one, or many such broadcasts. If no broadcasts are received, the agent maintains its original solution. If one or more broadcasts are received, one of them is chosen at random and that solution is adopted. It is worth noting that this strategy is equivalent to best-neighbor when the network is composed of one or more cliques, as in network deliberation.
+One of the strongest capabilities an agent might posses, is to compare two arbitrary solutions to determine which yields a higher value of the objective function. We represent this capability using the {\em arbitrary comparison} oracle.
+\begin{definition}
+The arbitrary comparison oracle $\mathcal{O^>}(s_1, s_2)$ is given by:
+\begin{eqnarray}
+\mathcal{O}^>(s_1, s_2) &\equiv&
+Q(s_1) > Q(s_2)
+\end{eqnarray}
+\end{definition}
+
+Under a weaker assumption, agents might be ``experts'' on their current solution and able to compare that particular solution to any other. This ability is represented by a {\em single-solution comparison} oracle.
+\begin{definition}
+The single-solution comparison oracle for solution $s$ is given by:
+\begin{eqnarray}
+\mathcal{O}^>_s(\tilde{s}) &\equiv&
+Q(\tilde{s}) > Q(s)
+\end{eqnarray}
+\end{definition}
+
+In many contexts, it is reasonable to assume that agents can explore the effects of small changes to their current solution. When the solutions are binary strings, such variations can be modeled by flipping a single bit of the solution string. We formalize this capability through the {\em mutation comparison} oracle.
+\begin{definition}
+The mutation comparison oracle for solution $s$ is given by:
+\begin{eqnarray}
+\mathcal{O}^\oplus_s(i) &\equiv&
+Q(s \oplus e_i) > Q(s),
+\end{eqnarray}
+where $\oplus$ represents addition mod 2 and $e_i$ represents the binary string with a single 1 at index $i$.
+\end{definition}
+
+\subsubsection{Mutation-Based Individual Learning}
+In real-world collaborations, individuals sometimes work independently, even when communication is available. Independent work might be motivated by practical concerns (such as distributing labor) or by social dynamics. We model individual learning using single-bit mutations, following the examples of
+\cite{lazer_network_2007} and \cite{barkoczi_social_2016}. Agents constructs a candidate solution by flipping a single bit of their solution at an index selected uniformly at random. If the candidate solution yields a higher value of the objective function, the agent adopts it as the new solution. As this strategy requires comparing solutions that differ by at most one bit, an oracle at least as powerful as the mutation comparison oracle is required.
+
+\begin{definition}
+The mutation individual learning strategy $\mathcal{L}_{\text{I}}(v)$ is defined as:
+\begin{eqnarray}
+i &\sim& \unif(1,d) \nonumber\\
+\mathcal{L}_{\text{I}}(v) &\equiv&
+\begin{cases}
+\{s(v) \oplus e_i\} & \mbox{if $\mathcal{O}^{\oplus}_{s(v)}(i)$}
+\\
+\{s(v)\} & \mbox{otherwise}.
+\end{cases}
+\end{eqnarray}
+\end{definition}
+
+\subsubsection{Best-Neighbor}
+Among social strategies, the straightforward greedy approach results in the {\em best-neighbor} strategy, which has been widely used in prior work \cite{lazer_network_2007, mason_propagation_2008, barkoczi_social_2016}. In this strategy, an agent simply compares the solutions of all agents in its neighborhood and adopts the best. While straightforward, this strategy makes a strong assumption about agent capabilities: access to the arbitrary comparisons.
+\begin{definition}
+The Best-Neighbor strategy $\mathcal{L}_{BN}(v)$ is defined as:
+\begin{eqnarray}
+\mathcal{L}_{BN}(v)
+&\equiv&
+\{ \, s \!\in\! S(v)
+\mid
+\forall \tilde{s} \!\in\! S(v) \, \
+\lnot \, \mathcal{O}^{>}(\tilde{s}, s),
+\end{eqnarray}
+where $S(v)$ is the multiset of solutions of $v$'s neighbors.
+\end{definition}
+
+\subsubsection{Confident-Neighbor}
+This paper introduces {\em confident-neighbor}, an alternative to the best-neighbor strategy which relies only on the single comparison oracle and which reduces to best-neighbor for interlocking pod networks. The confident neighbor strategy also represents a moderate level of social loafing \cite{karau_social_1993}, in which agents do not actively seek to improve their solution, but passively adopt better solutions if they are presented.
+
+Confident neighbor proceeds in two stages. In the first stage, agents determine if their current solution is at least as good as all others in their neighborhood. If so, we call the agent {\em confident}. In the second stage, confident agents broadcast their solution to all of their neighbors. Non-confident agents choose randomly between any broadcast solutions they receive, or keep their original solution if they receive none.
+
+\begin{definition}
+The confident-neighbor strategy $\mathcal{L}_{CN}$ is defined as:
+\begin{eqnarray}
+C(v) &\equiv& \{
+\, s(w)  \nonumber \\
+&& \,
+\mid
+\forall w \!\in\! N(v) \, \forall u \!\in\! N(w) \,
+\lnot \, \mathcal{O}^{>}_{s(w)}(s(u)) \,
+\}
+\\
+\mathcal{L}_{\text{CN}}(v)
+&\equiv& 
+\begin{cases}
+C(v) & \text{if } C(v) \neq \varnothing \\
+\{ \, s(v) \, \}& \text{otherwise,}
+\end{cases}
+\end{eqnarray}
+where $N(v)$ is the set of vertices neighboring $v$ and $s(v)$ is the current candidate solution for agent $v$.
+\end{definition}
+
+Confident-neighbor differs from best-neighbor because of two subtle but important considerations. First, an agent's neighbors need not be adjacent to each other. Second, an agent's neighbors can be adjacent to others outside that agent's neighborhood. As a result, an agent might receive zero, one, or many broadcasts. The exception is when agents belong to a clique (e.g., in network deliberation), in which case agents receive exactly one broadcast for each maximal solution in the clique, thus yielding the same results as best-neighbor. Confident-neighbor is thus more appropriate than best-neighbor for comparing network deliberation to single group deliberation, as the same information is utilized in both cases.
+
+\subsubsection{Conform}
+In some contexts, agents might rely on information other than solution quality in their learning strategies.
+Agents might do so out of necessity if they are not able to compare arbitrary solutions.
+Alternatively, agents might ignore solution quality due to social dynamics, e.g. social loafing \cite{karau_social_1993}. In these contexts, agents might instead evaluate solutions based on popularity, which produces the {\em conform} learning strategy.
+When using the conform strategy, agents count the number of times each solution appears among their neighbors, and adopt the most popular.
+\begin{definition}
+The conform strategy $\mathcal{L}_{\text{C}}(v)$ is defined as:
+\begin{eqnarray}
+\mathcal{L}_{\text{C}}(v) &=&
+\mode(S(v)),
+\end{eqnarray}
+where $S(v)$ is the multiset of candidate solutions for all vertices neighboring $v$, and $\mode()$ returns a set containing the mode or modes of a multiset.
+\end{definition}
+Note that the conform strategy does not depend on the objective function or any oracles, meaning it incorporates no new information about the quality of the solutions.
+
+\subsubsection{Combining Learning Strategies}\label{subsubsec:combine}
+Models of social learning often combine truly social strategies with individual learning \cite{lazer_network_2007,barkoczi_social_2016,gomez_clustering_2019}.
+We find that the method used to combine social and individual strategies can result in a notable difference in outcome.
+\begin{description}
+\item[Parallel]{
+Agents apply both social and individual learning strategies to their initial solution to produce two competing intermediate solutions, then adopt the better of the two. This method relies on the arbitrary comparison oracle.}
+\item[Fallback]{
+Agents first apply social learning to the current solution, but "fall back" to individual learning if the result is not an improvement on the original solution \cite{lazer_network_2007, barkoczi_social_2016,gomez_clustering_2019}. Fallback relies on the single comparison oracle and could be motivated by limited agent capability or social loafing.}
+\item[Serial]{
+Agents first perform individual learning to produce an intermediate solution, and then apply social learning to the intermediate solutions. This method does not rely on any of the solution comparison oracles.}
+\end{description}
+We follow existing literature by focusing on the fallback method.
+As a robustness check, we also consider the parallel method,
+which uses the same agent capabilities but is arguably more powerful.
+
+Combined social learning strategies may also differ in their
+{\em criticality} \cite{barkoczi_social_2016, rendell_rogersparadox_2010}.
+After combining individual and social learning according to one of the above methods, non-critical agents immediately adopt the result.
+Critical agents, on the other hand, compare the quality of the new solution to their previous solution, only adopting the new one if it provides an improvement.
+Note that critical behavior relies on information about solution quality and requires single-solution comparison capability, or stronger.
+
 
 \subsection{Statistical Methods}
 All comparisons are made using two-tailed paired t-tests. Pairs of observations correspond to the same instance of the NK-model objective function.
