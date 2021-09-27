@@ -24,14 +24,14 @@ there are at least two distinct measures to consider.
 The first measure is short-term:
 how effective a unit of work is at improving
 the collaboration's output,
-which we call {\em efficiency}.
+which we call {\em productivity}.
 The other measure is long-term:
 the highest quality typically reached by an output,
 which we call {\em performance}.
 These two terms are often used interchangeably,
 but we find it fruitful to distinguish between the two.
-We find that Wikipedia exhibits an overall trade-off between performance and efficiency.
-However, some WikiProjects surpass others in both efficiency and performance,
+We find that Wikipedia exhibits an overall trade-off between performance and productivity.
+However, some WikiProjects surpass others in both productivity and performance,
 suggesting the existence of factors that correlate positively with both.
 
 Our study focuses on the coeditor networks of each WikiProject:
@@ -64,12 +64,12 @@ including Wikipedia.
 Our main findings are:
 \begin{itemize}
 \setlength\itemsep{0pt}
-\item Despite an overall performance/efficiency trade-off,
-WikiProjects with low-degree coeditor networks tend to have both higher performance and higher efficiency;
+\item Despite an overall performance/productivity trade-off,
+WikiProjects with low-degree coeditor networks tend to have both higher performance and higher productivity;
 \item Short paths are associated with higher performance, consistent with a conformity-based learning strategy;
 \item Structural inequality, as measured by degree skewness, is associated with lower performance;
 \item Our agent-based model
-shows that the efficiency and performance of collaborations can
+shows that the productivity and performance of collaborations can
 depend on network degree,
 and that the direction of that dependence varies with social learning strategy.
 \end{itemize}
@@ -191,7 +191,7 @@ more loosely organized than traditional teams.
 
 Across the broad range of work discussed above,
 a few key themes emerge.
-Both the efficiency and the performance of a collaboration are important
+Both the productivity and the performance of a collaboration are important
 considerations and vary depending on both network structure and type of task
 \cite{kearns_experiments_2012}.
 While generated signal models of social learning predict no relationship
@@ -272,11 +272,11 @@ between May 4, 2006 and December 2, 2015.
 Finally, we used a publicly-available database dump of page events (including rename events)
 to reconstruct the article id for each title mentioned in the assessment logs.
 
-\subsection{Efficiency and Performance}
+\subsection{Productivity and Performance}
 
 When individuals collaborate to solve a problem,
 there are many ways to gauge their success.
-One possibility is {\em efficiency}:
+One possibility is {\em productivity}:
 how quickly they find a solution.
 Another is {\em performance}:
 how good their solution is.
@@ -284,36 +284,36 @@ Evidence from numerical simulations
 \cite{lazer_network_2007,mason_propagation_2008,mason_collaborative_2012,grim_scientific_2013,barkoczi_social_2016},
 lab studies \cite{kearns_experiments_2012},
 and field observations \cite{gentry_consensus_1982}
-all suggest a trade-off between efficiency and performance.
+all suggest a trade-off between productivity and performance.
 While common, this trade-off is not absolute,
 suggesting it is sometimes possible to simultaneously increase
-performance and efficiency.
-The identification of factors associated with both higher efficiency
+performance and productivity.
+The identification of factors associated with both higher productivity
 and higher performance has obvious practical importance.
 In this paper, we focus on how network structure
-relates to efficiency and performance within WikiProjects.
+relates to productivity and performance within WikiProjects.
 
-For a WikiProject, efficiency quantifies how much participants can raise the
+For a WikiProject, productivity quantifies how much participants can raise the
 assessed quality of an article for a fixed amount of work.
 We measure work by the number of revisions made.
 Quality assessments are made through consensus of the project participants themselves.
 Different projects can have different standards and practices for assessing article quality,
-so the efficiency is not a measure of how quickly some objective measure of quality improves,
+so the productivity is not a measure of how quickly some objective measure of quality improves,
 but rather of how quickly the project participants can reach consensus on the improvements that
 need to be made and make those improvements.
 Because our definition relies on assessment transitions,
-we must define efficiency variables for
+we must define productivity variables for
 each of the project-level quality assessments: A, B, and C.
 For a particular grade $G$,
-we desire our definition of efficiency to meet the following conditions:
+we desire our definition of productivity to meet the following conditions:
 \begin{itemize}
 \setlength\itemsep{0pt}
 \item{Strictly increasing in the number of articles reaching grade $G$ (with revision count fixed);}
 \item{Strictly decreasing in the number of revisions (with transition count fixed);}
-\item{Independent of WikiProject size: not affected by adding an article having the same efficiency.}
+\item{Independent of WikiProject size: not affected by adding an article having the same productivity.}
 \end{itemize}
 
-We now define an efficiency measure which meets the above criteria.
+We now define an productivity measure which meets the above criteria.
 Let $T(W,G)$ be the set of article assessment transitions from below grade $G$
 to grade $G$ or higher in project $W$.
 Let $N(W,G)$ be the number of articles in project $W$ which ever transition
@@ -322,7 +322,7 @@ Given a transition $t$,
 let $r(t)$ be the number of revisions to the article
 since its previous grade transition,
 and let $g(t)$ be the number of grade levels crossed bt $t$.
-We quantify the efficiency $E(W,G)$ as the inverse of the mean number of revisions
+We quantify the productivity $E(W,G)$ as the inverse of the mean number of revisions
 per transition:
 \beq
 E(W,G)
@@ -364,7 +364,7 @@ and $n(W)$ is the total number of articles.
 
 We would like to determine how the social network structure of
 Wikipedia---the pattern of who interacts with whom---relates to
-efficiency and performance.
+productivity and performance.
 There are several types of interactions we could focus on,
 including:
 coediting, user talk messages, and talk page replies.
@@ -393,7 +393,7 @@ We make the simplifying assumption of unit weight for all edges.
 We focus on three structural properties:
 degree, characteristic path length, and min-cut.
 Degree and characteristic path length have been shown to correlate with
-performance and efficiency in some social learning settings
+performance and productivity in some social learning settings
 \cite{golub_naive_2010,mason_propagation_2008,grim_scientific_2013},
 while min-cut can be interpreted as a measure of decentralization,
 common feature of peer-produced communities such as Wikipedia
@@ -421,7 +421,7 @@ To account for unconnected nodes, we also measure the {\em connected fraction}:
 the fraction of ordered node pairs with a directed path from source to sink.
 The path length represents how quickly information can move through the network.
 Networks with longer paths require more interactions for information to propagate,
-which has been shown to reduce efficiency in some settings
+which has been shown to reduce productivity in some settings
 \cite{mason_propagation_2008,barkoczi_social_2016}.
 
 Our final network measure quantifies the connectivity of a project's coeditor
@@ -457,7 +457,7 @@ so we exclude the 183 largest projects from the analysis.
 \centering
 \includegraphics[width=2.5in,height=2.5in]{fig/WPProdPerf/fig-eff-perf-hist.pdf}
 \caption{
-Histograms of WikiProject efficiency and performance.
+Histograms of WikiProject productivity and performance.
 Both measures are highly right-skewed, but form unimodal distributions
 with low skewness after log transformation.
 \label{fig:eff-perf-hist}
@@ -466,14 +466,14 @@ with low skewness after log transformation.
 
 \subsection{Empirical Results}
 
-We find that both efficiency and performance are highly right-skewed,
+We find that both productivity and performance are highly right-skewed,
 with a small number of projects having values much higher than the average.
-After log-transforming the values, both the efficiency and the performance have
+After log-transforming the values, both the productivity and the performance have
 a unimodal distribution with low skew (see Figure \ref{fig:eff-perf-hist}).
-Our findings confirm the trade-off between performance and efficiency
+Our findings confirm the trade-off between performance and productivity
 observed in many other settings (Figure \ref{fig:eff-perf}).
 However, when looking at specific projects, some are higher in both performance
-and efficiency,
+and productivity,
 suggesting the existence of factors which correlate positively with both.
 
 We also find that mean min-cut is highly correlated with degree ($r=0.980$, $p<0.001$),
@@ -490,12 +490,12 @@ bottlenecks and are thus highly decentralized.
 \centering
 \includegraphics[width=2.5in,height=1.67in]{fig/WPProdPerf/fig-perf-eff.pdf}
 \caption{
-WikiProject performance is anticorrelated with B-level efficiency,
+WikiProject performance is anticorrelated with B-level productivity,
 with Pearson r of -0.12.
 Results are similar for other grade levels.
-On average, highly efficient WikiProjects are under-performing,
+On average, highly productive WikiProjects are under-performing,
 but when looking at specific WikiProjects,
-some are higher than others in both performance and efficiency.
+some are higher than others in both performance and productivity.
 \label{fig:eff-perf}
 }
 \end{figure}
@@ -517,7 +517,7 @@ some are higher than others in both performance and efficiency.
 Mean degree$^\dagger$&-0.7$^{***}$&-0.8$^{***}$&-0.6$^{***}$&-0.3$^{*}$\\
 Out degree skew$^\dagger$&-0.4$^{***}$&-0.5$^{**}$&-0.3$^{*}$&-0.06\\
 Mean path length$^\dagger$&-0.33$^{***}$&-0.09&-0.05&-0.09\\
-C-Efficiency$^\dagger$&-0.08$^{*}$&\+---&\+---&\+---\\
+C-productivity$^\dagger$&-0.08$^{*}$&\+---&\+---&\+---\\
 Connected frac.&0.01&0.09$^{*}$&0.15$^{***}$&0.06\\
 Talk fraction$^\dagger$&0&-0.02&-0.03&0.01\\
 Mean similarity$^\dagger$&0.06$^{**}$&-0.03&0.01&0.02\\
@@ -540,14 +540,14 @@ R$^2_{adj}$&0.37&0.17&0.30&0.43\\
 }
 \end{table}
 
-To study the relationship between network structure, efficiency, and performance,
-we model the performance and efficiency of WikiProjects using ordinary least-squares linear regression.
+To study the relationship between network structure, productivity, and performance,
+we model the performance and productivity of WikiProjects using ordinary least-squares linear regression.
 Each WikiProject is a single observation.
 The models include each project's coeditor network properties as independent variables.
 We also include the following project-level variables to control for confounding factors.
 \begin{description}
 \setlength\itemsep{0pt}
-\item[C-efficiency]
+\item[C-productivity]
 (performance only).
 Quantifies how quickly a WikiProject improves articles.
 Efficiencies for different grades are highly correlated,
@@ -577,17 +577,17 @@ and using only top- and high-importance articles.
 The results were qualitatively similar results for all variables,
 except for degree-skewness, which had an inconsistent sign across models.
 
-We see that B-efficiency and C-efficiency have very similar models, but that A-efficiency behaves
+We see that B-productivity and C-productivity have very similar models, but that A-productivity behaves
 differently in its dependence on degree skewness and connectivity.
-The different behavior of A-efficiency is likely explained by the
+The different behavior of A-productivity is likely explained by the
 observation that the A-Class quality is infrequently used in practice.
 The A-Class quality level is usually passed when an article reaches
 good or featured article status,
 which follow deifferent a consensus process from other ratings.
 
-The negative dependence of performance on C-efficiency suggests there is generally a trade-off between
-performance and efficiency.
-However, low degree is correlated with both higher efficiency and higher performance,
+The negative dependence of performance on C-productivity suggests there is generally a trade-off between
+performance and productivity.
+However, low degree is correlated with both higher productivity and higher performance,
 suggesting that it is possible to improve both simultaneously.
 Much of the existing numerical work on networked social learning focuses on path length rather than degree,
 so we explore this result further using simulations in the next section.
@@ -596,9 +596,9 @@ For path length, we find that longer lengths correspond to lower performance, co
 that longer path lengths allow more exploration \cite{mason_propagation_2008}
 but consistent with a conformity-based social learning strategy \cite{barkoczi_social_2016}.
 
-We also observe that high degree skewness is correlated with lower performance and lower A-efficiency,
-suggesting that articles in projects with decentralized coeditor networks reach featured or good status
-more efficiently, and reach higher quality ratings in general.
+We also observe that high degree skewness is correlated with lower performance and lower A-productivity,
+suggesting that projects with decentralized coeditor networks produce featured or good status
+articles more quickly, and reach higher quality ratings in general.
 
 \section{Agent-Based Model}
 \label{sec:sim}
@@ -627,7 +627,7 @@ or the agent's local concern.
 
 In addition to our empirical study,
 we use a simple agent-based model of collaboration to better understand
-the relationship between node degree, efficiency, and performance.
+the relationship between node degree, productivity, and performance.
 Numerical models allow us to determine the effect of changing a single
 variable (e.g., network structure, learning strategy),
 which is impractical in the empirical setting.
@@ -682,10 +682,10 @@ according to some {\em learning strategy}.
 In networked social learning,
 agents are associated with the nodes of a network and share information
 only with their neighbors.
-We define efficiency and performance in terms of the solution values for each time step
+We define productivity and performance in terms of the solution values for each time step
 (averaged over many trials).
 We define the performance to be the mean solution value after the process has converged,
-while the efficiency is the reciprocal of the number of steps required to converge.
+while the productivity is the reciprocal of the number of steps required to converge.
 We measure the time to convergence as the number of steps required to reach 99\% of the maximum
 mean solution value.
 
@@ -821,7 +821,7 @@ Strategies are defined in Table \ref{tab:strat}.
 \small
 \centering
 \begin{tabular}{lll}
-Strategy & Performance & Efficiency\\
+Strategy & Performance & productivity\\
 \hline
 Best+I  & 0.722 $\pm$ 0.001 & 0.0221 $\pm$ 0.0003 \\
 Conf+I  & 0.721 $\pm$ 0.001 & 0.0174 $\pm$ 0.0002 \\
@@ -831,13 +831,13 @@ LMaj+LI & 0.729 $\pm$ 0.001 & 0.046 $\pm$ 0.002 \\
 \hline
 \end{tabular}
 \caption{
-Simulated Performance and Efficiency.
+Simulated Performance and productivity.
 Results shown for 100 trials with P[rewire] = 0.
 Strategies are defined in Table \ref{tab:strat}.
-Local strategies are less efficient than their non-local counterparts.
+Local strategies are less productive than their non-local counterparts.
 Local best-neighbor out-performs global,
 while local conformity is the worst performer in all cases.
-The local majority strategy is both most efficient and most performant.
+The local majority strategy is both most productive and most performant.
 \label{tab:sim-eff-perf}
 }
 \end{table}
@@ -868,17 +868,17 @@ Degree regression coefficients for simulations.
 \includegraphics[width=6.67in,height=1.33in]{fig/WPProdPerf/fig-deg-eff.pdf}
 \includegraphics[width=6.67in,height=1.33in]{fig/WPProdPerf/fig-deg-perf.pdf}
 \caption{
-Efficiency and Performance of social learning strategies vs. mean network degree.
+productivity and Performance of social learning strategies vs. mean network degree.
 Each point represents a single trial of 300 iterations.
 Strategies are defined in Table \ref{tab:strat}.
 The local best-neighbor strategy shows
 decreased performance at high degree,
-with no significant change in efficiency.
-Local conformity shows decreased performance and increased efficiency at high
+with no significant change in productivity.
+Local conformity shows decreased performance and increased productivity at high
 degree.
 Local majority shows the opposite behavior:
-increased performance and decreased efficiency at high degree,
-with the efficiency showing the largest effect size of all strategies.
+increased performance and decreased productivity at high degree,
+with the productivity showing the largest effect size of all strategies.
 \label{fig:deg-eff-perf}
 }
 \end{figure*}
@@ -886,34 +886,34 @@ with the efficiency showing the largest effect size of all strategies.
 Figure \ref{fig:val-iter} shows how agents' solutions improve after repeated applications of
 different learning strategies and rewiring values.
 Each curve represents an average over 100 trials, each with 250 agents.
-The mean performance and efficiency are reported in Table \ref{tab:sim-eff-perf}.
-For all rewiring values, local strategies are less efficient and more performant
+The mean performance and productivity are reported in Table \ref{tab:sim-eff-perf}.
+For all rewiring values, local strategies are less productive and more performant
 than their non-local counterparts.
 For the best-neighbor strategy, local outperforms global.
 Local conformity performs notably worse than all others.
-Local majority is both more efficient and more performant than others,
+Local majority is both more productive and more performant than others,
 with its performance increasing with higher rewiring.
 This implies that,
 at least in a simple collaboration model,
-performance and efficiency can be simultaneously increased.
-Furthermore, performance and efficiency are potentially affected by both the choice of
+performance and productivity can be simultaneously increased.
+Furthermore, performance and productivity are potentially affected by both the choice of
 learning strategy and the average degree of the agents' social network.
 
-The effects of degree on performance and efficiency are shown in Figure \ref{fig:deg-eff-perf} and
+The effects of degree on performance and productivity are shown in Figure \ref{fig:deg-eff-perf} and
 Table \ref{tab:sim-perf}.
 For non-local versions of both conformity and best-neighbor strategy,
-there is no significant effect of degree on performance or efficiency.
+there is no significant effect of degree on performance or productivity.
 The local best-neighbor strategy shows reduced performance with increasing degree,
-but no change in efficiency.
+but no change in productivity.
 Local conformity and local majority show opposite behavior as degree increases:
-with local conformity gaining efficiency at the expense of performance,
-while local majority increases in performance and decreases in efficiency.
-The largest effect size is achieved for efficiency in the local majority simulation,
-which is consistent with the efficiency behavior observed in WikiProjects.
+with local conformity gaining productivity at the expense of performance,
+while local majority increases in performance and decreases in productivity.
+The largest effect size is achieved for productivity in the local majority simulation,
+which is consistent with the productivity behavior observed in WikiProjects.
 However, the performance behavior for local majority is opposite that observed on
 Wikipedia.
 These agent-based models confirm that network degree has the potential to influence
-the performance and efficiency of collaborations.
+the performance and productivity of collaborations.
 Furthermore, this influence can be drastically different depending on the strategies
 used by collaborators.
 
@@ -926,7 +926,7 @@ analysis of large real-world systems is an important next step.
 Our empirical analysis contributes several findings towards a better
 understanding of large, decentralized, real-world collaboration.
 We observe several results consistent with previous work:
-a trade-off between performance and efficiency
+a trade-off between performance and productivity
 \cite{mason_propagation_2008,grim_scientific_2013},
 higher performance for shorter path lengths in a conformity setting
 \cite{barkoczi_social_2016},
@@ -935,26 +935,26 @@ and a reduction in performance with increased structural inequality
 By using real-world networks, we were also able to analyze network properties independently.
 While most existing work has focused on the importance of path length,
 our findings suggest degree distribution may be just as, or more, important.
-The association of low degree with both high performance and high efficiency is compelling,
-as it sidesteps the usual trade-off between performance and efficiency.
+The association of low degree with both high performance and high productivity is compelling,
+as it sidesteps the usual trade-off between performance and productivity.
 In low-degree networks, agents have more repeated interactions with smaller groups of collaborators, suggesting that small team sizes could be beneficial for large collaborations.
 Similarly, the observation that performance is higher in projects with less structural inequality suggests that,
 if the challenges of egalitarian organizing are overcome,
 decentralized collaborations may produce better outcomes than those with centralized, top-down structures.
 
 Our agent-based models offer a several insights.
-We observe degree-dependent performance and efficiency
+We observe degree-dependent performance and productivity
 for both local conformity and local majority strategies.
 However, these two strategies have opposite degree dependence,
 suggesting that different strategies may be preferable for high-degree and low-degree
 networks.
 Our local majority strategy,
 designed to satisfy several properties found in real-world collaborations,
-shows the strongest effects on performance and efficiency as network degree changes.
+shows the strongest effects on performance and productivity as network degree changes.
 For the local majority strategy,
-the relationship between degree and efficiency is consistent with our
+the relationship between degree and productivity is consistent with our
 empirical observations on Wikipedia,
-suggesting one possible mechanism underlying that efficiency dependence.
+suggesting one possible mechanism underlying that productivity dependence.
 However, the performance dependence of this strategy
 is opposite that observed on Wikipedia,
 suggesting that either the local majority strategy
@@ -973,11 +973,11 @@ For simplicity, we have assumed unweighted edges and
 measured work by revision counts rather than bytes changed.
 
 Our work suggests several directions for future work.
-Is the correlation between network structure, performance, and efficiency causal?
+Is the correlation between network structure, performance, and productivity causal?
 A time-dependent analysis of our data could offer insight.
 Are similar relationships observed in other large-scale collaborations?
 Does varying degree independently of path length influence
-performance and efficiency in a controlled lab setting?
+performance and productivity in a controlled lab setting?
 
 A better understanding of the relationship between network structure and collaboration
 outcomes has practical applications.
@@ -993,19 +993,19 @@ structure.
 \label{sec:conclusion}
 
 In this paper, we have described the relationship between the structural properties of WikiProject
-coeditor networks, their performance, and their efficiency.
-As in other studies, we see a trade-off between performance and efficiency.
+coeditor networks, their performance, and their productivity.
+As in other studies, we see a trade-off between performance and productivity.
 However, 
 some properties, such as low degree, are associated with
-both higher performance and higher efficiency.
+both higher performance and higher productivity.
 We also find that the correlations between path length and performance are consistent with a conformity-based
 social learning strategy, but not a greedy best-neighbor strategy.
 We observe improved performance in more decentralized projects,
 as has been seen in small-scale lab experiments.
 We have also proposed a novel local majority learning strategy that is more realistic,
-more efficient, and higher performance than existing strategies.
+more productive, and higher performance than existing strategies.
 While most previous social learning simulations focus on path length,
-we observe degree-dependent performance and efficiency
+we observe degree-dependent performance and productivity
 in both the local majority strategy
 and a localized version of the conformity strategy.
 We find that the direction of that dependence varies with the
