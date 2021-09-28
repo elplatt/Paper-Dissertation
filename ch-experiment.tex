@@ -14,7 +14,7 @@ feasible experimental design.
 
 The initial pilot study was conducted on December 21, 2018,
 before the custom online platform was developed.
-In this pilot, NUMBER participants engaged in a synchronous 60-minute deliberation.
+In this pilot, 18 participants engaged in a synchronous 60-minute deliberation.
 Participants sat at individual computer workstations, separated by dividers.
 Participants discussed the following question:
 ``Where should the use of electric scooters be permitted?''
@@ -23,13 +23,43 @@ pods of size 4--5.
 These pods were reassigned using the random-pod method for a total of three
 rounds.
 The deliberation took place in chat rooms running the free and open-source
-OTree online experiment software.
+OTree online experiment software \cite{chen_oTree_2016}.
 
 The second pilot took place after the initial development of the custom online
 platform, from August 24, 2020 through August 32, 2020.
+In this pilot, 7 participants engaged in an asynchronous deliberation over the
+course of 7 days.
+Participants were assigned to a single treatment group using network deliberation
+with random-pod assignment.
+Pods were size 4, and there were 3 rounds (2, 2, and 3 days).
+Participants were researchers considering a week-long collaboration and
+deliberated on the following question:
+``What is your current preference for week of science topics?''
 
 The third pilot took place from August 23, 2021 through August 29, 2021.
+Participants deliberated on the following question:
+``How should schools in the US reopen for fall 2021?''
+Participants were recruited on reddit and Twitter.
+18 participants were enrolled (excluding several identified as fake accounts).
+These participants were divided between a conventional deliberation control
+group and a random-pod treatment group.
+The random-pod treatment group had two pods of size 5.
+Deliberation was divided into 3 rounds (2, 2, and 3 days).
 
+In these pilots, participants showed quantitative and qualitative evidence of
+changing their preferences over the course of deliberation.
+Here is an example of one such interaction:
+\begin{quote}
+{\bfseries Aspen Sunflower:} Even though my \#1 choice includes mandatory vaccinations, I know it's not possible due to school starting now AND MDHS can't mandate it yet. Based on previous stage, I think most seemed to want vaccinations but also wanted options. One option doesn't fit all students.
+
+{\bfseries Aspen Poppy:} Major gap in my understanding here! The schools do not mandate vaccines for students, the state does. For the 12-17 age group, the vaccine is authorized under emergency use, full FDA approval is pending. This strengthens my desire to see hybrid learning with smaller in person groups and vaccinated staff.
+\end{quote}
+
+While the pilots did not have enough participants to identify any differences
+in the evolution of preferences between different treatment groups,
+evidence that preferences do change through deliberation affirms the central
+assumption of this dissertation and further motivates the question of how
+communication network structure influences that evolution.
 
 \section{Experimental Design}
 
@@ -225,7 +255,7 @@ One possibility is to measure the distance from strong unanimity.
 Two such methods will be used to analyze the results of the deliberation experiment:
 the mean Kendal tau metric and the mean Spearman correlation.
 The Kendal tau metric is the number fraction of pairwise contests that have
-different results between two profiles \cite{kendall_new_1938}}.
+different results between two profiles \cite{kendall_new_1938}.
 By averaging this measure over all pairs of members, an overall measure of agreement can be calculated for the group.
 This measure does not incorporate information about win/loss margins,
 only whether an alternative wins or loses.
