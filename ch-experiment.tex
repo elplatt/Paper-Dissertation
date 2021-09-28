@@ -1,8 +1,59 @@
 \section{Introduction}
+Networks of small interlocking pods appear as a common thread throughout
+successful large-scale collaborations.
+However, it remains unclear whether that network structure plays a causal role
+in the success of those collaborations,
+and whether the specific structural properties of that interlocking network matter.
+Observational study suggests a correlation between properties such as degree,
+structural efficiency, and structural inequality and the performance/productivity
+of collaborations \cite{platt_network_2018}.
+Numerical simulation suggests a causal relationship in a simplified theoretical
+setting.
+This chapter proposes an online experiment to bridge these two findings.
 
 
 \section{Study Software}
 
+In order to conduct studies of network deliberation online, I have modified the
+free and open-source Loomio platform \cite{jackson_open_2016}
+to implement network deliberation.
+Loomio is a widely-used online deliberation platform which provides both
+forum functionality (Figure \ref{fig:reply})
+and various forms of voting, including ranked-choice (Figure \ref{fig:vote}).
+Loomio is popular among grassroots organizations and worker-owned cooperatives
+(Loomio itself is a worker-owned cooperative).
+Loomio was chosen for its combination of built-in functionality,
+existing user base, and open-source extensibility.
+
+The modified platform implements both random-pod and long-path assignment methods
+and automatically reassigns participants when the stage is advanced.
+In addition to network deliberation features, I have made several modifications to implement
+the experimental protocol.
+Upon signing in for the first time,
+participants are randomly assigned to a treatment group.
+Participants are also assigned an alias which they will use throughout the
+deliberation (Figure \ref{fig:alias}).
+
+\begin{figure}
+\label{fig:reply}
+\center
+\frame{\includegraphics[width=5in]{fig/Experiment/fig-reply.png}}
+\caption{Participants can perform standard forum actions, such as posting and commenting.}
+\end{figure}
+
+\begin{figure}
+\label{fig:vote}
+\center
+\frame{\includegraphics[width=3in]{fig/Experiment/fig-vote.png}}
+\caption{Participants are presented with a ranked-choice voting screen between rounds of deliberation.}
+\end{figure}
+
+\begin{figure}
+\label{fig:alias}
+\center
+\frame{\includegraphics[width=3in]{fig/Experiment/fig-alias.png}}
+\caption{Participants are assigned an alias for the duration of the experiment.}
+\end{figure}
 
 \section{Pilot Studies}
 Several pilot studies have already been conducted:
@@ -23,7 +74,7 @@ pods of size 4--5.
 These pods were reassigned using the random-pod method for a total of three
 rounds.
 The deliberation took place in chat rooms running the free and open-source
-OTree online experiment software \cite{chen_oTree_2016}.
+OTree online experiment software \cite{chen_otreeopen-source_2016}.
 
 The second pilot took place after the initial development of the custom online
 platform, from August 24, 2020 through August 32, 2020.
@@ -241,7 +292,7 @@ In contrast, transitivity only requires that the social preferences induced by
 individual preferences are transitive.
 Distance-rationalizable voting systems are defined by projecting the preference
 profile onto the nearest consensus profile according to a suitable distance.
-For example, Dodgson's method \cite{dodgeson_method_1876, brandt_computational_2012}
+For example, Dodgson's method \cite{dodgson_method_1876, brandt_computational_2012}
 defines a distance based on swapping adjacent entries in individual preference profiles.
 However, for most voting systems,
 finding the consensus profile that minimizes distance is NP-Hard
