@@ -1,6 +1,35 @@
 \section{Introduction}
 
 
+\section{Study Software}
+
+
+\section{Pilot Studies}
+Several pilot studies have already been conducted:
+one in a synchronous lab setting, and two using the asynchronous online
+software.
+In addition to providing an opportunity to test software,
+these pilot studies have provided crucial information for developing a
+feasible experimental design.
+
+The initial pilot study was conducted on December 21, 2018,
+before the custom online platform was developed.
+In this pilot, NUMBER participants engaged in a synchronous 60-minute deliberation.
+Participants sat at individual computer workstations, separated by dividers.
+Participants discussed the following question:
+``Where should the use of electric scooters be permitted?''
+Participants were placed in a single treatment group, and divided into 4
+pods of size 4--5.
+These pods were reassigned using the random-pod method for a total of three
+rounds.
+The deliberation took place in chat rooms running the free and open-source
+OTree online experiment software.
+
+The second pilot took place after the initial development of the custom online
+platform, from August 24, 2020 through August 32, 2020.
+
+The third pilot took place from August 23, 2021 through August 29, 2021.
+
 
 \section{Experimental Design}
 
@@ -141,33 +170,103 @@ Has your opinion changed over the course of the discussion?
 \caption{Example prompts for each round of deliberation.}
 \end{table}
 
-\section{Qualitative Analysis}
-In addition to quantitative data,
-qualitative data will also be collected in conjunction with
-the deliberation experiment.
-These data will be used to corroborate the results of quantitative
-analysis and to achieve a richer understanding of individual participants'
-experience of network deliberation,
-as well as to as well as identify common themes that may provide
-insight into the strengths and weaknesses of network deliberation.
+\section{Quantitative Analysis}
 
-The text of participants' posts and comments throughout the deliberation
-will be kept for analysis.
-This text can potentially be used to identify deliberative behaviors that
-lead to changes in preferences.
-Similarly, this text can be used to track the diffusion of specific keywords,
-arguments, and influence through the communication network.
+The primary quantitative data will be the results of the ranked-choice
+polls conducted before and after each stage of deliberation.
+These results represent individual participants' stated preferences at multiple
+time points.
+Standard tools from social choice theory can be applied to such rank-ordered
+preferences \cite{arrow_social_2012, brandt_computational_2012}.
+At each time, these preferences can be aggregated into a {\em preference profile}
+representing the collective preferences of all participants in a treatment group.
+Preference profiles can be used to aggregate individual preferences into a single
+ranking via a {\em social welfare function}.
+Similarly, preference profiles can be used to select a single winner via a
+{\em social choice function}.
+These social choice and social welfare functions represent voting methods.
+Different voting methods can potentially yield different results for the same
+preference profile.
+However, the more similar preferences are across individual participants,
+the more likely it is that different voting methods will yield the same winner
+or social ranking.
+For example, when one proposal beats all others in pairwise contests, it is known as the
+{\em Condorcet winner}.
+Many voting methods yield the Condorcet winner when it exists, but the existence
+of a Condorcet winner is not guaranteed.
 
-A subset of participants will be randomly selected to participate in
-60-minute semi-structured interviews about their experience.
-The interview script can be found in Appendix \ref{apx:interview}.
-These interviewed will be transcribed and qualitatively coded using a
-grounded theory approach.
-The initial code book will be developed by open-coding pilot study transcripts
-and an initial subset of interview transcripts.
+For the purposes of this dissertation, the preference profiles will be used
+to quantify agreement and conflict over the course of deliberation.
+Within social choice theory, agreement can be defined by a {\em consensus class},
+a set of preference profiles meeting one of several consensus criteria
+\cite{elkind_rationalizations_2016}.
+Examples include strong unanimity (of rank orders),
+unanimity (of winners),
+majority (existence of majority),
+Condorcet (existence of Condorcet winner),
+and transitivity (of social preference).
+On the most restrictive end, in strong unanimity and unanimity,
+all decision-makers prefer the same alternative.
+In contrast, transitivity only requires that the social preferences induced by
+individual preferences are transitive.
+Distance-rationalizable voting systems are defined by projecting the preference
+profile onto the nearest consensus profile according to a suitable distance.
+For example, Dodgson's method \cite{dodgeson_method_1876, brandt_computational_2012}
+defines a distance based on swapping adjacent entries in individual preference profiles.
+However, for most voting systems,
+finding the consensus profile that minimizes distance is NP-Hard
+\cite{elkind_rationalizations_2016}.
+Social choice theory also provides measures of distances between two individual
+preference rankings.
+These measures can be extended to create measures of agreement for entire
+preference profiles that can be calculated efficiently.
+
+One possibility is to measure the distance from strong unanimity.
+Two such methods will be used to analyze the results of the deliberation experiment:
+the mean Kendal tau metric and the mean Spearman correlation.
+The Kendal tau metric is the number fraction of pairwise contests that have
+different results between two profiles \cite{kendall_new_1938}}.
+By averaging this measure over all pairs of members, an overall measure of agreement can be calculated for the group.
+This measure does not incorporate information about win/loss margins,
+only whether an alternative wins or loses.
+To quantify the win/loss margin, the mean Spearman correlation will be used.
+The Spearman correlation is the linear coefficient of correlation between the
+rank orders of alternatives for two voters \cite{spearman_proof_1904}.
+As with Kendall tau, the Spearman correlation can be averaged over all pairs of
+members to determine a measure of agreement for the entire group.
+It must be noted that representing agreement with a single number will inevitably
+ignore important information.
+Neither of these measures distinguishes a small number of voters disagreeing
+on many comparisons from a large number of voters disagreeing on a few.
+The Spearman correlation is also unable to distinguish these from situations in
+which a small number of voters disagree by a very large margin.
+
+While unanimity might be preferred,
+it may sometimes be more realistic to focus on transitivity.
+This consensus class requires only that the social preferences between pairs
+of alternatives are transitive.
+Such preference profiles guarantee that a Condorcet winner will exist,
+bringing many different voting methods into agreement on which should win.
+
+The deviation from transitivity will be qunatified by counting the number
+of ranked-pair violations.
+When performing a vote by the Tideman ranked pair system,
+the relative order of two alternatives in the social preference is
+determined by the winner of a pairwise vote,
+except in the special case that contests with a higher margin have already
+constrained their order due to transitivity.
+In the latter case, the winner of the pairwise contest may have a lower
+position in the social preference.
+If this situation occurs, the social preference is intransitive and there may
+not be a Condorcet winner.
+Each such pair represents a contest violating the social ranking,
+so the fraction of such pairs
+can be used to quantify the strength of intransitivity in the group’s preferences.
+This measure has the property that a Condorcet winner is guaranteed when the value is 0.
 
 
-\subsection{Network Topologies}
+
+\section{Power Analysis}
 The minimum number of participants required is determined by a number of factors.
 First, the long-path pod assignment method results in a minimum number of pods,
 determined by the chosen parameters.
@@ -222,33 +321,29 @@ observe differences between the network deliberation treatment conditions.
 networks for $T=3$ stages and a pod size of $M=5$.}
 \end{figure}
 
-\subsection{Quantifying Preferences, Conflict, and Agreement}
+\section{Qualitative Analysis}
+In addition to quantitative data,
+qualitative data will also be collected in conjunction with
+the deliberation experiment.
+These data will be used to corroborate the results of quantitative
+analysis and to achieve a richer understanding of individual participants'
+experience of network deliberation,
+as well as to as well as identify common themes that may provide
+insight into the strengths and weaknesses of network deliberation.
 
-\section{Study Software}
+The text of participants' posts and comments throughout the deliberation
+will be kept for analysis.
+This text can potentially be used to identify deliberative behaviors that
+lead to changes in preferences.
+Similarly, this text can be used to track the diffusion of specific keywords,
+arguments, and influence through the communication network.
 
-\section{Pilot Studies}
-Several pilot studies have already been conducted:
-one in a synchronous lab setting, and two using the asynchronous online
-software.
-In addition to providing an opportunity to test software,
-these pilot studies have provided crucial information for developing a
-feasible experimental design.
+A subset of participants will be randomly selected to participate in
+60-minute semi-structured interviews about their experience.
+The interview script can be found in Appendix \ref{apx:interview}.
+These interviewed will be transcribed and qualitatively coded using a
+grounded theory approach.
+The initial code book will be developed by open-coding pilot study transcripts
+and an initial subset of interview transcripts.
 
-The initial pilot study was conducted on December 21, 2018,
-before the custom online platform was developed.
-In this pilot, NUMBER participants engaged in a synchronous 60-minute deliberation.
-Participants sat at individual computer workstations, separated by dividers.
-Participants discussed the following question:
-``Where should the use of electric scooters be permitted?''
-Participants were placed in a single treatment group, and divided into 4
-pods of size 4--5.
-These pods were reassigned using the random-pod method for a total of three
-rounds.
-The deliberation took place in chat rooms running the free and open-source
-OTree online experiment software.
-
-The second pilot took place after the initial development of the custom online
-platform, from August 24, 2020 through August 32, 2020.
-
-The third pilot took place from August 23, 2021 through August 29, 2021.
 
