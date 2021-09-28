@@ -1,50 +1,173 @@
 \section{Introduction}
 
+
+
 \section{Experimental Design}
-Overview
+
+This section describes the experimental design of the proposed field experiment.
+In this experiment, participants will use a pseudonymous online platform
+to deliberate on a policy issue.
+The deliberation will take place asynchronously, over a period of several days.
+At several times throughout the deliberation,
+participants will complete a ranked-choice poll regarding the policy issue,
+allowing the evolution of their preferences to be tracked over the course of the
+experiment.
+Depending on opportunity and necessity, multiple waves of deliberation may
+be conducted, each with a distinct policy issue and set of participants.
+
+
+\subsection{Deliberative Topic}
+The policy issue chosen as the topic of deliberation is a crucial component
+of the experiment.
+The topic will be chosen carefully according to several criteria.
+The chosen policy issue must be:
+\begin{itemize}
+\item Relevant to the experimental population;
+\item Amenable to participants changing their preferences based on new information or reasoning;
+\item Amenable to a predefined list of proposed solutions;
+\item Sufficiently complex to have three or more proposed solutions;
+\item Timely, but unlikely to be influenced by current events during the deliberation.
+\end{itemize}
+Examples of policy issues meeting these criteria include:
+\begin{itemize}
+\item ``Where should the use of electric scooters be permitted?''
+\item ``Given the COVID-19 pandemic, how should schools in the US reopen in Fall 2021?''
+\end{itemize}
+
 
 \subsection{Participant Recruitment and Incentives}
-Participants will be recruited to discuss a policy issue
-using a custom-built psudeonymous online platform.
-The policy issue will be chosen to be relevant to many individuals,
-and to be amenable to a predefined list of proposed solutions,
-as well as to be relevant at the time the experiment is conducted.
-Example policy questions include
-``Where should the use of electric scooters be permitted?'' and
-``Given the COVID-19 pandemic, how should schools in the US reopen in Fall 2021?.''
-Multiple waves of deliberation may be held using different questions and participants,
-depending factors such as participant attrition.
-
-Participants will be recruited using a number of methods.
+Participants will be recruited using several methods.
 Participants will be recruited individually through posts on web forums
-relevant to the policy question (e.g., reddit),
-relevant facebook groups,
-and relevant email lists.
+relevant to the policy question (e.g., reddit, facebook groups)
+and to relevant email lists.
 Participant pools will also be utilized,
-such as lists of previous participants who have expressed interest in future
-studies,
+including lists of previous participants
+who have expressed interest in future studies
 and the UMSI Online Recruitment System for Economic Experiments.
 Individual participants will also be recruited using promoted posts and
 advertisements on Twitter, Facebook, etc.
 Separately, participants may also be recruited through partnership with
 community groups who wish to try network deliberation as part of an organizational
 decision-making strategy.
-The number of such collaborations will depend on the number of sufficiently-large
+The number of such collaborations will depend on the number of interested
 partner organizations that have decisions amenable to network deliberation
 over the course of the experiment.
 
-All participants will be paid incentives for participation in the deliberation
-and completion of ranked-choice votes and pre/post-experiment surveys.
-It is crucial that the incentive structure incentivize participation,
-without incentivizing any particular deliberative strategy
-(e.g., prefering a specific outcome, maintaining an original position, or
-seeking agreement/disagreement).
-Any such incentive structure could motivate participants to act based on their
-preferences for incentive payments rather than their true preferences regarding
-the policy question under consideration,
-and disincentivize honest deliberation about the policy question.
-As such, incentives will be paid as the same fixed amount to all participants.
+In order to incentivize participation and to compensate participants fairly
+for their time,
+participants who complete the deliberation and pre/post-experiment surveys
+will be compensated financially.
+Participants will be paid a predetermined fixed amount in order to
+minimize the effect of the compensation on their deliberative behavior and
+expressed preferences.
 
+
+\subsection{Experimental Protocol}
+
+Before the deliberation period begins,
+participants will complete a short demographic survey.
+This survey will enable the identification of sample bias in age, gender, race,
+and other demographic factors.
+
+Participants will be randomly assigned to one of three treatment/control groups
+at time of enrollment:
+\begin{description}
+\item[Control]{
+The control group will engage in conventional single large group deliberation.
+Posts and comments made by participants in the control group will be visible
+to all others in the control group for the entire duration of the deliberation.}
+\item[Network Deliberation (Efficient)]{
+Participants in this treatment group will be divided into small
+(4--5 participant) pods.
+Posts and comments made by participants in this treatment group will only be
+visible to others in their current pod.
+All participants will be assigned to a new pod at the beginning of each round
+of deliberation using the random-pod assignment method,
+producing a structurally efficient communication network.}
+\item[Network Deliberation (Inefficient)]{
+Participants in this treatment group will be divided into small
+(4--5 participant) pods.
+Posts and comments made by participants in this treatment group will only be
+visible to others in their current pod.
+All participants will be assigned to a new pod at the beginning of each round
+of deliberation using the long-path assignment method,
+producing a structurally inefficient communication network.}
+\end{description}
+
+The deliberation period will be divided into a predetermined number of {\em rounds},
+each lasting a fixed length of time.
+Present plans are to divide the deliberation period into three stages of two days
+each.
+However, these numbers may be adjusted to ensure time timeline of the
+deliberation is consistent with any constraints imposed by specific policy issues.
+Before and after each stage, participants will be asked to rank the proposed
+solutions to the policy question according to their individual preference.
+During each round, participants will be shown a discussion prompt and will be
+able to post a response to that prompt.
+Example prompts are shown in Table \ref{tab:prompts}.
+Participants will be able to view and comment on the posts of other participants
+assigned to the same pod.
+Participants will also be able to view posts and comments that were visible to them
+in previous rounds, but will no longer be able to interact with or reply to
+those posts and comments.
+
+\begin{table}
+\center
+\label{tab:prompts}
+\begin{tabular}{|p{0.3in}|p{3.6in}|}
+\hline
+Stage & Prompt \\
+\hline
+1 &
+Which proposals do you prefer, and why?
+If there are disagreements, try asking questions to understand the perspective
+of others and to understand the causes of the disagreement.
+\\
+\hline
+2 & In the previous round of discussion, what opinions and reasoning did you
+observe in your group?
+How much agreement was there?
+Were there any disagreements or conflicts?
+If so, what were the sources of conflict, and how might they be resolved?
+\\
+\hline
+3 &
+What seem to be the most popular opinions?
+Do you agree with them?
+Has your opinion changed over the course of the discussion?
+\\
+\hline
+\end{tabular}
+\caption{Example prompts for each round of deliberation.}
+\end{table}
+
+\section{Qualitative Analysis}
+In addition to quantitative data,
+qualitative data will also be collected in conjunction with
+the deliberation experiment.
+These data will be used to corroborate the results of quantitative
+analysis and to achieve a richer understanding of individual participants'
+experience of network deliberation,
+as well as to as well as identify common themes that may provide
+insight into the strengths and weaknesses of network deliberation.
+
+The text of participants' posts and comments throughout the deliberation
+will be kept for analysis.
+This text can potentially be used to identify deliberative behaviors that
+lead to changes in preferences.
+Similarly, this text can be used to track the diffusion of specific keywords,
+arguments, and influence through the communication network.
+
+A subset of participants will be randomly selected to participate in
+60-minute semi-structured interviews about their experience.
+The interview script can be found in Appendix \ref{apx:interview}.
+These interviewed will be transcribed and qualitatively coded using a
+grounded theory approach.
+The initial code book will be developed by open-coding pilot study transcripts
+and an initial subset of interview transcripts.
+
+
+\subsection{Network Topologies}
 The minimum number of participants required is determined by a number of factors.
 First, the long-path pod assignment method results in a minimum number of pods,
 determined by the chosen parameters.
@@ -98,84 +221,6 @@ observe differences between the network deliberation treatment conditions.
 \caption{The k-connectivity of long-path and random-pod network deliberation
 networks for $T=3$ stages and a pod size of $M=5$.}
 \end{figure}
-
-\subsection{Experimental Protocol}
-
-At the beginning of the experiment, participants will complete a short
-demographic survey.
-This survey will enable the identification of sample bias in age, gender, race,
-and other demographic factors.
-
-When participants are enrolled, they will be assigned to one of three treatment
-groups: control, random-pod, long-path.
-The control group will deliberate in a single large group.
-The random-pod and long-path treatments will deliberate in a series of small
-pods (network deliberation).
-These treatments will vary only by the pod assignment method used:
-either random-pod or long-path (see Chapter \ref{chap:abm}).
-
-Deliberation will be divided into a predetermined number of {\em rounds}, each lasting
-a fixed length of time.
-Current plans are to use three stages of two days each,
-although these numbers may need to be changed
-to ensure time timeline of the deliberation is consistent with any constraints
-imposed by specific policy questions.
-Before and after each stage, participants will be asked to rank the proposed
-solutions to the policy question according to their individual preference.
-During each round, participants will be shown a discussion prompt and will be
-able to post and reply to other participants.
-Example prompts are shown in Table \ref{tab:prompts}.
-Participants will only be able to see or interact with posts from others in
-their current pod.
-(all control group participants will be able to interact with all others
-at all times).
-Participants will be able to view posts and comments that were visible to them
-in previous rounds, but will no longer be able to interact with or reply to
-those posts and comments.
-
-\begin{table}
-\center
-\label{tab:prompts}
-\begin{tabular}{|p{0.3in}|p{3.6in}|}
-\hline
-Stage & Prompt \\
-\hline
-1 &
-Which proposals do you prefer, and why?
-If there are disagreements, try asking questions to understand the perspective
-of others and to understand the causes of the disagreement.
-\\
-\hline
-2 & In the previous round of discussion, what opinions and reasoning did you
-observe in your group?
-How much agreement was there?
-Were there any disagreements or conflicts?
-If so, what were the sources of conflict, and how might they be resolved?
-\\
-\hline
-3 &
-What seem to be the most popular opinions?
-Do you agree with them?
-Has your opinion changed over the course of the discussion?
-\\
-\hline
-\end{tabular}
-\end{table}
-
-A subset of participants will be randomly selected to participate in
-60-minute semi-structured interviews about their experience.
-These interviewed will be qualitatively coded using grounded theory.
-The interviews will provide information on the subjective experience of
-participants, as well as help identify common themes that may provide
-insight into the strengths and weaknesses of network deliberation.
-
-In summary, the experiment will result in several data sets:
-\begin{itemize}
-\item The ranked choice preferences of each participant before and after each round of deliberation.
-\item The text of the online deliberation.
-\item Post-deliberation survey responses.
-\item Qualitatively-coded interview transcripts.
-\end{itemize}
 
 \subsection{Quantifying Preferences, Conflict, and Agreement}
 
