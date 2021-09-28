@@ -1,0 +1,36 @@
+The NK Model \cite{kauffman_towards_1987} is an optimization problem particularly well-suited for modelling complex tasks. The model is used to create a fitness function $Q(s)$ over some discrete space $\mathcal{S}$, typically binary strings of a fixed length.
+The model is parameterized by two variables.
+The first, $N$, is the dimension of the solution space, i.e., the length of each binary string.
+The second parameter, $K$, determines the ``ruggedness'' of the fitness function, i.e., the number of local maxima.
+In effect, the $K$ parameter allows the complexity of the optimization problem to be tuned.
+The ability to tune task complexity makes the NK model well-suited for studying the role of complexity in various settings.
+The construction of an NK fitness function from a set of parameters is a stochastic process.
+So particular values of $N$ and $K$ define a class of fitness functions, which can be sampled to produce a specific fitness function.
+
+We now show the construction of the NK model fitness function.
+A class of NK model fitness functions can be defined by a tuple of integer parameters
+$(N, K)$ such that $N > 0$ and $0 \leq K < N$.
+We begin by defining $N$ fitness contributions functions:
+\begin{eqnarray}
+q_i &:& \mathbb{Z}^{K+1} \rightarrow [0, 1].
+\end{eqnarray}
+The value of each $q_i(x)$ is chosen uniformly at random in the range $[0, 1]$ at the time the function is defined.
+We also define $N$ projection operators $P_i$ which select $K+1$ bits from a length-$N$ bit string.
+Each $P_i$ selects the bit at index $i$ and $K$ other indices, chosen uniformly at random at the time $P_i$ is constructed.
+For a solution $s$, the $i$th fitness contribution is evaluated on the $K + 1$ bits selected by the $i$th projection: $q_i(P_i(s))$.
+The value of the fitness function is the mean of all fitness contributions:
+\begin{eqnarray}
+Q(s) &=& \frac{1}{N}\sum_{i=1}^N q_i(P_i(s)).
+\end{eqnarray}
+
+The parameter $K$ alters the ruggedness of the fitness function by controlling the interdependence between the $q_i$.
+When $K = 0$, each $q_i$ depends on a single unique index of $s$,
+allowing the $q_i$ to be optimized independently.
+In this case, $Q(s)$ has a single maximum: the global maximum.
+However, for $K > 0$, two things happen: it becomes possible for each $q_i$ to have multiple local maxima, and some of the $q_i$ become coupled due to dependence on the same indices of $s$.
+The result is that as $K$ increases, both the number of local maxima of $Q(s)$ \cite{weinberger_local_1991} and the difficulty of simultaneously optimizing the $q_i$ increase.
+In other words, $Q$ becomes more rugged, and more complex.
+
+The distribution of local maximum values is asymptotically normal for large $K$ \cite{weinberger_local_1991}.
+When a skewed distribution is preferred, it is common to exponentiate the value of $Q(s)$ as a final step \cite{lazer_network_2007, barkoczi_social_2016, gomez_clustering_2019}.
+
