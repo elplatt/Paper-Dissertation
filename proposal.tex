@@ -21,6 +21,9 @@
 \newcommand{\eeq}{\end{eqnarray}}
 \newcommand{\+}{\phantom{-}}
 
+\renewcommand{\labelenumii}{\theenumii}
+\renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
+
 \newtheorem{definition}{Definition}
 \newtheorem{property}{Property}
 \newtheorem{claim}{Claim}
@@ -32,18 +35,48 @@
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
-\linenumbers
+
+%\linenumbers
 
 \author{Edward L. Platt}
 \title{Network Deliberation: The role of network structure in large-scale, internet-enabled, participatory decision-making}
 
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+   \begin{center}
+       \vspace*{1cm}
 
-\begin{abstract}
+       \textbf{\Large Network Deliberation: The role of network structure in large-scale, internet-enabled, participatory decision-making}        
+            
+       \vspace{1.5cm}
+
+       \textbf{Edward L. Platt}
+       
+       \today
+
+       \vfill
+            
+       Dissertation Proposal\\
+       Doctor of Philosophy \\
+       University of Michigan \\
+       School of Information
+            
+       \vspace{0.8cm}
+     
+            
+   \end{center}
+    {\bfseries Doctoral Committee:}\\
+    Associate Professor Daniel M. Romero \\
+    Professor Scott E. Page \\
+    Associate Professor Tawanna Dillahunt \\
+    Assistant Professor Ceren Budak
+         
+\end{titlepage}
+
+%\begin{abstract}
 %\include{abstract.tex}
-\end{abstract}
+%\end{abstract}
 
 \tableofcontents
 
@@ -52,28 +85,35 @@
 
 \chapter{Introduction}
 \label{chap:intro}
-\include{ch-intro.tex}
+%\include{ch-intro.tex}
 
 \chapter{Network structure, productivity, and performance in WikiProjects}
 \label{chap:wp-prod-perf}
-\include{ch-wp-prod-perf.tex}
+%\include{ch-wp-prod-perf.tex}
 
 \chapter{Small interlocking groups improve mass deliberation in the presence
 of strong social influence}
 \label{chap:abm}
-\include{ch-abm.tex}
+%\include{ch-abm.tex}
 
 \chapter{Experimental evaluation of Network Deliberaiton}
 \label{chap:experiment}
-%\include{ch-experiment.tex}
+\include{ch-experiment.tex}
 
-\chapter*{Acknowledgements}
+%\chapter*{Acknowledgements}
 %\include{acknoledgements.tex}
 
 
 \begin{appendices}
+
 \chapter{The NK-Model}
-\label{apx-nk}
+\label{apx:nk}
+\include{apx-nk.tex}
+
+\chapter{Interview Script}
+\label{apx:interview}
+\include{apx-interview.tex}
+
 \end{appendices}
 
 \nocite{*}
