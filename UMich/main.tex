@@ -1,0 +1,117 @@
+% University of Michigan Dissertation LaTeX Template for 2019 -- 2020
+% Created by John Meluso and Shreyas Kousik
+% 9 Jul 2020
+
+% Use the University of Michigan thesis class.
+\documentclass[thesis]{thesis-umich}
+\input{packages}
+
+% If you are using the alpha bibliography style, keep these next three lines in your preamble, so that the references are left-aligned; or, you can comment it out and see what happens
+\makeatletter
+\renewcommand{\@biblabel}[1]{[#1]\hfill}
+\makeatother
+
+% Title of the thesis
+\title{Network Deliberation: The role of network structure in large-scale, internet-enabled, participatory decision-making}
+
+% Author name
+\author{Edward L. Platt}
+
+% Department
+\department{Information}
+
+% Year of completion
+\year=2022
+
+% Author email
+\email{elplatt@umich.edu}
+
+% Author ORCID iD
+\orcid{0000-0003-2148-3841}
+
+% Frontispiece
+\frontispiece{\includegraphics[width=4in]{front_materials/frontispiece.png}}
+
+% Default style for front pages
+\frontpagestyle{7} % 7 is preferred by Rackham, but should be set individually for each front page
+
+% Dedication (the input [7] determines the style -- 7 is Rackham's preferred style)
+% \hidededication{%
+\dedication[7]{\input{front_materials/dedication}}
+
+% Acknowledgments (the input [7] determines the style -- 7 is Rackham's preferred style)
+\acknowledgments[7]{\input{front_materials/acknowledgements}}
+
+% Preface
+%\preface[7]{\input{front_materials/preface}}
+
+% Committee
+\committee{ %
+Professor Daniel M. Romero, Chair \\
+Professor Ceren Budak \\
+Professor Tawanna Dillahunt \\
+Professor Scott E. Page
+}
+
+% Chair must be entered separately for formatting reasons.
+\chair{Professor Daniel M. Romero}
+%\cochair{Co-chair One \& Co-chair Two}
+
+% Commands to hide or show lists of figures, tables, etc.
+% To hide a list, change the word "show" in the command to "hide".
+\showlistoftables
+\showlistofprograms
+\showlistofappendices
+\showlistofacronyms
+
+
+% Definition of any acronyms used.
+% To add an acronym, add an \acro{}{} command on a new line within the \acronyms{} command. For \acro, field 1 is the acronym and field 2 is the corresponding expression. For example: \acro{TLA}{Three Letter Acronym}.
+%\acronyms{
+%    \acro{TLA}{Three Letter Acronym}
+%    \acro{SOA}{Some Other Acronym}
+%}
+
+% Some abstract text
+\abstract{
+\input{front_materials/abstract}
+}
+%\hideabstractpagenumber
+
+%% DOCUMENT AREA
+\begin{document}
+
+\chapter{Introduction}
+\label{chap:intro}
+\input{chapters/ch01-intro}
+
+\chapter{Network structure, productivity, and performance in WikiProjects}
+\label{chap:wp-prod-perf}
+\input{chapters/ch02-WPProdPerf}
+
+\chapter{Small interlocking groups improve mass deliberation in the presence
+of strong social influence}
+\label{chap:abm}
+\input{chapters/ch03-NetDelibABM}
+
+\chapter{Experimental evaluation of Network Deliberaiton}
+\label{chap:experiment}
+\input{chapters/ch04-NetDelibExp}
+
+\chapter{Discussion}
+\label{chap:discussion}
+\input{chapters/ch05-discussion}
+% Place your additional chapters here using the \input{} command
+%\input{chapters/example_chapter_99}
+
+% Appendices
+\appendix
+\input{appendices/apx01-nk}
+\input{appendices/apx02-interview}
+
+\bibliographystyle{plain}
+
+% Give this command the relative path to the .bib file.
+\bibliography{references.bib}
+
+\end{document}

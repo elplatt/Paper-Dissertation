@@ -1,0 +1,235 @@
+The ability of large groups to reach mutually agreeable decisions is key to
+democratic governance, social movements, and peer production (e.g., Wikipedia).
+Faced with the intractability of large-scale decision-making, traditional
+systems have sacrificed one or more desirable properties, such as participation
+(as in representative democracy), deliberation (as in voting), equality
+(as in command hierarchies), and speed (as in formal consensus).
+This dissertation examines the emerging role of internet-enabled collaborative
+networks in overcoming these historical limitations.
+
+In recent years, examples of large-scale collaborations have emerged that seem
+to achieve the previously unachievable. Millions of volunteer Wikipedia editors
+have created a high-quality encyclopedia without centralized leadership
+\cite{keegan_evolution_2017, giles_internet_2005}.
+The Free Software movement has produced the Linux kernel and GNU operating
+system, which power much of the modern internet
+\cite{coleman_coding_2013, benkler_coases_2002, raymond_cathedral_1999}.
+Social movements such as the Arab Spring, Occupy, Black Lives Matter, and
+Podemos have reshaped national governments and brought attention to deeply
+entrenched social issues
+\cite{tufekci_twitter_2017, gonzalez-bailon_networked_2016}.
+The emergence of these large-scale decentralized collaborations has been
+attributed to the fast, bidirectional,
+and global communication enabled by the internet
+\cite{tufekci_twitter_2017, benkler_coases_2002}.
+A better understanding of how specifically such communication sidesteps
+historical barriers to large-scale collaboration will contribute to more
+effective policy as well as best practices for organizational design and
+intervention.
+This dissertation focuses on one particularly challenging aspect of
+such collaborations: decision-making
+I specificaly examine how,
+when groups are too large for all members to participate in all discussions,
+the course and outcome of the decision-making process is influenced by the
+communication network structure: the shape of who talks to whom.
+
+\section{Theoretical Framework}
+
+This dissertation draws on ideas from network science, economics, and complex
+systems.
+While a topic as broad as decision-making can be studied from many perspectives,
+these fields provide a minimal framework for studying how individual preferences
+and behaviors interact with interpersonal communication networks to influence
+group decisions.
+
+The fundamental challenge of large-scale collective decision-making is how to
+reconcile the conflicting preferences of individual group members.
+This challenge has been studied formally in social choice theory,
+a sub-field of economics.
+Prior work in social choice theory has found, somewhat discouragingly,
+that even when all individual preferences are known perfectly,
+making a fair collective decision isn't always possible.
+In some cases, the method of aggregating individual preferences
+(i.e. the voting system) can influence the outcome.
+Social choice theory focuses on understanding of these limitations,
+such as the Condorcet Paradox
+\cite{condorcet_essay_1785} and
+Arrow's Impossibility Theorem \cite{arrow_social_2012}.
+This dissertation finds hope in the transformative potential of the
+deliberative process.
+Social choice theory typically assumes fixed individual preferences.
+Deliberation allows individuals to influence and change each other's
+preferences,
+which creates the potential to sidestep the historical limitations of
+social choice theory.
+When individual preferences are allowed to vary, it becomes possible for an
+irreconcilable set of preferences to evolve into one with a clear winner.
+So far, this possibility has received relatively little attention,
+most likely due to the historical intractability of large-scale deliberative
+decision-making.
+This dissertation explores the potential of the internet to enable effective
+deliberation in large collectives.
+Such large-scale deliberation creates the potential for members to
+resolve conflicting preferences and reach mutually acceptable decisions
+without relying on coercive or hierarchical processes that might introduce
+power imbalances or informational biases.
+
+Network science provides the tools for analyzing the structure of interpersonal
+networks.
+Interpersonal interactions in large collaborations are necessarily structured:
+when a group is too large for each individual to interact with all other individuals,
+the question of ``who talks to whom?'' creates a network structure.
+By modelling collaborative groups as a collection of abstract ``nodes''
+connected by interpersonal communication links,
+a group's communication structure can be studied in isolation.
+Findings from network science suggest that social processes on networks can be
+influenced by structural properties such as
+the {\em degree}: the number of links a node has,
+{\em geodesic distance} the number of links separating two nodes,
+and {\em clustering}: how common it is for two linked nodes to share links with
+a third \cite{boccaletti_complex_2006}.
+While network structure is certainly not the only factor to influence collective
+decision-making,
+studying network structure in isolation provides a baseline for the
+further study of social dynamics and other non-structural factors.
+Network structure is also significant as a potential point of intervention in
+cases where social dynamics may be difficult to influence.
+
+This dissertation also incorporates theoretical and computational models from
+social learning theory.
+Social learning theory acknowledges that individuals rarely
+learn or make decisions in isolation, but rather learn from and imitate others
+in their social network
+\cite{golub_naive_2010}.
+Social learning theory
+formalizes both the types of tasks collectives perform
+\cite{hong_interpreted_2009}
+and the behavioral strategies individuals might employ
+\cite{lazer_network_2007, barkoczi_social_2016}.
+These strategies range from pure imitation to critical evaluation,
+depending on the circumstances being modeled.
+Social learning models provide a baseline to compare empirical observations
+against,
+as well as a language and framework for contextualizing findings.
+
+Throughout this dissertation,
+I motivate and develop a novel theoretical framework,
+which I call {\em network deliberation}.
+My review of the literature identifies a common theme
+among successful large-scale internet-enabled collaborations:
+large collectives composed of interlocking smaller groups.
+These groups have various names, including:
+committees, working groups, teams, circles, cores, syndicates,
+affinity groups, zones, and nodes.
+As an abstraction of these small interlocking group, I will use the term "pods."
+Network deliberation describes large-scale collective deliberation achieved
+through interlocking pods.
+As in the theories of interlocking directorates \cite{levine_study_1979},
+interlocking publics \cite{habermas_structural_1991},
+and network rotation \cite{salehi_hive_2018},
+pods allow for beneficial small group dynamics,
+while the overlap between pods enables diffusion of information and opinions
+through the greater collective.
+In network deliberation, the method of assigning individuals to pods
+(whether deliberate or self-organized) can produce interpersonal networks with
+varying structures.
+The central question of this dissertation is how the structure of these
+interlocking-pod networks influences the process and outcome of deliberation
+in large collaborations.
+
+\section{Methodology}
+
+Studying collective behavior on the scale of hundreds, thousands, and millions
+presents significant methodological challenges.
+To address these challenges, this dissertation combines multiple methodologies,
+including: observational study, agent-based modelling, and field experiment.
+I use observational studies to reconstruct real-world collaborative networks
+from the English-language Wikipedia and analyze the collaborative output of
+those networks (Chapter \ref{chap:wp-prod-perf}).
+Observational study has the benefits of scaling to millions of individuals
+in a real-world environment.
+However, observational studies typically cannot establish causal relationships,
+only correlation.
+
+To begin to address the causal relationship between network structure and
+deliberative outcome, I use agent-based models
+(Chatpers \ref{chap:wp-prod-perf} and \ref{chap:abm}).
+Agent-based models are computational models of large systems composed of
+many agents following simple behavioral rules.
+In this case, agents represent individual collaborators,
+and their behavior is determined by their preferences and their strategy for
+incorporating information learned from their neighbors.
+Agent-based models can establish causality,
+and do so in group sizes limited only by available computing power.
+As simplified models, however, their results cannot necessarily be generalized
+to real-world scenarios.
+
+To bridge the limitations of the above methods,
+this dissertation will include a controlled field experiment evaluating the
+effect of network deliberation in real-world collective decision-making
+(Chapter \ref{chap:experiment}).
+
+\section{Contributions}
+This dissertation describes the contributions of three projects.
+Chapter \ref{chap:wp-prod-perf} describes an observational and computational
+study of WikiProjects on the English-language Wikipedia,
+and reports the following contributions:
+\begin{itemize}
+\setlength\itemsep{0pt}
+\item Despite an overall productivity/performance trade-off,
+WikiProjects with low-degree coeditor networks tend to have both higher
+productivity and higher performance;
+\item Short geodesic lengths are associated with higher performance,
+consistent with a conformity-based learning strategy;
+\item Structural inequality, as measured by degree skewness,
+is associated with lower performance;
+\item The agent-based model shows that the productivity and performance of
+collaborations can depend on network degree,
+and that the direction of that dependence can depend on social learning strategy.
+\end{itemize}
+
+Chapter \ref{chap:abm} describes an agent-based model of network deliberation,
+comparing performance across several network topologies and social learning
+strategies.
+The primary contributions are:
+\begin{itemize}
+\setlength\itemsep{0pt}
+\item When agents conform to social influence,
+Network deliberation identifies solutions of higher quality than
+conventional deliberation,
+while requiring less time to converge.
+\item Within network deliberation conditions,
+the structurally-efficient random pod network outperforms the
+structurally-inefficient long-path network when agents conform to social influence.
+However, when agents prefer their own judgement to social influence,
+the inefficient network yields higher performance,
+consistent with findings for conventional networks.
+\cite{barkoczi_social_2016}.
+\item A novel social learning strategy, confident-neighbor,
+which outperforms or matches the conventional best-neighbor strategy across all
+networks considered,
+despite using strictly less information about solution quality.
+\end{itemize}
+
+Chapter \ref{chap:experiment} proposes and describes current progress on a
+field experiment to study network deliberation in large-scale human collaborations.
+The study design uses periodic ranked-choice polls to track individual preferences
+throughout the course of a large-scale online deliberation.
+By varying communication network structure and tracking the evolution of individual
+preferences,
+this experiment evaluate the ability of network deliberation to resolve conflict
+and build consensus, relative to conventional single-group deliberation.
+
+\section{Dissertation Progress and Timeline}
+At the time of this proposal,
+the analysis of English-language WikiProjects described in Chapter
+\ref{chap:wp-prod-perf} has been completed and resulted in a published
+paper \cite{platt_network_2018}.
+The agent-based modelling project described in Chapter \ref{chap:abm}
+has been completed and resulted in a finished manuscript.
+I have completed custom software, obtained IRB exemption, and conducted
+several pilot studies for the field experiment described in
+Chapter \ref{chap:experiment}.
+I expect to have data collected from at least one full-scale experiment
+by the end of 2021, and to have the data analyzed by mid-February, 2022.
+I plan to have my dissertation completed by mid-May, 2022.
