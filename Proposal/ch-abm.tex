@@ -34,7 +34,7 @@ Agents maintain a candidate solution to the task and iteratively apply their lea
 \subsection{Overview}
 
 As their collective task, agents seek an optimal point on a rugged fitness landscape.
-This landscape is generated using the NK model \cite{kauffman_towards_1987, weinberger_local_1991} (see Appendix \ref{apx-nk}).
+This landscape is generated using the NK model \cite{kauffman_towards_1987, weinberger_local_1991} (see Appendix \ref{apx:nk}).
 The NK model is a ``tuanbly rugged'' objective function parameterized by two variables:
 the number of bits in the input string ($N$),
 and the number bits used to compute each contribution to the objective function ($K+1$).
@@ -72,7 +72,7 @@ The vertices $V$ correspond to the agents (individuals).
 The edges $E_t$ allow agents to exchange information with their immediate neighbors at time $t$.
 Over the course of the simulation, agents seek to maximize some objective function $Q(s)$.
 We use binary strings of length $d$ as our solution space: $s \in \mathbb{Z}^d$.
-We generate the objective function $Q(s)$ using the NK model \cite{kauffman_towards_1987, weinberger_local_1991} (see Appendix \ref{apx-nk}).
+We generate the objective function $Q(s)$ using the NK model \cite{kauffman_towards_1987, weinberger_local_1991} (see Appendix \ref{apx:nk}).
 
 The simulation begins at time $t=0$ by generating a set of initial solutions $s_{v,0}$ for the agents.
 These are generated randomly, with each possible solution having equal probability.
