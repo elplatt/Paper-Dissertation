@@ -1,63 +1,93 @@
-The assumption that coordination requires coercive hierarchy is so pervasive
-that it is common to see the words ``hierarchy'' and ``organization'' used
-interchangeably, as in the conventional ``org chart.''
-Hierarchy is certainly a well-demonstrated tool for achieving coordination,
-but that coordination comes with costs.
-In terms of principles, hierarchical organizations rely on coercion and power imbalances,
-sacrificing egalitarianism.
+\epigraph
+{Socialism would take too many evenings.}
+{---Attributed to Oscar Wilde by Michael Walzer \cite{walzer_day_1971} }
+Large-scale participatory governance is, to many, an oxymoron.
+The assumption that large-scale coordination requires coercive hierarchy is so pervasive that it is common to see the words ``hierarchy'' and ``organization'' used interchangeably, as in the conventional ``org chart.''
+Control hierarchies \cite{crumley_heterarchy_1995}, including representative democracy, are indeed very effective at addressing some of the challenges of large-scale governance.
+Faced with the historical difficulty of achieving both large-scale participation and deliberative discourse \cite{ackerman_deliberation_2002}, control hierarchies defer governance of large groups to a subset of members, enabling more deliberative discourse and more rapid decision-making than traditional consensus deliberations \cite{gentry_consensus_1982}.
+Hierarchies can also serve to establish consistency and preserve institutions, as the priorities of elites shift from maximizing group welfare to sustaining their positions, as described by the iron law of oligarchy \cite{michels_political_1999, shaw_laboratories_2014}.
+However, the benefits of control hierarchy come with costs.
+
+In terms of principles, hierarchical organizations rely on coercion and power imbalances, sacrificing egalitarianism.
 More practically, when information is distributed but decision-making is centralized,
 that decision-making necessarily excludes potentially useful information.
-The emergence of successful large-scale, internet-enabled, non-hierarchical collaborations
-suggests that perhaps, at leaast in some cases,
-neither the principle of egalitarianism nor the practical wisdom of the
-crowd needs to be sacrificed to achieve effective coordination and collaboration.
-The key question is: how do such large-scale participatory projects achieve success?
+The emergence of successful large-scale, internet-enabled, parrticipatory collaborations suggests that perhaps, at leaast in some cases, neither the principle of egalitarianism nor the practical wisdom of the crowd needs to be sacrificed to achieve effective coordination and collaboration.
+The key question I have attempted to address is: how do such large-scale participatory projects achieve success?
+I have specificaly focused on one challenge facing such collaborations: how can a group collaborate effectively when it is impractical for all members to communicate and interaction is restricted to a network.
 
-The work described and proposed here is motivated by and founded on empirical observations,
-but it is also speculative in nature.
-By employing agent-based models and experiment, it is possible to understand
-not just how things are, but how things could be.
-Rather than seeking to identify principles that apply broadly to existing
-collaborations, this work starts from empirical observations of collaborations
-that have done something unusual and attempts to identify robust principles
-that might be applied to transform existing collaborations or create new ones.
-The repeated appearance of small interlocking groups in successful large-scale
-participatory collaborations suggests that this type of network structure might
-be such a principle.
-It may seem counterintuitive or even impossible that collaborations and organizations might deliberately
-alter their interpersonal network structure.
+In the preceeding chapters, I have approached the above question using observational study, numerical simulation, and experiment.
+A combination of literature reivew and obersvational analysis of English-language Wikipedia (\ref{chap:wp-prod-perf}) identified a common theme among successful examples: small, tightly-knit groups, interconnected through mutual membership: network deliberation.
+Subsequent work investigates simple models of network deliberation to better understand how and why it helps large groups effectively self-govern.
+These models are not intended to capture all properties of real-world network deliberation, but rather to isolate and investigate particular factors, such as social influence and network efficiency.
+Both numerical simulations (Chapter \ref{chap:abm}) and experiment (Chapter \ref{chap:experiment}) find evidence that network deliberation can improve the effectiveness of large deliberations relative to conventional single-group deliberation.
+In particular, these studies both identify a protective effect against the negative consequences of social influence, such as information cascades.
+As such, network deliberation may be especially beneficial in settings with a high level of social influence.
+
+\section{Future Work: Deliberative Settings}
+While the studies presented here confirm the observation that network deliberation sometimes contributes to the success of large-scale deliberation, there are many factors that can influence the deliberative process, and there remains much work to be done to understand how these factors interact with network deliberation.
+
+\subsection{Language and Culture}
+The observational and experimental studies presented focus on the English-lanaguage setting, as well as on subsets of the population who are comfortable with wiki technology and/or attend university.
+It is very possible that cultural norms, level of comfort and familiarity with technology, and language barriers between group members could have important consequences for large-scale deliberation that interact with the benefits of network deliberaiton.
+
+\subsection{Modes of Deliberation}
+There are many ways to design a deliberative interaction, whether online or offline. Any of the following considerations could have consequences for the successful implementation of large-scale deliberation.
+\begin{description}
+	\item[Synchronous/Asynchronous:] Deliberative activity can vary substantially between synchronous and asynchonous settings. Synchronous settings allow more interactivity, but can potentially include/exclude members based on availability and schedule.
+	\item[Simultaneous/Sequential:] The simplified models studied here assigned individuals to one pod at a time in order to constrain network structure and study the dynamics of preference evolution, but real-world collaborations may have individuals participating in multiple groups simultaneously.
+	\item[One/Many Topics:] All pods might be focused on the same topic, or each might be focused on a different topic (or sub-topic).
+	\item[Formal/Informal:] Deliberations can vary widely in their level of formality. While intentionally-planned formal deliberations may be impactful, spontaneous light-hearted deliberations could be just as impactful. It is interesting to consider how intentional network structure might be facilitated in spontaneous intereactions.
+	\item[Public/Private:] Deliberations can take place in settings with a range of privacy. Perception of privacy, as well as comfort and familiarity with other participants may impact the effectiveness of deliberation.
+\end{description}
+
+\subsection{Facilitation and Moderation}
+When all members are equal participants in a deliberation, facilitation and moderation are a challenge.
+In the experiment reported in Chapter \ref{chap:experiment}, facilitation was achieved through discussion prompts.
+Moderation was performed by an experimenter, but the discussion remained respectful and no moderation actions were required.
+An active facilitator might contribute subtantially to the quality of a deliberation, but there are many potential ways to choose a facilitator from among a group of peers.
+Similarly, moderation is incredibly important for productive deliberation on sensitive topics, and it is not immediately obvious how moderation might work in a network deliberation environment.
+
+
+\subsection{Emergent Alternatives}
+In the simple model of network deliberation presented here, the available alternatives were determined before the beginning of the deliberation.
+However, the deliberative process can produce new ideas and these ideas are sometimes improvements on those previously available \cite{salganik_wiki_2015}.
+Additional research is necessary to undertand the consequences of introducing new ideas into a network deliberation, as well as how and when to introduce those ideas to different pods for best effect.
+
+\subsection{Preference Distribution}
+The initial distribution of preferences could have substantial impact on the outcome of network deliberation.
+Additonal research is needed to address the many possible scenarios.
+For example, if a preference is held by a small enough fraction of participants, they are likely to be assigned to different pods and perceive themselves as the only one with that preference.
+Network deliberation creates a high likelihood that such a participants will eventually
+be assigned to a pod with others sharing their preference, but in strong social influence settings, they might switch their preferences before then.
+
+\section{Applications of Network Deliberation}
+The studies of network deliberation presented here have a double purpose.
+The first purpose is to better understand the role of network structure in successful large-scale deliberations such as Wikipedia.
+The second is to identify principles that can be used in the analysis and creation of new sociotechnical systems.
+This work starts from empirical observations of collaborations that have done something unusual and attempts to identify robust principles that might be applied to transform existing collaborations or create new ones.
+The repeated appearance of small interlocking groups in successful large-scale participatory collaborations suggests that network deliberation may be such a principle.
+The applicability of network deliberation depends on the ability to exert influence over network structure.
+It may seem counterintuitive or even impossible that collaborations and organizations might intentionally alter their interpersonal network structure.
 But in fact, countless practices such as job interviews, letters of recommendation,
 performance reviews, internships, mentorships, etc. all serve exactly this purpose;
 to deliberately shape the social network within a collaboration.
 By analogy, the task of deliberately designing a neighborhood might seem impossible,
 but urban planners have made a science of it.
 
-Between the completed chapters of this dissertation, a few commonalities emerge.
-While it is conventional to describe the ``quality'' of a collaborive output,
-both Chapter \ref{chap:wp-prod-perf} and Chapter{chap:abm} demonstrate that
-quality can be multidimensional.
-Specifically, Chapter \ref{chap:wp-prod-perf} shows that productivity and performance can
-be anti-correlated in some contexts and not in others.
-Similarly, Chapter \ref{chap:abm} identifies contexts where altering network structure
-and social learning strategies can improve just performance, just productivity, or both.
-Another common theme is that subtle differences in task or behavior can have dramatic
-influences on output quality.
-With regards to network deliberation in particular, Chapter \ref{chap:abm} suggests
-that it is most effective in collaborations with a tendancy towards conformity.
-Such conformity might occur because of social norms, or to compensate for sparse information.
-Interestingly, the correlations between network properties and performance on Wikipedia
-were consistent with a conformity-based social learning strategy.
-Why network deliberation seems to improve conformity-based collaboration remains an
-open question for future work.
-And whether network deliberation has a similar effect in a controlled experimental
-setting is yet to be seen.
+One possible application of network deliberation principles is in the design of organizational structures and procedures.
+In fact, small interlocking pods are a feature found in self-managed organizations \cite{laloux_reinventing_2014}.
+As the pracitices and structures of such organizations are codified and refined, a better understanding of network deliberation can provide a guide to consructing more effective organizations and institutions.
 
-While this work only scratches the surface of factors contributing to successful collaboration,
-especially in the messiness of the real world, it identifies previously overlooked distinctions
-that may help refine the study of participatory collaboration. Furthermore, starting from empirical
-observation of large-scale participatory collaborations, this work has identified, refined, and formalized
-network deliberation, and shown that, at least in agent based models, exhibits a distinct influence
-on collaborative outcomes, independent of other network properties.
-The ongoing work described in Chatper \ref{chap:experiment} will shed light on whether network deliberation
-plays a causal role in enabling large-scale participatory collaborations.
+Similarly, network deliberation emerges naturally in technical settings such as working groups in large collaborations (e.g., WikiProjects), federated social networks (e.g., mastodon), and group chat platforms (e.g., discord).
+The deliberation that takes place on these platforms is shaped in part by the protocols and user interaces of the software.
+The principles of network deliberation have the potential to inform the design of such protocols and interfaces in a way that minimizes harm and promotes effective interactions.
 
+\section{Conclusion}
+Inexpensive, instantaneous, global, peer-to-peer communication has only been possible for a tiny sliver of recent human history.
+Existing organizational and institutional structures have evolved over hundreds or thousands of years.
+While the full implications of digital communication for human institutions can't be predicted, our institutions have already started adapting in exciting ways.
+In particular, we have seen the emergence of very large collaborations with participatory governance, which would have seemed impossible before the internet.
+In the research presented here, I have empirically identified one of the commonalities between these unprecedented projects, namely interlocking networks of small pods: network deliberation.
+The agent-based simulation and experiment presented here study the properties of a simplified model of network deliberation, in order to better unerstand the principles and mechanisms at work.
+This research contributes knowledge on the interaction of network deliberaiton with factors such as network efficiency, individual behavior, and in particiular, social influence.
+It is my hope that this work will help enable large groups to collaborate on common goals in a manner that allows all members to contribute and allows all voices to be heard.
