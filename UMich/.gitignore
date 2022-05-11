@@ -2,6 +2,7 @@
 *.bbl
 *.blg
 *.loa
+*.loapx
 *.lof
 *.log
 *.lop
