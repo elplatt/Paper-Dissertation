@@ -33,6 +33,9 @@ but we find it fruitful to distinguish between the two.
 We find that Wikipedia exhibits an overall trade-off between performance and productivity.
 However, some WikiProjects surpass others in both productivity and performance,
 suggesting the existence of factors that correlate positively with both.
+We are particularly interested in factors that give insight into the success of Wikipedia
+as a large-scale collaboration, such as those relating to the network structure of
+interactions between editors.
 
 Our study focuses on the coeditor networks of each WikiProject:
 which editors have edited at least one article in common?
@@ -312,7 +315,7 @@ we desire our definition of productivity to meet the following conditions:
 \item{Independent of WikiProject size: not affected by adding an article having the same productivity.}
 \end{itemize}
 
-We now define an productivity measure which meets the above criteria.
+We now define a productivity measure which meets the above criteria.
 Let $T(W,G)$ be the set of article assessment transitions from below grade $G$
 to grade $G$ or higher in project $W$.
 Let $N(W,G)$ be the number of articles in project $W$ which ever transition
@@ -409,6 +412,10 @@ A large positive degree skewness for a WikiProject coeditor network
 implies that a small number of editors have a very large number of collaborators,
 while a small positive value implies that the editors having the most collaborators
 don't have many more than a typical editor.
+For traditional organizations, maximum effective team size has been
+variously estimated between 5 and 8 individuals
+\cite{freeman_tyranny_1972, lohman_designing_2000, miflin_small_2004},
+while WikiProject mean editor degrees range from 0 to 1256, with a median of 133.
 
 We also calculate the characteristic path length for each WikiProject coeditor network.
 The {\em distance} from node $s$ to node $t$ is the distance of the shortest path
@@ -425,10 +432,10 @@ which has been shown to reduce productivity in some settings
 
 Our final network measure quantifies the connectivity of a project's coeditor
 network using min-cut size.
-The minimum $st$-cut between nodes $s$ and $t$ is the set of edges that must beremoved
+The minimum $st$-cut between nodes $s$ and $t$ is the smallest set of edges that must be removed
 for no path exists from $s$ to $t$.
 The minimum cut (min-cut) of a graph is the smallest minimum $st$-cut over all node pairs $st$. 
-The size of the graph min-cut quantifies the connectivity of a graph,
+The size (number of edges) of the graph min-cut quantifies the connectivity of a graph,
 but only incorporates information about edges lying on paths crossing the min-cut.
 Instead, we use the mean size of all minimum $st$-cuts, which we refer to as the
 {\em mean min-cut}.
@@ -544,6 +551,8 @@ we model the performance and productivity of WikiProjects using ordinary least-s
 Each WikiProject is a single observation.
 The models include each project's coeditor network properties as independent variables.
 We also include the following project-level variables to control for confounding factors.
+For project similarity, we use the Jaccard similarity \cite{jaccard1912distribution},
+which provides a meaningful index for comparing set membership.
 \begin{description}
 \setlength\itemsep{0pt}
 \item[C-productivity]
@@ -554,7 +563,7 @@ so we include only one.
 \item[Connected fraction.]
 Fraction of coeditor pairs connected by a path.
 \item[Talk fraction.] Fraction of total revisions made to talk pages.
-\item[Mean similarity.] Mean Jaccard similarity (by article) with other WikiProjects; a measure of topical complexity.
+\item[Mean similarity.] Mean Jaccard (by article) with other WikiProjects; a measure of topical complexity.
 \item[Mean editors/article.] Mean number of editors collaborating on each article in a WikiProject.
 \item[Article count.] Total number of articles in the WikiProject.
 \item[Editor count.] Total number of editors working on articles within a WikiProject.
@@ -565,7 +574,8 @@ Fraction of coeditor pairs connected by a path.
 
 Our models are summarized in Table \ref{tab:model}.
 Min-cut is excluded from all models to avoid collinearity,
-as it is highly correlated with degree.
+as it is highly correlated (r=0.44) with degree.
+In many cases the min-cut is simply the removal of the highest-degree node.
 In-degree and out-degree skewness were also highly correlated,
 so we only include out-degree skewness
 (results are similar for in-degree skewness).
@@ -579,10 +589,12 @@ except for degree-skewness, which had an inconsistent sign across models.
 We see that B-productivity and C-productivity have very similar models, but that A-productivity behaves
 differently in its dependence on degree skewness and connectivity.
 The different behavior of A-productivity is likely explained by the
-observation that the A-Class quality is infrequently used in practice.
+observation that the A-Class quality is infrequently used in practice,
+with an average of 16.8 A-Class articles per project versus
+118.2 and 251.1 for B-Class and C-Class.
 The A-Class quality level is usually passed when an article reaches
 good or featured article status,
-which follow deifferent a consensus process from other ratings.
+which follow a different consensus process from other ratings.
 
 The negative dependence of performance on C-productivity suggests there is generally a trade-off between
 performance and productivity.
@@ -808,7 +820,7 @@ on degree than on path length.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=3in,height=1.5in]{chapters/figures/WPProdPerf/fig-val-iter.pdf}
+\includegraphics[width=6in,height=3in]{chapters/figures/WPProdPerf/fig-val-iter.pdf}
 \caption{
 Mean agent solution value over time, averaged over 100 trials.
 Strategies are defined in Table \ref{tab:strat}.
@@ -820,7 +832,7 @@ Strategies are defined in Table \ref{tab:strat}.
 \small
 \centering
 \begin{tabular}{lll}
-Strategy & Performance & productivity\\
+Strategy & Performance & Productivity\\
 \hline
 Best+I  & 0.722 $\pm$ 0.001 & 0.0221 $\pm$ 0.0003 \\
 Conf+I  & 0.721 $\pm$ 0.001 & 0.0174 $\pm$ 0.0002 \\
@@ -833,10 +845,10 @@ LMaj+LI & 0.729 $\pm$ 0.001 & 0.046 $\pm$ 0.002 \\
 Simulated Performance and productivity.
 Results shown for 100 trials with P[rewire] = 0.
 Strategies are defined in Table \ref{tab:strat}.
-Local strategies are less productive than their non-local counterparts.
 Local best-neighbor out-performs global,
 while local conformity is the worst performer in all cases.
 The local majority strategy is both most productive and most performant.
+Local strategies are more productive for the conform strategy and less productive for the best-neighbor strategy.
 \label{tab:sim-eff-perf}
 }
 \end{table}
@@ -845,7 +857,7 @@ The local majority strategy is both most productive and most performant.
 \small
 \centering
 \begin{tabular}{lll}
-Strategy & Perf. Std. Coeff. & Eff. Std. Coeff.\\
+Strategy & Perf. Std. Coeff. & Prod. Std. Coeff.\\
 \hline
 Best+I  & -4.2$\times{10^{-5}}$ & \+4.1$\times{10^{-5}}$ \\
 Conf+I  & \+2.7$\times{10^{-5}}$ & \+9.4$\times{10^{-5}}$ \\
@@ -867,7 +879,7 @@ Degree regression coefficients for simulations.
 \includegraphics[width=6.67in,height=1.33in]{chapters/figures/WPProdPerf/fig-deg-eff.pdf}
 \includegraphics[width=6.67in,height=1.33in]{chapters/figures/WPProdPerf/fig-deg-perf.pdf}
 \caption{
-productivity and Performance of social learning strategies vs. mean network degree.
+Performance and productivity of social learning strategies vs. mean network degree.
 Each point represents a single trial of 300 iterations.
 Strategies are defined in Table \ref{tab:strat}.
 The local best-neighbor strategy shows
@@ -941,7 +953,7 @@ Similarly, the observation that performance is higher in projects with less stru
 if the challenges of egalitarian organizing are overcome,
 decentralized collaborations may produce better outcomes than those with centralized, top-down structures.
 
-Our agent-based models offer a several insights.
+Our agent-based models offer several insights.
 We observe degree-dependent performance and productivity
 for both local conformity and local majority strategies.
 However, these two strategies have opposite degree dependence,
