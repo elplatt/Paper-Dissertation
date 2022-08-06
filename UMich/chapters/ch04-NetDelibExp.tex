@@ -20,7 +20,7 @@ Scholars of democracy commonly describe governance systems in terms of two axes:
 While both can improve governance, they are difficult to achieve simultaneously \cite{gentry_consensus_1982, freeman_tyranny_1972} and tradeoffs can be made to favor one over the other, as in voting (high representation, low argumentation) and representative democracy (low representation, high argumentation).
 
 We focus on deliberation due to fundamental limitations of voting.
-Results from social choice theory showt that any ranked-choice voting system is subject to limitations such as the Condorcet Paradox \cite{condorcet_essay_1785} and Arrow's Impossibility Theorem \cite{arrow_social_2012}.
+Results from social choice theory show that any ranked-choice voting system is subject to limitations such as the Condorcet Paradox \cite{condorcet_essay_1785} and Arrow's Impossibility Theorem \cite{arrow_social_2012}.
 Deliberation offers one way to avoid these limitations by changing individual preferences \cite{ackerman_deliberation_2002}.
 The success of deliberation at generating consensus has been attributed to its ability to identify and resolve conflict \cite{gentry_consensus_1982}.
 However, deliberation also carries risks, such as the posibility of pushing individuals towards extreme and polarized preferences \cite{schkade_what_2007}.
@@ -31,15 +31,33 @@ The field of social learning has studied both simple estimation tasks \cite{degr
 Observational studies have been used to analyze the network structures of online collaborations \cite{gonzalez-bailon_networked_2016, platt_network_2018}.
 Lab and field studies have also been used to study real-world collaborations on a small scale \cite{salehi_hive_2018, kearns_experiments_2012}.
 As discussed in Chapter \ref{chap:abm}, the successful large-scale collaborations enabled by the internet often exhibit network sructures characterized by small, interlocking groups, reminiscent of interlocking directorates \cite{levine_study_1979} and interlocking publics \cite{habermas_structural_1991}.
-In Chapter \ref{chap:abm}, we describe agent-based simulations showing that such network deliberation can improve performance on complex tasks when individuals exhibit strong social influence.dsd
+In Chapter \ref{chap:abm}, we describe agent-based simulations showing that such network deliberation can improve performance on complex tasks when individuals exhibit strong social influence.
 Here, we expand on existing research by performing a controlled online experimental evaluation of network deliberation.
 We use periodic polling to track preference evolution, allowing causal inference in a real-world setting.
 
 While many studies have examined the role of network structure in collaboration, there has so far been little attention to the interlocking pod structure of network deliberation.
 The closest we are aware of is the study of network rotation by Salehi \& Bernstein \cite{salehi_hive_2018}.
-The present experiment goes beyond existing work primarily by tracking preferences throughout the experiment and by the use of a conventional single-group control condition.
+The present experiment goes beyond existing work in several ways.
+Our primarity innovation is the tracking of preferences throughout the experiment,
+which allows the quantification of consensus and social influence.
+We also include a large single-group control condition.
+Through the use of a pseudonymous online platform, we isolate deliberative text and network structure from other social cues that
+might result in social influence, e.g., tone of voice, visual appearance.
+While these factors undoubtedly play an important role in the social dynamics of deliberation,
+we are focused specifically on the role of communication network structure.
 We also describe multiple network deliberation topologies for achieving efficient or inefficient networks.
 For the present study, we focus on an efficient topology.
+By tracking preference evolution, limiting confounding factors, and using a controlled experimental design,
+we can examine the dynamics and causality of the relationship between network structure and preference evolution.
+
+Observational and numerical findings have shown that successful large-scale collaborations often exhibit a structure
+of small, interlocking pods: {\em network deliberation}.
+This pod structure can be seen in a range of collaborations, including the
+articles of Wikipedia \cite{platt_network_2018},
+the projects and modules of the free/open-source software community \cite{benkler_coases_2002},
+and the nodes of Occupy Sandy \cite{brugh_combining_2019}.
+Numerical simulations (Chapter \ref{chap:abm}) demonstrate the effectiveness of the network
+deliberation structure in the presence of social influence.
 
 The experiment described here focuses on several issues.
 Based on observational and numerical findings that successful large-scale collaborations often exhibit network deliberation struture, we test the following hypothesis:
@@ -68,7 +86,7 @@ We discuss the results in Section \ref{sec:discussion} and conclude in Section \
 \section{Theory}
 \label{sec:theory}
 \subsection{Social Choice Theory}
-Our analysis of preferences is foudned in the formalism of social choice theory \cite{arrow_social_2012, gaertner_primer_2009}.
+Our analysis of preferences is founded in the formalism of social choice theory \cite{arrow_social_2012, gaertner_primer_2009}.
 In social choice theory, individual's {\em preferences} are represented by a ranked ordering of {\em alternatives} (e.g., proposals, candidates).
 The set of preferences for all individuals in a group is called the {\em preference profile}.
 A {\em social welfare function} can be applied to the profile to generate a {\em social preference}: an ordering of alternatives representing the preference of the group as a whole.
@@ -123,6 +141,7 @@ For a pair of preferences $p, q$, we define a length $M - 1$ {\em crossing vecto
 Informally, $v_m$ is the number of alternatives that cross place $m$.
 Each element of $v_m$ is an integer in the range $[0, v_m^{\max}]$ dependent on the index:
 \begin{equation}
+\label{eqn:distance-max}
     v_m^{\max} =
     \begin{cases}
     m & m \leq (M - 1) / 2 \\
@@ -134,20 +153,60 @@ There are many potential choices for weights.
 We choose the weight of place $m$ to be equal to the highest total of all lower ranked places plus one.
 Thus the weight at index $i = M - m$ (noting that low rank corresponds to high $m$) is given by:
 \begin{equation}
+\label{eqn:weight}
     w_i = 1 + \sum_{k=1}^{i-1} w_k v_k^{\max}.
 \end{equation}
 
+For example, consider the following two preference orderings (in least-to-most preferred order):
+\begin{eqnarray}
+p &=& (C, B, E, F, A, D) \\
+q &=& (F, E, B, C, A, D).
+\end{eqnarray}
+Applying Eq. \ref{eqn:distance-max} and \ref{eqn:weight} 
+gives the maximum place-values $v^{\text{max}}$ and place weights $w_i$:
+\begin{eqnarray}
+v^{\text{max}} &=& (1, 2, 3, 2, 1) \\
+w &=& (1, 2, 6, 24, 72).
+\end{eqnarray}
+Partitioning both vectors at index 3 gives:
+\begin{eqnarray}
+p &\mapsto& {C, B, E}, {F, A, D} \\
+q &\mapsto& {F, E, B}, {C, A, D}.
+\end{eqnarray}
+Noting that these partitions differ by a single swap ($F \rightleftarrows C$)
+the corresponding element of the crossing vector $v_3$ is $1$.
+Applying the same procedure to each index gives the full crossing vector:
+\begin{eqnarray}
+v(p,q) &=& (1, 2, 1, 0, 0).
+\end{eqnarray}
+Taking the inner product with the weight vector gives the total crossing distance:
+\begin{eqnarray}
+d(p, q) &=& v(p,q) \cdot w \\
+&=& 11.
+\end{eqnarray}
+Normalizing by the maximum crossing distance $143$ gives a normalized distance of approximately $0.08$.
+For comparison, the normalized Kendall tau distance bewtween these two preferences is $0.40$,
+much larger despite agreeing on the highest two choices.
+
+
 \subsection{Quantifying Social Influence}
 
-We are particularly interested in the role of social influence in preference evolution and require a formalism to quantify and analzye social influence.
+Deliberation is fundamentally a social influence process in which
+individuals exchange statements with their peers in an effort to influence their preferences.
+We will thus benefit from a formalism to quantify and analzye social influence.
 If two individuals preferences become closer, can we say whether one influenced the other? And if so, can we say which influence which?
 We cannot answer either question with certainty from preferences alone, but we can construct a reasonable proxy based on some simplifying assumptions.
 Namely, we will construct measures of social influence based on the assumptions that:
 \begin{itemize}
-    \item The magnitude of an individual's change in preference increases with their susceptibility with social influence;
+    \item The magnitude of an individual's change in preference increases with their susceptibility to social influence;
     \item The magnitude of an individual's change in preference increases with the magnitude of the distance between their preference and the influencing preference.
 \end{itemize}
+The distance between two individuals' preferences is symmetric between the two individuals,
+so the latter of the above conditions does not speak to who influences whom.
+The converse of the former condition however suggests that the greater the change in an individual's preference,
+the more they have been influenced by other.
 Thus, if the distance between the preferences of individuals $A$ and $B$ decreases, and the preference of $B$ changed more than the preference of $A$, we assume that individual $A$ influenced individual $B$.
+On the other hand, if the distance increases, we refer to this as negative social influence, suggesting one individual has influenced another to adopt an opposing preference.
 We now describe two formal measures that use these assumptions to quantify how susceptible to influence and how potential influential an individual is.
 
 \subsubsection{Conformity and Hipness}
@@ -182,6 +241,10 @@ The negative change in mean dissimilarity is given by:
 This quantity can be interpreted as the increase in agreement within the group between times $t_i$ and $t_f$,
 with negative values signifying a decrease in agreement.
 
+Measuring only the change in agreement leaves some ambiguities.
+For instance, changes in agreement could simply be due to individuals converging towards initially popular preferences.
+Alternatively initially unpopular preferences might overtake others in popularity,
+which suggests unequal social influence, and might indicate the presence of an information cascade.
 We wish to quantify whether a change in agreement/disagreement is due to individuals converging towards initially popular alternatives, or to the the group being persuaded towards initially unpopular alternatives.
 In the former case, we would expect the majority of individuals to change their preferences by a small amount, while a smaller number of individuals holding unpopular opinions make larger shifts towards popular preferences.
 In the latter case, we would expect the opposite:
@@ -189,8 +252,11 @@ some individuals with unpopular preferences hold closely to those opinions, whil
 So we are interested not just in the total change in agreement/disagreement,
 but also in how that change is distributed across the individuals in the group.
 
+We divide the change in agreement between individuals $p$ and $q$ into two parts:
+that due to $p$'s influence on $q$ and vice versa. 
 To apportion the change in agreement between individuals $p$ and $q$,
-we make the assumption that an individual's contribution to the change in agreement is proportional to the change in their own preference.
+we make the assumption that the contribution due to $q$'s influence on $p$'s preferences is
+proportional to the change in $p$'s preference.
 Specifically, we define the conformity $c(p,q)$ of individual $p$ toward individual $q$ as:
 \begin{eqnarray}
     d_i &=& d(p_i, q_i) \\
@@ -198,6 +264,7 @@ Specifically, we define the conformity $c(p,q)$ of individual $p$ toward individ
     |p| &=& d(p_i, p_f) \\
     c(p,q) &=& -(d_f - d_i)\frac{|p|}{|p| + |q|}.
 \end{eqnarray}
+These values are illustrated schematically in Figure \ref{fig:conform-hip-diagram}.
 Note that the change in agreement between two individuals can be written in terms of the conformity:
 \begin{equation}
     -(d_f - d_i) = c(p, q) + c(q, p).
@@ -217,9 +284,21 @@ Alternatively, if the sum is performed over the first argument of $c$, the resul
 \begin{equation}
     H(p) = \sum_q c(q, p).
 \end{equation}
+Note that a high hipness does not imply that an individual has influenced others to adopt similar preferences,
+only that others have adopted such preferences.
 Both $C(p)$ and $H(p)$ are equal to $\Delta$ when summed over all individuals, but they describe conceptually different attributes of an individual.
 The conformity quantifies how much an individual has increased agreement by changing their preferences to match others.
 The hipness quantifies how much an individual has increased agreement due to holding an unchanging preference near to others' final preferences.
+
+\begin{figure}
+\centering
+\includegraphics[width=3in]{chapters/figures/NetDelibExp/fig-conform-hip-diagram.pdf}
+\caption{Schematic illustration of the quantities used in calculating the social influence
+between $p$ and $q$. Initial preferences are shown as $p_i$ and $q_i$ with final preferences
+shown as $p_f$ and $q_f$. The change in agreement from initial to final is primarily due to
+$p$'s movement, so we consider $p$ to be high in conformity, while $q$ is high in hipness.}
+\label{fig:conform-hip-diagram}
+\end{figure}
 
 
 \subsection{Network Topologies}
@@ -362,8 +441,7 @@ Race & Asian & 14 & 16 \\
 
 Participants were assigned to one of two conditions at the time of enrollment.
 Assignments were uniformly at random.
-Stratified sampling would be preferable in order to ensure even demographic distributions, but was not feasible due to software and time constraints.
-However, we manually confirmed that each condition had comparable demographics.
+We manually confirmed that each condition had comparable demographics.
 The two conditions were:
 \begin{description}
 \item[Control]{
@@ -375,6 +453,15 @@ Participants in this condition were divided into small pods ($\leq 5$ participan
 Posts and comments made by participants in this condition were only visible to others in their current pod.
 Participants in this condition were assigned to a new pod at the beginning of each round of deliberation using the random-pod assignment method, producing a structurally efficient communication network.}
 \end{description}
+
+\subsubsection{Ethical Considerations}
+This study was reviewed by the University of Michigan's IRB and classified as exempt.
+To protect participant privacy, all participants were assigned randomly-generated pseudonyms.
+The keys connecting pseudonyms to identifiable information were stored securely and only available
+to the researchers.
+Participants were provided with an email address to report any harassment, which was continuously
+monitored throughout the experiment.
+The deliberations were also regularly reviewed for any disruptive, hateful, or harassing activity.
 
 
 \subsection{Deliberation Topic}
@@ -398,12 +485,12 @@ The question and alternatives presented to participants were:
 The 2021 [redacted] final exam will include a section worth up to 10\% based on the content covered during the first part of the semester. Which of the following options should be chosen for the topic and format of that section of the exam?
 
 \begin{description}
-\item[Prop. 1]{Open-ended with partial credit (2 questions, 5 points each) - Ch. 1-2: Intro to networks.}
-\item[Prop. 2]{Open-ended with partial credit (2 questions, 5 points each) - Ch. 3: Bridges, clustering, triadic closure, strong and weak ties, and the Strong Triadic Closure Property.}
-\item[Prop. 3]{Multiple choice with no partial credit (5 questions, 2 points each) - Ch. 4: Homophily, selection, social influence, and social-affiliation networks.}
-\item[Prop. 4]{Multiple choice with no partial credit (5 questions, 2 points each) - Ch. 5: Signed networks and balance theory.}
-\item[Prop. 5]{True/false with no partial credit (10 questions, 1 point each) - Ch. 6: Game theory, best responses, and Dominant Strategies, Nash equilibrium.}
-\item[Prop. 6]{True/false with no partial credit (10 questions, 1 point each) - Ch. 9:  Auctions.}
+\item[Prop. 1]{Open-ended, partial credit (2 questions, 5 points each) - Ch. 1-2}
+\item[Prop. 2]{Open-ended, partial credit (2 questions, 5 points each) - Ch. 3}
+\item[Prop. 3]{Multiple choice, no partial credit (5 questions, 2 points each) - Ch. 4}
+\item[Prop. 4]{Multiple choice, no partial credit (5 questions, 2 points each) - Ch. 5}
+\item[Prop. 5]{True/false, no partial credit (10 questions, 1 point each) - Ch. 6}
+\item[Prop. 6]{True/false, no partial credit (10 questions, 1 point each) - Ch. 9}
 \end{description}
 \end{displayquote}
 
@@ -488,7 +575,8 @@ prop2 & prop2 & prop2 \\
 
 \begin{figure}
     \centering
-    \includegraphics[width=3in]{chapters/figures/NetDelibExp/fig-counts.pdf}
+    \raisebox{-\height}{\includegraphics[width=3in]{chapters/figures/NetDelibExp/fig-counts.pdf}}
+    \raisebox{-\height}{\includegraphics[width=1in]{chapters/figures/NetDelibExp/fig-counts-legend.pdf}}
     \caption{Number of first-choice votes for each alternative over the course of the deliberation.}
     \label{fig:firstplace}
 \end{figure}
@@ -501,7 +589,7 @@ We compare participants' preferences before and after the deliberation in Figure
 The most striking feature is that a number of participants (4) in the control group who initially ranked Prop. 2 highest then went on to rank Prop 1. the highest in the final poll.
 These participants are a significant driver of the switch from Prop 2. to Prop 1. in the control group.
 While the random-pod group does show some participants switching away from Prop. 2, those participants shift to the less popular Props. 3 and 4 rather than Prop 1.
-In the sections that follow, we will further analyze the evolution of participant preferneces and the potential mechanisms driving them.
+In the sections that follow, we will further analyze the evolution of participant preferences and the potential mechanisms driving them.
 
 \begin{figure}
     \centering
@@ -515,7 +603,7 @@ In the sections that follow, we will further analyze the evolution of participan
 \label{sec:res-activity}
 
 Here we describe the trends we observe in participants' deliberation activity and the potential impact on participant preferences.
-Overall, the nubmer of comments per participant shows a heavy-tailed distribution (Figure \ref{fig:commentcounts}) with a mode of one comment per participant.
+Overall, the number of comments per participant shows a heavy-tailed distribution (Figure \ref{fig:commentcounts}) with a mode of one comment per participant.
 The random-pod group shows less of a heavy-tail, with more participants posting a single comment per round and a smaller maximum count (2--3 comments vs. 3--4 for control).
 The random-pod group thus shows a more equal division of activity across participants.
 
@@ -526,7 +614,7 @@ The random-pod group thus shows a more equal division of activity across partici
     \label{fig:commentcounts}
 \end{figure}
 
-Figure \ref{fig:commentrounds} shows the comment counts for each round as well as the Shannon entropy of participant comment counts.
+Figure \ref{fig:commentrounds} shows the comment counts for each round as well as the Shannon entropy of the distribution of comment counts over participants.
 The random-pod group shows a lower total number of comments and a higher entropy, again showing a more equal division of activity across participants.
 
 \begin{figure}
@@ -599,6 +687,7 @@ However, this effect is due more to a decrease in agreement
 within the control group than an increase in the random-pod group.
 After an initial increase in agreement, both groups showed an unexpected ``rebound'' effect.
 In the control group, this rebound resulted in a net reduction in agreement, suggesting the presence of negative social influence.
+In other words, participants altered their preferences to more strongly oppose those they interacted with.
 
 \subsubsection{First-Choice Votes}
 \label{sec:res-firstchoice}
@@ -620,7 +709,7 @@ After that round however, a majority of control group participants reported a fi
 In the random-pod group, Prop. 2 remained the most popular and received an even higher share of first-choice votes (16:2) after round 1.
 
 In both the control and random-pod groups, we see round 1 deliberation clearly favoring one alternative, which then gains a number of first-choice votes, suggesting social influence.
-This social influence is further evidenced by the increase in agreement observed for both groups over the course round 1 (Figure \ref{fig:agreement}).
+This social influence is further evidenced by the increase in agreement observed for both groups over the course of round 1 (Figure \ref{fig:agreement}).
 
 The control group varies from the random-pod group in that the round 1 advocacy and subsequent preference shifts are opposite to the original preferences.
 In other words, there is evidence of an information cascade flipping the control group's preference from Prop. 2 to Prop. 1 over the course of round 1.
@@ -695,10 +784,10 @@ In constrast, within the random-pod group, changes in preference are distributed
 
 Combining the above insights from conformity and hipness measures suggests the following.
 The negative shift in agreement in the control group is due
-to a majority of participants shifting their preferences away (negative conformity) from a samll number of stubborn participants (highly-negative hipness) without converging on an alternative (lack of positive conformity).
+to a majority of participants shifting their preferences away (negative conformity) from a small number of stubborn participants (highly-negative hipness) without converging on an alternative (lack of positive conformity).
 Furthermore, this shift occurs after round 2, following an initial stage of high-conformity.
 The random-pod participants also exhibit stubborn participants, but fewer and with smaller magnitude,
-and the the majority of participants converge toward each other's preferences (positive conformity).
+and the majority of participants converge toward each other's preferences (positive conformity).
 
 Our findings show that the random-pod network deliberation group experienced a positive change in agreement relative to the conventional deliberation control group.
 The above analysis of individual preference shifts suggests that the decreased agreement in the control group is due to social influence leading a number of participants to shift from more popular preferences to a divergent set of less popular preferences.
@@ -753,7 +842,7 @@ The difference in perceptions of agreement across conventional and network delib
 We hypothesized (H1) that network deliberation tends to reach a higher level of agreement than conventional single-group deliberation.
 The observed agreement calculated from polls throughout the experiment experiment supports this hypothesis (Section \ref{sec:res-agreement}).
 However, our hypothesis was based on the assumption that network deliberation would more effectively identify and resolve disagreements,
-leading us to expect a large increase increase in agreement in the random-pod group.
+leading us to expect a large increase in agreement in the random-pod group.
 Instead, we observe a small increase of agreement within the random-pod group and a large decrease within the control group.
 So while we do see more of an improvement in agreement under network deliberation, our observations are more consistent with a protective effect against a disagreement-producing mechanism, than with the originally hypothesized agreement-producing mechanism.
 
