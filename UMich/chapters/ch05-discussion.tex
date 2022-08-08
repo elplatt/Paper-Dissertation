@@ -15,16 +15,43 @@ The emergence of successful large-scale, internet-enabled, parrticipatory collab
 The key question I have attempted to address is: how do such large-scale participatory projects achieve success?
 I have specificaly focused on one challenge facing such collaborations: how can a group collaborate effectively when it is impractical for all members to communicate and interaction is restricted to a network.
 
-In the preceeding chapters, I have approached the above question using observational study, numerical simulation, and experiment.
-A combination of literature reivew and obersvational analysis of English-language Wikipedia (\ref{chap:wp-prod-perf}) identified a common theme among successful examples: small, tightly-knit groups, interconnected through mutual membership: network deliberation.
-Subsequent work investigates simple models of network deliberation to better understand how and why it helps large groups effectively self-govern.
-These models are not intended to capture all properties of real-world network deliberation, but rather to isolate and investigate particular factors, such as social influence and network efficiency.
-Both numerical simulations (Chapter \ref{chap:abm}) and experiment (Chapter \ref{chap:experiment}) find evidence that network deliberation can improve the effectiveness of large deliberations relative to conventional single-group deliberation.
-In particular, these studies both identify a protective effect against the negative consequences of social influence, such as information cascades.
-As such, network deliberation may be especially beneficial in settings with a high level of social influence.
+To answer the above question, I have introduced, developed, and applied a model of
+large-scale group deliberation: network deliberation.
+As a theoretical model, Network deliberation encapsulates common structural pattern
+observed across successful large-scale participatory projects:
+a network structure built from small interlocking pods.
+As with all theoretical models, many parameters are left variable.
+In the case of network deliberation, these parameters include:
+pod size, pod assignment strategy, and the behavioral/social dynamics of deliberation.
+This model can thus be used to analyze how such parameters influence the success of large-scale
+participatory projects while providing a common theoretical framework for making comparisons
+between different studies.
+
+In the preceeding chapters, I have shown how the network deliberation model can be
+used in the analysis of observational studies, numerical simulation, and experiment.
+A combination of literature reivew and obersvational analysis of English-language Wikipedia
+(\ref{chap:wp-prod-perf}) identified a common theme among successful examples:
+small, tightly-knit groups, interconnected through mutual membership: network deliberation.
+In Wikipedia for example, articles and their talk pages act as pods,
+creating venues for small group interactions, with interlocks created by editors who contribute
+to multiple articles.
+Subsequent work investigates simple models of network deliberation to better understand
+how and why it helps large groups effectively self-govern.
+Both numerical simulations (Chapter \ref{chap:abm}) and experiment (Chapter \ref{chap:experiment})
+find evidence that network deliberation can improve the effectiveness of large deliberations
+relative to conventional single-group deliberation.
+In particular, these studies both identify a protective effect against the negative
+consequences of social influence, such as information cascades.
+As such, these studies of network deliberation suggests an interlocking pod structure may be especially
+beneficial in settings susceptible to information cascades, such as those with a high
+level of social influence.
 
 \section{Future Work: Deliberative Settings}
-While the studies presented here confirm the observation that network deliberation sometimes contributes to the success of large-scale deliberation, there are many factors that can influence the deliberative process, and there remains much work to be done to understand how these factors interact with network deliberation.
+While the studies presented here confirm the observation that network deliberation
+sometimes contributes to the success of large-scale deliberation,
+there are many factors that can influence the deliberative process.
+It is difficult to predict whether or how these factors interact with network deliberation
+and there remains much work to be done.
 
 \subsection{Language and Culture}
 The observational and experimental studies presented focus on the English-lanaguage setting, as well as on subsets of the population who are comfortable with wiki technology and/or attend university.
@@ -41,16 +68,23 @@ There are many ways to design a deliberative interaction, whether online or offl
 \end{description}
 
 \subsection{Facilitation and Moderation}
-When all members are equal participants in a deliberation, facilitation and moderation are a challenge.
-In the experiment reported in Chapter \ref{chap:experiment}, facilitation was achieved through discussion prompts.
-Moderation was performed by an experimenter, but the discussion remained respectful and no moderation actions were required.
-An active facilitator might contribute subtantially to the quality of a deliberation, but there are many potential ways to choose a facilitator from among a group of peers.
-Similarly, moderation is incredibly important for productive deliberation on sensitive topics, and it is not immediately obvious how moderation might work in a network deliberation environment.
-
+When all members are equal participants in a deliberation, facilitation and moderation are
+a challenge.
+In the experiment reported in Chapter \ref{chap:experiment}, facilitation was achieved
+through discussion prompts.
+Moderation was performed by an experimenter, but the discussion remained respectful and no
+moderation actions were required.
+An active facilitator might contribute subtantially to the quality of a deliberation,
+but there are many potential ways to choose a facilitator from among a group of peers.
+Similarly, moderation is incredibly important for productive deliberation on sensitive
+topics, and it is not immediately obvious how moderation might work in a network
+deliberation environment.
+Possibilities might include ad-hoc moderators, or bot/AI-asisted moderation.
 
 \subsection{Emergent Alternatives}
 In the simple model of network deliberation presented here, the available alternatives were determined before the beginning of the deliberation.
-However, the deliberative process can produce new ideas and these ideas are sometimes improvements on those previously available \cite{salganik_wiki_2015}.
+However, the deliberative process can produce new ideas and these ideas are sometimes
+improvements on those previously available \cite{salganik_wiki_2015}.
 Additional research is necessary to undertand the consequences of introducing new ideas into a network deliberation, as well as how and when to introduce those ideas to different pods for best effect.
 
 \subsection{Preference Distribution}
@@ -59,6 +93,23 @@ Additonal research is needed to address the many possible scenarios.
 For example, if a preference is held by a small enough fraction of participants, they are likely to be assigned to different pods and perceive themselves as the only one with that preference.
 Network deliberation creates a high likelihood that such a participants will eventually
 be assigned to a pod with others sharing their preference, but in strong social influence settings, they might switch their preferences before then.
+
+\subsection{Next Steps}
+The future work needed most immediately is replication of experimental studies of network
+deliberation in various contexts.
+Such replications can test the robustness and generalizability of the results reported here.
+It is also desirable to develop experimental platforms that can accommodate emergent alternatives
+that arise during the deliberation, as such alternatives are often preferred to initial proposals
+\cite{salganik_wiki_2015}.
+The question of the role of structural efficiency also remains.
+Our numerical studies found that the effects of varying structural efficiency were much smaller
+than those caused by adopting network vs. conventional deliberation,
+but we have only evaluated structurally efficient networks empirically.
+
+Large-scale empirical studies present practical challenges, such as recruiting and providing incentives.
+One possible approach for overcoming these challenges in future studies is the development
+of a publicly-available platform that can be adopted by organizations for practical use,
+while simultaneously providing empirical data for study.
 
 \section{Applications of Network Deliberation}
 The studies of network deliberation presented here have a double purpose.
@@ -74,13 +125,33 @@ to deliberately shape the social network within a collaboration.
 By analogy, the task of deliberately designing a neighborhood might seem impossible,
 but urban planners have made a science of it.
 
-One possible application of network deliberation principles is in the design of organizational structures and procedures.
-In fact, small interlocking pods are a feature found in self-managed organizations \cite{laloux_reinventing_2014}.
-As the pracitices and structures of such organizations are codified and refined, a better understanding of network deliberation can provide a guide to consructing more effective organizations and institutions.
+One possible application of network deliberation principles is in the design of
+organizational structures and procedures.
+In fact, small interlocking pods are a feature found in self-managed organizations
+\cite{laloux_reinventing_2014}.
+As the practices and structures of such organizations are codified and refined,
+a better understanding of network deliberation can provide a guide to constructing
+more effective organizations and institutions.
+Simply recognizing the effectiveness of network deliberation structure suggests dividing
+larger teams into pods and ensuring that individuals are active in multiple pods or
+periodically rotate through them.
+Similarly, our studies suggest there may be benefits to having multiple pods working on the
+same tasks in parallel, particularly in the early stages of ideation,
+when the exploration/exploitation tradeoff is focused more on exploration.
+Furthermore, as the conesequences of parameters such as pod size and assignment methods are
+better understood, this understanding may inform the structure and composition of teams.
 
-Similarly, network deliberation emerges naturally in technical settings such as working groups in large collaborations (e.g., WikiProjects), federated social networks (e.g., mastodon), and group chat platforms (e.g., discord).
-The deliberation that takes place on these platforms is shaped in part by the protocols and user interaces of the software.
-The principles of network deliberation have the potential to inform the design of such protocols and interfaces in a way that minimizes harm and promotes effective interactions.
+Similarly, network deliberation emerges naturally in technical settings such as working
+groups in large collaborations (e.g., WikiProjects), federated social networks
+(e.g., mastodon), and group chat platforms (e.g., discord).
+The deliberation that takes place on these platforms is shaped in part by the protocols
+and user interfaces of the software.
+The principles of network deliberation have the potential to inform the design of such
+protocols and interfaces in a way that minimizes harm and promotes effective interactions.
+The success of network deliberation favors protocols that allow individuals to participate
+in multiple contexts, e.g., forums, microblogging servers, chat rooms.
+Similarly, our findings suggest the importance of being able to subdivide larger contexts
+into smaller pods.
 
 \section{Conclusion}
 Inexpensive, instantaneous, global, peer-to-peer communication has only been possible for a tiny sliver of recent human history.
