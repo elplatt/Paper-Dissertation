@@ -4,7 +4,7 @@
 
 The ability of large groups to reach mutually agreeable decisions is key to
 democratic governance, organizational effectiveness, social movements, and peer production.
-Faced with the intractability of large-scale decision-making, traditional
+Faced with the intractability of large-scale participatory decision-making, traditional
 systems have sacrificed one or more desirable properties, such as participation
 (as in representative democracy), deliberation (as in voting), equality
 (as in command hierarchies), and speed (as in formal consensus).
@@ -13,14 +13,14 @@ networks in overcoming these historical limitations.
 
 In recent years, examples of large-scale collaborations have emerged that seem
 to achieve the previously unachievable. Millions of volunteer Wikipedia editors
-have created a high-quality encyclopedia without centralized leadership
+have created a high-quality encyclopedia without formal centralized leadership
 \cite{keegan_evolution_2017, giles_internet_2005}.
 The Free Software movement has produced the Linux kernel and GNU operating
 system, which power much of the modern internet
 \cite{coleman_coding_2012, benkler_coases_2002, raymond_cathedral_1999}.
 Social movements such as the Arab Spring, Occupy, Black Lives Matter, and
-Podemos have reshaped national governments and brought attention to deeply
-entrenched social issues
+Podemos have brought attention to deeply entrenched social issues,
+and in some cases, contriubted to political regime changes
 \cite{tufekci_twitter_2017, gonzalez-bailon_networked_2016}.
 Participatory governance at such scales is unprecedented.
 The emergence of these large-scale decentralized collaborations has been
@@ -33,16 +33,26 @@ effective policy as well as best practices for organizational design and
 intervention.
 This dissertation focuses on one particularly challenging aspect of
 such collaborations: decision-making.
-I specificaly examine how,
+Specifically, I examine how
 when groups are too large for all members to participate in all discussions,
 the course and outcome of the decision-making process is influenced by the
 communication network structure: the shape of who talks to whom.
 
-In this dissertation, I combine observational, agent-based modeling, and experimental methods to evaluate the role of network structure in large-scale participatory decision-making.
-Taken together, the findings in these studies suggests that small, tightly-knit pods, interlocked through the sharing of members can benefit such collaborations.
-This common structure, which I refer to as network deliberation, appears to preserve some benefits of small-scale deliberation, while allowing efficient diffusion of information through very large groups.
-Furthermore, I find evidence that network deliberation can mitigate some of the negative aspects of social influence.
-These findings provide insight into the success of existing large-scale collaborations as well as provide guidance for the design of new sociotechnical systems.
+In this dissertation, I combine observational, agent-based modeling, and experimental
+methods to evaluate the role of network structure in large-scale participatory decision-making.
+I focus on group sizes well above the estimated 5--8 individual maximum for effective small goups
+\cite{freeman_tyranny_1972, lohman_designing_2000, miflin_small_2004},
+ranging from 32--33 participants in the experimental study to millions of editors in the
+observational study of English-language Wikipedia WikiProjects.
+Taken together, the findings in these studies suggests that small, tightly-knit pods,
+interlocked through the sharing of members can benefit such collaborations.
+This common structure, which I refer to as network deliberation, appears to preserve some
+benefits of small-scale deliberation, while allowing efficient diffusion of information
+through large groups.
+Furthermore, I find evidence that network deliberation can mitigate some of the negative
+aspects of social influence.
+These findings provide insight into the success of existing large-scale collaborations
+as well as provide guidance for the design of new sociotechnical systems.
 
 
 \section{Theoretical Framework}
@@ -67,6 +77,9 @@ Social choice theory focuses on understanding of these limitations,
 such as the Condorcet Paradox
 \cite{condorcet_essay_1785} and
 Arrow's Impossibility Theorem \cite{arrow_social_2012}.
+While social choice theory typically assumes fixed fundamental preferences,
+preferences can be instrumental in nature,
+varying with factors such as available knowledge, group identity, or perspective.
 This dissertation finds hope in the transformative potential of the
 deliberative process.
 Social choice theory typically assumes fixed individual preferences.
@@ -143,6 +156,22 @@ and network rotation \cite{salehi_hive_2018},
 pods allow for beneficial small group dynamics,
 while the overlap between pods enables diffusion of information and opinions
 through the greater collective.
+The network deliberation framework abstracts and generalizes phenomena
+such as interlocking directorates and interlocking publics,
+allowing their commonalities to be studied from the perspective of network structure.
+The framework also provides concrete parameters such as pod size and pod assignment method,
+which can be used in quantitative analysis of models and experiments,
+and provides a common language for making comparisons across models and experiments.
+Network deliberation is conceptually similar to network rotation in that both describe
+large-scale deliberation through repeated small-group interactions.
+There are two key differences, one conceptual, and one relating to network structure.
+Conceptually, network rotation reassigns pod membership one individual at a time in order
+to optimize certain network properties,
+while network deliberation focuses on providing an analytical framework for understanding
+the impact of different pod assignment methods on network structure and deliberation outcome.
+The one-at-a-time reassignments of network rotation also creates pods with high overlap,
+while network deliberation is focused on simultaneous or sequential pods with little overlap.
+
 In network deliberation, the method of assigning individuals to pods
 (whether deliberate or self-organized) can produce interpersonal networks with
 varying structures.
@@ -184,8 +213,11 @@ effect of network deliberation in real-world collective decision-making
 \section{Contributions}
 This dissertation describes the contributions of three projects.
 Chapter \ref{chap:wp-prod-perf} describes an observational and computational
-study of WikiProjects on the English-language Wikipedia,
-and reports the following contributions:
+study of WikiProjects on the English-language Wikipedia.
+This study examines one of the real-world collaborations that inspired the network deliberation
+framework and shows that variations in the network structure of such a collaboration can
+correlate with quality indicators.
+Specifically, Chapter \ref{chap:wp-prod-perf} reports the following contributions:
 \begin{itemize}
 \setlength\itemsep{0pt}
 \item Despite an overall productivity/performance trade-off,
@@ -231,3 +263,12 @@ The primary contributions are:
     \item Findings include no evidence that network deliberation facilitates substantial conflict-resolution, but indicate that it may provide protection against polarization.
 \end{itemize}
 
+The above contributions suggest that network deliberation structure may be an important factor in the
+success of existing large-scale, internet-enabled collaborations, and furthermore,
+that it may help guide the design and organization of future collaborations.
+Specifically, network deliberation appears to help moderate the effects of social influence,
+providing some protection against both information cascades due to positive social influence,
+and polarization due to negative social influence.
+In summary, the work presented in the following chapters provides a framework for the
+future study of large-scale participatory governance,
+and provides evidence that large-scale participatory governance can be both practical and effective.
